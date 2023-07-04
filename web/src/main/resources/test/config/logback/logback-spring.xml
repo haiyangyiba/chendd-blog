@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+configuration
+    scan:当此属性为true时，文件发生变化将自动加载，默认为true
+    scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟
+    debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false
+-->
+<configuration scan="true" scanPeriod="3600000" debug="false">
+    <!-- 导入自带默认文件，含彩色日志等 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <contextName>chendd-logback</contextName>
+    <!-- name的值是变量的名称，value的值时变量定义的值。通过定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。 -->
+    <!--开发环境:打印控制台-->
+    <property name="log.console.level" value="All" />
+    <springProfile name="dev">
+        <!-- 可以从application.yml文件中获取配置参数 -->
+        <!--<springProperty scope="context" name="log.path" source="log.path.dev"/>-->
+        <property name="log.path" value="logs" />
+        <property name="log.console.level" value="debug" />
+    </springProfile>
+    <springProfile name="test">
+        <property name="log.path" value="../logs" />
+        <property name="log.console.level" value="debug" />
+    </springProfile>
+    <springProfile name="prod">
+        <property name="log.path" value="../logs" />
+        <property name="log.console.level" value="info" />
+    </springProfile>
+
+    <!-- 彩色日志格式，由于存在语法高亮，故去掉了进程ID与线程名称等 -->
+    <property name="CONSOLE_LOG_PATTERN" value="%d %clr(${LOG_LEVEL_PATTERN:-%5p}) [%thread] %cyan(at %class.%method) \\(%file:%line\\) : %m%n"/>
+    <property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level \\(%logger{50}.%method:%line\\) - %msg%n"/>
+    <property name="FILE_LOG_PATTERN_ONLY_CONTENT" value="%msg%n"/>
+
+    <!--输出至控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!--此日志appender是为开发使用，只配置最底级别，控制台输出的日志级别是大于或等于此级别的日志信息-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${log.console.level}</level>
+        </filter>
+        <encoder>
+            <Pattern>${CONSOLE_LOG_PATTERN}</Pattern>
+            <charset>UTF-8</charset><!-- 设置字符集 -->
+        </encoder>
+    </appender>
+
+    <!-- 时间滚动输出 level为 INFO 日志 -->
+    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 正在记录的日志文件的路径及文件名 -->
+        <file>${log.path}/web/blog.root.log</file>
+        <!--日志文件输出格式-->
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志记录器的滚动策略，按日期，按大小记录，不按级别存储 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${log.path}/web/blog.root-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <!--日志文件保留天数-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!-- 可按日志级别过滤 -->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>-->
+    </appender>
+
+    <appender name="ASYNC_LOG_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="LOG_FILE"/>
+    </appender>
+
+    <appender name="THREAD_RESOURCE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/web/log-access-thread.log</file>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN_ONLY_CONTENT}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--按文件个数备份，未测试-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">   
+          <fileNamePattern>tests.%i.log.zip</fileNamePattern>   
+          <minIndex>1</minIndex>   
+          <maxIndex>3</maxIndex>   
+        </rollingPolicy>-->
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 每天日志归档路径以及格式 -->
+            <fileNamePattern>${log.path}/web/log-access-thread-%d{yyyy-MM-dd.HH.mm}.log</fileNamePattern>
+            <!--日志文件保留时间，单位是分钟此处保留近10分钟的文件-->
+            <!--<maxHistory>10</maxHistory>-->
+        </rollingPolicy>
+    </appender>
+
+    <!--可按路径设置日志的输出级别，但此级别需要高于默认的root-level级别 -->
+    <logger name="org.springframework" level="info" />
+    <logger name="org.apache" level="info" />
+
+    <logger name="cn.chendd.core.logger.resource" level="info">
+        <appender-ref ref="THREAD_RESOURCE_LOG"/>
+    </logger>
+
+    <root level="${log.console.level}">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_LOG_FILE" />
+    </root>
+
+
+</configuration>

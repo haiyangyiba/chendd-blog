@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.toolkit.quartz.mapper.QuartzJobExecuteMapper">
+    <!-- 定时任务执行历史列表查询 -->
+    <select id="queryQuartzJobExecutePage" resultType="cn.chendd.toolkit.quartz.vo.QuartzJobExecuteResult"
+            parameterType="cn.chendd.toolkit.quartz.po.QuartzJobExecuteParam">
+            SELECT
+                a.id,a.jobName, a.jobGroup,a.beginTime , a.endTime, a.result ,
+                case when result = 'success' then a.remark
+                     else '' end remark
+            FROM
+                QUARTZ_JOB_EXECUTE a
+            WHERE
+                1 = 1
+                and a.beginTime &gt;= concat(#{param.beginTime} , ' 00:00:00')
+                and a.endTime &lt;= concat(#{param.endTime} , ' 23:59:59')
+                <if test="param.jobGroup != null and param.jobGroup != ''">
+                    and a.jobGroup like concat('%',#{param.jobGroup},'%')
+                </if>
+                <if test="param.jobName != null and param.jobName != ''">
+                    and a.jobName like concat('%',#{param.jobName},'%')
+                </if>
+            order by a.beginTime desc , a.jobGroup asc , a.jobName asc
+    </select>
+
+    <!-- 根据ID查询任务执行结果 -->
+    <select id="getResultById" resultType="String" parameterType="long">
+        SELECT
+               a.remark
+            FROM
+                QUARTZ_JOB_EXECUTE a
+            WHERE a.ID = #{id}
+    </select>
+
+</mapper>

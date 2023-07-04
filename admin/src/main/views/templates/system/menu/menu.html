@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>菜单新增与修改</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <form id="roleForm_save_id" action="/system/info/systemInfoManage">
+            <div class="form-group row mt-2">
+                <label for="menuName_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span>菜单名称</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="menuName" id="menuName_add_id" maxlength="32"
+                           th:value="${sysMenu?.menuName}" placeholder="请输入菜单名称" autocomplete="off" />
+                </div>
+                <label for="menuOrder_add_id" class="col-sm-2 col-form-label"><span class="text-danger invisible width6"></span>显示序号</label>
+                <div class="col-sm-4">
+                    <input type="number" class="form-control" name="menuOrder" id="menuOrder_add_id"
+                           th:value="${sysMenu?.menuOrder}" placeholder="请输入排列序号" autocomplete="off"  />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="menuType_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span>菜单类型</label>
+                <div class="col-sm-4">
+                    <select id="menuType_add_id" name="menuType" class="form-control">
+                        <option value="">请选择菜单类型</option>
+                        <option th:each="menuType : ${menuTypes}" th:selected="${menuType.value eq sysMenu?.menuType?.value}" th:value="${menuType.value}" th:text="${menuType.text}"></option>
+                    </select>
+                </div>
+                <label for="menuKey_add_id" class="col-sm-2 col-form-label"><span class="text-danger invisible width6"></span>菜单标识
+                    <button type="button" class="btn btn-soft-primary waves-effect waves-light badge badge-soft-primary" data-toggle="popover" data-trigger="focus" data-placement="bottom"
+                          data-content="菜单唯一标识，用于菜单类型为‘按钮’时" data-original-title="填写说明">①</button>
+                </label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" name="menuKey" id="menuKey_add_id"
+                           th:value="${sysMenu?.menuKey}" placeholder="请输入标识" autocomplete="off"  />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="menuUrl_add_id" class="col-sm-2 col-form-label"><span class="width6"></span>菜单地址
+                    <button type="button" class="btn btn-soft-primary waves-effect waves-light badge badge-soft-primary" data-toggle="popover" data-trigger="focus" data-placement="bottom"
+                            data-content="菜单地址，菜单类型为‘菜单’时限制必输" data-original-title="填写说明">②</button>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="menuUrl" id="menuUrl_add_id" maxlength="200"
+                           th:value="${sysMenu?.menuUrl}" placeholder="请选择菜单地址" autocomplete="off" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="menuUrl_add_id" class="col-sm-2 col-form-label"><span class="width6"></span>请求类型</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="requestMethod" id="requestMethod_add_id">
+                        <option value="">-请选择-</option>
+                        <option th:each="requestMethod : ${requestMethods}" th:selected="${requestMethod eq sysMenu?.requestMethod}" th:value="${requestMethod}" th:text="${requestMethod}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="menuIcon_add_id" class="col-sm-2 col-form-label"><span class="width6"></span>菜单图标</label>
+                <div class="col-sm-4">
+                    <div class="input-group-prepend">
+                        <input type="text" class="form-control" name="menuIcon" id="menuIcon_add_id" maxlength="32"
+                               th:value="${sysMenu?.menuIcon}" placeholder="请输入或选择菜单图标" autocomplete="off"
+                               style="border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;" />
+                        <a href="javascript:void(0);" class="input-group-text" id="menuIconView_add_id"
+                           th:attr="currentTheme=${session.systemCurrentUser.userConfig.adminTheme}"
+                              style="border-left: none;background-color:white;border-top-left-radius: 0;border-bottom-left-radius:0;"><th:block th:utext="(${sysMenu?.menuIcon} != null and ${sysMenu?.menuIcon} != '') ? '<i class=\'' + ${sysMenu?.menuIcon} + '\'></i>' : '选择'"></th:block></a>
+                    </div>
+                </div>
+                <label class="col-sm-2 col-form-label"><span class="text-danger">*</span>可用状态</label>
+                <div class="col-sm-4" style="padding-top: 8px;">
+                    <div class="radio radio-primary form-check-inline" th:each="menuState : ${menuStatus}">
+                        <input type="radio" th:checked="${menuState.value eq sysMenu?.menuStatus?.value}" th:id="'menuStatus_' + ${menuState.value}" th:value="${menuState.value}" name="menuStatus">
+                        <label th:for="'menuStatus_' + ${menuState.value}" th:text="${menuState.text}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="remark_add_id" class="col-sm-2 col-form-label"><span class="text-danger invisible width6"></span>描述</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" name="remark" id="remark_add_id" maxlength="200" placeholder="描述不能超过200个字符" rows="6"
+                              th:text="${sysMenu?.remark}"></textarea>
+                </div>
+            </div>
+            <input type="hidden" name="menuId" id="menuId_add_id" th:value="${sysMenu?.menuId}" />
+            <input type="hidden" name="parentId" id="parentId_add_id" th:value="${sysMenu?.parentId}" />
+        </form>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/plugins/tippy/js/tippy.all.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/maxlength/bootstrap-maxlength.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/menu/menu.js"></script>
+</body>
+</html>

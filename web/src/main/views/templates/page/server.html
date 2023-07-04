@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>系统信息</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="本站介绍" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mt-2">
+                    <div class="col-lg-12">
+                        <div class="card-box ribbon-box">
+                            <div class="ribbon ribbon-primary float-left" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i> 系统参数</div>
+                            <div class="ribbon-content">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="header-title mb-2"><strong><th:block th:text="${custom.hostName}">计算机名</th:block></strong></h4>
+                                                <h5 class="font-family-primary font-weight-semibold">JVM信息</h5>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate" th:title="${custom.jvmVendor + ' ' + custom.jvmName + ' ' + custom.jvmVersion}"><span class="font-weight-normal">
+                                                                <th:block th:text="${custom.jvmVendor}">Oracle Corporation</th:block>&nbsp;&nbsp;
+                                                                <th:block th:text="${custom.jvmName}">Java HotSpot(TM) Client VM</th:block>&nbsp;&nbsp;
+                                                                <th:block th:text="${custom.jvmVersion}">1.8.0_172</th:block>&nbsp;
+                                                            </span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <p class="mb-2 text-truncate">
+                                                            <th:block th:text="${custom.osName + ' ' + custom.osArch + ' '  + custom.userName + ' ' + custom.userLanguage + '_' + custom.userCountry + ' ' + custom.userTimezone}">
+                                                                Windows 10 x86 chendd zh_CN Asia/Shanghai</th:block>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">当前进程ID&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.pid}">38608</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">系统编码&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.fileEncoding}">UTF-8</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate" th:title="${custom.userDir}">USER_DIR&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.userDir}">C:\chendd</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate" th:title="${custom.javaHome}">JAVA_HOME&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.javaHome}">false</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate">CATALINA_HOME&nbsp;&nbsp;<span class="font-weight-normal" th:title="${custom.catalinaHome}">
+                                                            <th:block th:text="${custom.catalinaBase}">200</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="header-title mb-2"><strong><th:block th:text="${custom.hostName}">计算机名</th:block></strong></h4>
+                                                <h5 class="font-family-primary font-weight-semibold">基本信息</h5>
+                                                <p class="mb-2">
+                                                    <th:block th:text="${custom.manufacturer}">制造商</th:block>&nbsp;
+                                                    <th:block th:text="${custom.family}">操作系统</th:block>&nbsp;
+                                                    <th:block th:text="${custom.versionInfoVersion}">版本</th:block>&nbsp;
+                                                    <th:block th:text="${custom.bitness} + '位'"></th:block>&nbsp;
+                                                    <th:block th:switch="${custom.versionInfoCodeName}">
+                                                        <th:block th:case="'Enterprise'" th:text="'企业版'"></th:block>
+                                                        <th:block th:case="'Home'" th:text="'家庭版'"></th:block>
+                                                        <th:block th:case="'Compute Cluster'" th:text="'计算机集群'"></th:block>
+                                                        <th:block th:case="*" th:text="${custom.versionInfoCodeName}"></th:block>
+                                                    </th:block>
+                                                </p>
+                                                <p class="mb-2">
+                                                    <th:block th:text="${custom.processorName}">Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz</th:block>
+                                                </p>
+                                                <p class="mb-2">
+                                                    <span class="font-weight-semibold mr-2">开机时间</span>
+                                                    <span th:text="${custom.systemBootTime}">开机时间</span>&nbsp;
+                                                </p>
+                                                <p class="mb-2">
+                                                    <span class="font-weight-semibold mr-2">可用内存</span>
+                                                    <span data-dd-raw-format="${custom.memoryAvailable}">可用内存</span>&nbsp;
+                                                    <span class="font-weight-semibold mr-2">总共内存</span>
+                                                    <span data-dd-raw-format="${custom.memoryTotal}">总共内存</span>&nbsp;
+                                                </p>
+                                                <div class="mt-3">
+                                                    <h6 class="text-uppercase">内存使用 <span class="float-right" th:text="${100 - custom.memoryAvailable * 100 / custom.memoryTotal}+'%'">50%</span></h6>
+                                                    <div class="progress progress-sm m-0">
+                                                        <div class="progress-bar bg-blue" role="progressbar" aria-valuenow="50"
+                                                             th:attr="aria-valuenow=${100 - custom.memoryAvailable * 100 / custom.memoryTotal},
+                                     style='width:' + ${100 - custom.memoryAvailable * 100 / custom.memoryTotal}+'%'"
+                                                             aria-valuemin="0" aria-valuemax="100" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-12 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="header-title mb-2"><strong><th:block th:text="${custom.hostName}">计算机名</th:block></strong></h4>
+                                                <h5 class="font-family-primary font-weight-semibold">操作系统</h5>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate">固件发布日期&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.firmwareReleaseDate}"></th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">管理员权限&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.elevated}">false</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">处理器个数&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.logicalProcessorCount}">8</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">磁盘数量&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.fileStoresCount}">4</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">显示器个数&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.displayCount}">150</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">系统服务&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.servicesCount}">5200</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">线程总数量&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.threadCount}">200</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">进程总数量&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.processCount}">150</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">网卡数量&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.networkIFs}">6</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0">声卡数量&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.soundCardsCount}">4</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-2">
+                                                            <h5 class="mt-0 text-truncate">标识符&nbsp;&nbsp;<span class="font-weight-normal"><th:block th:text="${custom.processorIdentifier}">150</th:block></span></h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-box ribbon-box">
+                    <div class="ribbon ribbon-primary float-left" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i> 磁盘信息</div>
+                    <div class="ribbon-content">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="header-title mb-0"><strong>磁盘信息</strong></h4>
+                                        <div class="collapse pt-3 show">
+                                            <div class="table-responsive">
+                                                <table class="table table-centered table-borderless mb-0">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th>磁盘名称</th>
+                                                        <th>盘符</th>
+                                                        <th>磁盘类型</th>
+                                                        <th>磁盘大小</th>
+                                                        <th>可用大小</th>
+                                                        <th>使用占比</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="fileStore : ${custom.fileStores}">
+                                                        <td><th:block th:text="${fileStore.name}"></th:block></td>
+                                                        <td><th:block th:text="${fileStore.mount}"></th:block></td>
+                                                        <td><th:block th:text="${fileStore.type}"></th:block></td>
+                                                        <td><th:block data-dd-raw-format="${fileStore.totalSpace}"></th:block></td>
+                                                        <td><th:block data-dd-raw-format="${fileStore.usableSpace}"></th:block></td>
+                                                        <td>
+                                                            <div class="row" th:with="fileStoreProgress=${100 - fileStore.usableSpace * 100 / fileStore.totalSpace}">
+                                                                <div class="col-lg-8 col-md-6 col-sm-6" th:with="fileStoreTheme60=${fileStoreProgress <= 65},
+                                                                fileStoreTheme60_80=${fileStoreProgress > 65 && fileStoreProgress < 85},
+                                                                fileStoreTheme90=${fileStoreProgress >= 85}
+                                                                ">
+                                                                    <div class="progress progress-sm m-0">
+                                                                        <div th:class="${fileStoreTheme90 ? 'progress-bar bg-danger' : (fileStoreTheme60_80 ? 'progress-bar bg-warning' : 'progress-bar bg-success')}" class="progress-bar bg-danger" role="progressbar" aria-valuenow="50"
+                                                                             th:attr="aria-valuenow=${fileStoreProgress},style='width:' + ${fileStoreProgress}+'%'"
+                                                                             aria-valuemin="0" aria-valuemax="100" >
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-4 col-md-6 col-sm-6" style="margin-top:-7px;" th:text="${fileStoreProgress} + '%'"></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="/frame/footer :: template">template</th:block>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+</body>
+</html>

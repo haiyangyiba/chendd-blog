@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.online.mapper.OnlineManageMapper">
+
+    <resultMap id="onlineManageMap" type="cn.chendd.blog.admin.blog.online.vo.OnlineManageResult">
+        <result column="attributeBytes" property="attributeBytes" typeHandler="org.apache.ibatis.type.BlobTypeHandler"></result>
+    </resultMap>
+    
+    <!-- 用户信息列表查询 -->
+    <select id="queryOnlineManagePage" resultMap="onlineManageMap"
+            parameterType="cn.chendd.blog.admin.blog.online.po.OnlineManageParam">
+         SELECT a.PRIMARY_ID primaryId,
+                a.SESSION_ID sessionId,
+                a.CREATION_TIME creationTime,
+                a.LAST_ACCESS_TIME lastAccessTime,
+                a.MAX_INACTIVE_INTERVAL maxInactiveInterval,
+                a.EXPIRY_TIME expiryTime,
+                a.PRINCIPAL_NAME principalName,
+                b.ATTRIBUTE_NAME attributeName,
+                b.ATTRIBUTE_BYTES attributeBytes
+            FROM SPRING_SESSION a
+            LEFT JOIN SPRING_SESSION_ATTRIBUTES b on a.PRIMARY_ID = b.SESSION_PRIMARY_ID
+              WHERE 1 = 1
+              <if test="param.scope == 'user'">
+                  and b.ATTRIBUTE_NAME = 'systemCurrentUser'
+              </if>
+          ORDER BY a.CREATION_TIME desc
+    </select>
+
+</mapper>

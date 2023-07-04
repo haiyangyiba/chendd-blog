@@ -1,0 +1,137 @@
+.navbar {
+    display: block;
+}
+.content{
+    padding: 0;
+}
+.content-tabs {
+    position: relative;
+    height: 42px;
+    background: #fafafa;
+    line-height: 40px;
+    margin: 10px auto 0;
+    /*width: 99.6%;*/
+    border-bottom: 2px solid #00acc1;
+}
+.content-tabs .roll-nav,
+.page-tabs-list {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: #999;
+    z-index: 2;
+    top: 0;
+}
+.content-tabs .roll-left {
+    left: 0;
+}
+.content-tabs .roll-right {
+    right: 0;
+}
+.content-tabs button {
+    background: #fff;
+    border: 0;
+    height: 40px;
+    width: 40px;
+    outline: none;
+}
+.content-tabs .active {
+    background-color: #EDEFF1;
+}
+.content-tabs button:hover {
+    background: #fafafa;
+}
+nav.page-tabs {
+    margin-left: 40px;
+    width: 100000px;
+    height: 40px;
+    overflow: hidden;
+}
+nav.page-tabs .page-tabs-content {
+    float: left;
+}
+.page-tabs a {
+    display: block;
+    float: left;
+    padding: 0 15px;
+}
+.page-tabs a i:hover {
+    color: #c00;
+}
+.page-tabs a:hover,
+.content-tabs .roll-nav:hover {
+    color: #777;
+    background: #f2f2f2;
+    cursor: pointer;
+}
+.roll-right.J_tabRight {
+    right: 140px;
+}
+.roll-right.btn-group {
+    right: 60px;
+    width: 80px;
+    padding: 0;
+}
+.roll-right.btn-group button {
+    width: 80px;
+}
+.roll-right.J_tabExit {
+    background: #fff;
+    height: 40px;
+    width: 60px;
+    outline: none;
+}
+.dropdown-menu-right {
+    left: auto;
+}
+
+.fixed-nav .J_mainContent {
+    height: calc(100% - 80px);
+    overflow: hidden;
+}
+.close-group{
+    line-height: 20px;
+}
+
+.main-panel > .content{
+    height: calc(100% - 123px);
+}
+
+/*tab导航样式--tab设置100%宽度*/
+.content-page {
+    margin-top: 60px;
+    padding: 0;
+}
+.content-page .content .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+/**/
+.J_menuTab , .J_tabClose , .J_tabShowActive , .J_tabCloseAll , .J_tabCloseOther , .J_tabExit , .J_tabRefresh {
+    font-size: 12px;
+}
+.J_menuTabs .J_menuTab {
+    color: black;
+}
+.J_menuTabs .active {
+    color: blue;
+    font-weight: bold;
+}
+
+/*换肤*/
+.content-tabs[currentTheme="dark"] .J_menuTabs ,
+.content-tabs[currentTheme="dark"] .J_tabLeft , .content-tabs[currentTheme="dark"] .J_tabRight , .content-tabs[currentTheme="dark"] .J_tabClose ,
+.content-tabs[currentTheme="dark"] .J_tabRefresh , .content-tabs[currentTheme="dark"] .J_menuTab {
+    background-color: #303841;
+    color: #94a0ad;
+    border-left: 1px solid #3B4651;
+}
+.content-tabs[currentTheme="dark"] .J_tabLeft:hover , .content-tabs[currentTheme="dark"] .J_tabRight:hover , .content-tabs[currentTheme="dark"] .J_tabClose:hover ,
+.content-tabs[currentTheme="dark"] .J_tabRefresh:hover , .content-tabs[currentTheme="dark"] .J_menuTab:hover {
+    background-color: #424E5A;
+    color: #9097a7;
+}
+.content-tabs[currentTheme="dark"] .active {
+    background-color: #424E5A;
+}

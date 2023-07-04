@@ -1,0 +1,75 @@
+application:
+  version: 1.0.0
+  formatted-version: vadmin-${application.version}
+  title: chendd & jiangyou baobao 【测试环境】
+
+server:
+  port: 8888
+  servlet:
+    context-path: /
+  tomcat:
+    connection-timeout: 120s
+logging:
+  config: classpath:config/logback/logback-spring.xml
+spring:
+  mvc:
+    async:
+      request-timeout: 120s
+  profiles:
+    active: test
+  banner:
+    location: classpath:config/banner/banner.txt
+  cache:
+    ehcache:
+      config: classpath:config/cache/ehcache.xml
+  main:
+    banner-mode: log #将banner输出至日志文件
+  thymeleaf:
+    mode: HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: true
+    prefix: classpath:/templates
+    suffix: .html
+  freemarker:
+    template-loader-path: classpath:/templates/freemarker
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/chendd-blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+  session:
+    store-type: jdbc
+    timeout: 120m
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
+mybatis:
+  type-aliases-package: cn.chendd.blog.**.model
+  configuration:
+    map-underscore-to-camel-case: true #启用匈牙利转驼峰
+    jdbc-type-for-null: null #空类型时的默认识别类型
+
+mybatis-plus:
+  type-enums-package: cn.chendd.blog.**.enums
+  global-config:
+    db-config:
+      logic-delete-value: DISABLE
+      logic-not-delete-value: USABLE
+      #查询时动态sql的判定条件 != null && != ""（因为表单中提交过来的数据会为""的情况）
+      select-strategy: not_empty
+      update-strategy: ignored
+  mapper-locations: classpath*:mybatis/mapper/**/*Mapper.xml
+
+#swagger-ui-bootstrap
+swagger:
+  markdowns: classpath*:markdown/*
+  basic:
+    enable: true
+    username: chendd
+    password: Swagger666

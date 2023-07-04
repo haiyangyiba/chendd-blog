@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.article.mapper.ArticleManageMapper">
+    
+    <!-- 根据ID查询文章列表分页 -->
+    <select id="queryArticleManagePage" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleManageResult"
+            parameterType="cn.chendd.blog.admin.blog.article.po.ArticleManageParam">
+         SELECT a.id,
+                a.title,
+                a.type,
+                a.ascription,
+                a.sortOrder,
+                a.createTime,
+                a.createUsername,
+                a.updateTime,
+                a.updateUsername,
+                ifnull(a.visitsNumber , 0) visitsNumber,
+                b.menuName typeText,
+                case when c.articleId is not null then 'true' else 'false' end existContent
+         FROM blog_article a
+         LEFT JOIN sys_menu b on a.type = b.menuId
+         LEFT JOIN blog_article_content c on c.articleId = a.id
+         WHERE 1=1
+            <if test="param.title != null and param.title != ''">
+                and a.title like concat('%',#{param.title},'%')
+            </if>
+            <if test="param.type != null and param.type != ''">
+                and a.type in (select menuId from sys_menu t where t.menuKey like (select concat(t.menuKey,'%') from sys_menu t where t.menuId = #{param.type}))
+            </if>
+            and a.dataStatus = 'USABLE'
+         ${param.sortName}
+    </select>
+
+    <!-- 根据ID查询文章信息 -->
+    <select id="getArticleById" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleResult" parameterType="Long">
+        SELECT  a.id,
+                a.title,
+                a.type,
+                b.menuName typeText,
+                a.ascription,
+                a.sortOrder
+         FROM blog_article a
+         LEFT JOIN sys_menu b on a.type = b.menuId
+         WHERE 1=1 and a.id = #{id} and a.dataStatus = 'USABLE'
+    </select>
+
+    <!-- 根据ID更新文章最后状态 -->
+    <update id="updateLastState" parameterType="cn.chendd.blog.admin.blog.article.model.Article">
+        UPDATE blog_article set updateTime = #{updateTime} ,  updateUsername = #{updateUsername} where id = #{id}
+    </update>
+
+    <!-- 按页码查询文章列表 -->
+    <select id="queryArticleContents" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleContentResult">
+        select
+             a.id,a.title,a.type,a.ascription,a.createTime,a.updateTime,concat(left(c.simpleContent , 400) , '...') simpleContent
+        from blog_article a
+        left join blog_article_property b on a.id = b.articleId and b.property = 'state'
+        left join blog_article_content c on a.id = c.articleId
+        where
+            a.dataStatus = 'USABLE' and a.ascription = 'Content' and b.value = 'publish'
+        order by a.createTime desc limit #{begin} , #{end}
+    </select>
+    <!-- 根据文章ID查询文章标签列表 -->
+    <select id="queryArticleTags" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleTagResult">
+        SELECT
+             b.id,b.tag,b.strong
+        FROM
+             blog_tag_article a
+        LEFT JOIN
+             blog_tag b on a.tagId = b.id
+        WHERE
+             a.articleId = #{id}
+        ORDER BY b.sortOrder LIMIT 5
+    </select>
+
+    <!-- 根据文章ID修改访问次数 -->
+    <update id="updateVisitsNumber" parameterType="long">
+        UPDATE blog_article a SET visitsNumber = ifnull(visitsNumber , 0) + 1 where a.id = #{articleId}
+    </update>
+
+    <!-- 查询文章类型分页，排除置顶的数据，置顶的单独查询 -->
+    <select id="queryArticleTypePage" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleContentResult">
+        select
+            a.id,a.title,a.type,a.ascription,a.createTime,a.updateTime,concat(left(c.simpleContent , 400) , '...') simpleContent
+        from blog_article a
+                 left join blog_article_property e on a.id = e.articleId and e.property = 'topping'
+                 left join blog_article_property b on a.id = b.articleId and b.property = 'state'
+                 left join blog_article_content c on a.id = c.articleId
+        where
+            a.dataStatus = 'USABLE' and a.ascription = 'Content' and b.value = 'publish'
+            and a.type = #{articleTypeId} and ifnull(e.value , 'null') != 'top'
+        order by a.sortOrder desc
+    </select>
+    <!--查询文章类型置顶数据-->
+    <select id="queryArticleTypeTop" resultType="cn.chendd.blog.admin.blog.article.vo.ArticleContentResult">
+        select
+            a.id,a.title,a.type,a.ascription,a.createTime,a.updateTime,concat(left(c.simpleContent , 400) , '...') simpleContent
+        from blog_article a
+                 left join blog_article_property e on a.id = e.articleId and e.property = 'topping'
+                 left join blog_article_property b on a.id = b.articleId and b.property = 'state'
+                 left join blog_article_content c on a.id = c.articleId
+        where
+            a.dataStatus = 'USABLE' and a.ascription = 'Content' and b.value = 'publish'
+          and a.type = #{articleTypeId} and e.value = 'top'
+        order by a.sortOrder desc
+    </select>
+    <!-- 关键字搜一搜查询分页 -->
+    <select id="querySearchPage" resultType="cn.chendd.blog.client.search.SearchVo">
+        select
+            a.id , a.title , ifnull(a.updateTime , a.createTime) lastTime ,
+            concat(left(c.simpleContent , 400) , '...') simpleContent , newTab.sums, newTab.counts
+        from blog_article a
+        left join blog_article_property b on a.id = b.articleId and b.property = 'state' and b.value = 'publish'
+        left join blog_article_content c on a.id = c.articleId
+        right join (
+             select sum(counts) sums , count(*) counts , targetId from (
+                 select count(*) counts , a.targetId , tag a from sys_module_tags a
+                 where a.moduleName = 'article' and tag in
+                 <foreach collection="tagList" item="item" open="(" close=")" separator=",">#{item}</foreach>
+                 group by targetId , tag
+             ) newTab group by targetId
+        ) newTab on a.id = newTab.targetId
+        where a.dataStatus = 'USABLE' and a.ascription = 'Content' order by newTab.counts desc, newTab.sums desc
+    </select>
+
+</mapper>

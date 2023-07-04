@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>按日期访问数量明细</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico">
+<link href="/statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body style="overflow: hidden;">
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div id="grid_toolbar">
+                        <form id="query_form_id">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">URL</div>
+                                        </div>
+                                        <input type="text" class="form-control enterSubmit" id="url_search_id" name="url" autocomplete="off" placeholder="请输入URL地址" />
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">是否外链</div>
+                                            <div id="isOutLink_label" class="input-group-text" style="width:200px;max-width:200px;padding: 0 12px;">请选择</div>
+                                        </div>
+                                        <div class="input-group-prepend selectpickerbox" currentTheme="light">
+                                            <select id="isOutLink_search_id" name="isOutLink" class="form-control" style="height: 40px;display: none;">
+                                                <option value="">请选择</option>
+                                                <option value="true">是</option>
+                                                <option value="false">否</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="query_btn_id">
+                                        <i class="fas fa-search"></i>&nbsp;查询
+                                    </button>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light resetForm">
+                                        <i class="fas fa-redo"></i>&nbsp;重置
+                                    </button>
+                                </div>
+                            </div>
+                            <input id="date_id" name="date" type="hidden" th:value="${date}" />
+                        </form>
+                    </div>
+                    <table id="grid_table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/statics/plugins/form/jquery.form.min.js"></script>
+<script src="/statics/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script src="/statics/js/blog/access/requestManage.js"></script>
+</body>
+</html>

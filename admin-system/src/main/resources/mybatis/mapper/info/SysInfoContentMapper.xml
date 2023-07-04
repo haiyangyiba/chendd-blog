@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.info.mapper.SysInfoContentMapper">
+
+    <!--根据条件查询列表数据 -->
+    <select id="queryInfoContentList" parameterType="cn.chendd.blog.admin.system.info.po.SysInfoContentManageParam"
+            resultType="cn.chendd.blog.admin.system.info.vo.SysInfoContentManageResult">
+        SELECT
+            a.id,
+            a.title,
+            a.key,
+            a.sortOrder,
+            a.createUser,
+            a.createTime,
+            a.updateUser,
+            a.updateTime
+        FROM sys_info_content a where 1=1
+        <if test="param.title != null and param.title != ''">
+            and a.title like concat('%' , #{param.title} , '%')
+        </if>
+        <if test="param.key != null and param.key != ''">
+            and a.key like concat('%' , #{param.key} , '%')
+        </if>
+        order by a.sortOrder asc , a.updateTime desc
+    </select>
+    <!-- 根据key查询对应数据 -->
+    <select id="queryArticleVisitsNumber" resultType="java.lang.Integer">
+        SELECT main.visitsNumber from blog_article main where main.id = #{articleId}
+    </select>
+
+    <!--查询文章自定义内容-->
+    <select id="queryArticleCustom" resultType="cn.chendd.blog.client.article.vo.ArticleCustomDto">
+        select
+            article.*
+        from blog_article article
+        where article.id = #{articleId}
+    </select>
+
+    <!-- 查询点赞数量最多的前5篇文章 -->
+    <select id="queryArticleForParise" resultType="cn.chendd.blog.client.infocontent.MaintenanceInfoVo$ArticleRecord">
+        select a.articleId , a.counts , b.title from (
+            select articleId , count(*) counts from blog_article_praises group by articleId
+        ) a right join blog_article b on a.articleId = b.id
+        inner join blog_article_property c on c.articleId = b.id and c.property = 'state' and c.value = 'publish'
+        where b.dataStatus = 'USABLE' and a.articleId is not null
+            order by a.counts desc limit 5
+    </select>
+
+    <!-- 查询点赞数量最多的前5篇文章 -->
+    <select id="queryArticleForComment" resultType="cn.chendd.blog.client.infocontent.MaintenanceInfoVo$ArticleRecord">
+        select a.articleId , a.counts , b.title from (
+            select targetId articleId , count(*) counts from sys_comment where moduleKey = 'Article' group by targetId
+        ) a right join blog_article b on a.articleId = b.id
+        inner join blog_article_property c on c.articleId = b.id and c.property = 'state' and c.value = 'publish'
+        where b.dataStatus = 'USABLE' and a.articleId is not null
+            order by a.counts desc limit 5
+    </select>
+
+</mapper>

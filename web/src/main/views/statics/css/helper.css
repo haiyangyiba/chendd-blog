@@ -1,0 +1,162 @@
+/*取消顶部菜单浮动*/
+.navbar-custom {
+    /*background-color: #abcdef;*/
+}
+.topnav {
+    position: static;
+}
+.content-page {
+    padding: 0px 15px 65px 15px!important;
+    margin-top: 10px;
+}
+
+.topnav-menu .non-href {
+    cursor: default!important;
+}
+
+.active>.nav-link {
+    color: #00acc1!important;font-weight: bold;
+}
+
+/*设置首页左右切换导航颜色样式*/
+.carousel-control-prev , .carousel-control-next {
+    color: #99CB9C!important;
+    font-size: 28px;
+}
+.carousel-control-prev:hover , .carousel-control-next:hover {
+    color: #429D47!important;
+}
+
+.carousel-indicators {
+    bottom: -30px;
+}
+
+.carousel-indicators li {
+    background-color: #99CB9C!important;
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+}
+
+.carousel-indicators li.active {
+    background-color: green!important;
+}
+
+.carousel-indicators li:hover {
+    background-color: green!important;
+}
+/*设置simditor样式*/
+.editor-style {
+    font-size: 14px;
+}
+.simditor .simditor-popover .settings-field {
+    margin: 0 0 25px 0;
+}
+.settings-field .link-target {
+    width: 200px; height: 35px;
+}
+.simditor .simditor-body{
+    /*开启滚动条*/
+    overflow-y: auto!important;
+    /*设置高度*/
+    min-height: 230px!important;
+    max-height: 230px!important;
+}
+/*首页的左右滑动块*/
+#reportChartHomepage .carousel-control-prev ,
+#reportChartHomepage .carousel-control-next ,
+#systemInfoHomepage .carousel-control-prev ,
+#systemInfoHomepage .carousel-control-next {
+    top: 50%;width: 20px;height: 20px;
+}
+/*文章详情页*/
+.content-view p {
+    margin: 5px!important;
+    color: rgb(77, 77, 77);
+}
+#articleContent_box_id img {
+    max-width: 100% !important;
+}
+
+/*闪烁文本*/
+@keyframes  scratchy {
+    0% {
+        background-position: 0 0;
+    }
+    25% {
+        background-position: 0 0;
+    }
+    26% {
+        background-position: 20px -20px;
+    }
+    50% {
+        background-position: 20px -20px;
+    }
+    51% {
+        background-position: 40px -40px;
+    }
+    75% {
+        background-position: 40px -40px;
+    }
+    76% {
+        background-position: 60px -60px;
+    }
+    99% {
+        background-position: 60px -60px;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.blink{
+    display: inline-block;
+    font-size: 20px;
+    background: linear-gradient(left, #f71605, #e0f513);
+    background: -webkit-linear-gradient(left, #f71605, #e0f513);
+    background: -o-linear-gradient(right, #f71605, #e0f513);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation:scratchy 0.253s linear forwards infinite;
+    /* 其它浏览器兼容性前缀 */
+    -webkit-animation:scratchy 0.253s linear forwards infinite;
+    -moz-animation: scratchy 0.253s linear forwards infinite;
+    -ms-animation: scratchy 0.253s linear forwards infinite;
+    -o-animation: scratchy 0.253s linear forwards infinite;
+}
+
+blockquote {
+    background:#f9f9f9;
+    border-left:4px solid #ccc;
+    margin:1.5em 10px;
+    padding:.5em 10px;
+    quotes:"\201C""\201D""\2018""\2019";
+}
+blockquote::before{
+    content: "“ ";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote::after{
+    content: " ”";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote p {
+    display:inline;
+}
+
+/*代码块*/
+pre[class*=language-] {
+    max-height: 755px;
+}
+/*手机小屏幕文章封面图和开源项目介绍图*/
+@media screen and (max-width: 480px) {
+    .card-box .media img {
+        display: none!important;
+    }
+}

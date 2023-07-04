@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>用户管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div id="grid_toolbar">
+                        <form id="query_form_id">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">用户名</div>
+                                        </div>
+                                        <input type="text" class="form-control enterSubmit" id="realName_search_id" name="realName" autocomplete="off" placeholder="请输入用户名或昵称" />
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">用户来源</div>
+                                            <div id="userSource_label" class="input-group-text" style="width:200px;max-width:200px;padding: 0 12px;">请选择用户来源</div>
+                                        </div>
+                                        <div class="input-group-prepend selectpickerbox" th:attr="currentTheme=${session.systemCurrentUser.userConfig.adminTheme}">
+                                            <select id="userSource_add_id" name="userSource" class="form-control" multiple style="height: 40px;display: none;">
+                                                <option th:each="userSource : ${userSources}" th:value="${userSource.value}" th:text="${userSource.text}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">用户状态</div>
+                                            <div id="userStatus_label" class="input-group-text" style="width:200px;max-width:200px;padding: 0 12px;">请选择用户状态</div>
+                                        </div>
+                                        <div class="input-group-prepend bg-white selectpickerbox" th:attr="currentTheme=${session.systemCurrentUser.userConfig.adminTheme}">
+                                            <select id="userStatus_add_id" name="userStatus" class="form-control" multiple style="height: 40px;display: none;">
+                                                <option th:each="userState : ${userStatus}" th:value="${userState.value}" th:text="${userState.text}"></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="query_btn_id">
+                                        <i class="fas fa-search"></i>&nbsp;查询
+                                    </button>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light resetForm">
+                                        <i class="fas fa-redo"></i>&nbsp;重置
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group-prepend mb-2">
+                                        <button type="button" id="add_btn_id" class="input-group-text btn btn-blue waves-effect waves-light">
+                                            <i class="fe-plus"></i>&nbsp;新增&nbsp;
+                                        </button>
+                                        <button type="button" id="modif_btn_id" class="input-group-text btn btn-blue waves-effect waves-light">
+                                            <i class="fe-edit-1"></i>&nbsp;修改
+                                        </button>
+                                        <button type="button" id="enable_btn_id" class="input-group-text btn btn-danger waves-effect waves-light">
+                                            <i class="fas fa-user-check"></i>&nbsp;启用
+                                        </button>
+                                        <button type="button" id="disable_btn_id" class="input-group-text btn btn-danger waves-effect waves-light">
+                                            <i class="fas fa-user-alt-slash"></i>&nbsp;禁用
+                                        </button>
+                                        <button type="button" id="resetPassword_btn_id" class="input-group-text btn btn-danger waves-effect waves-light">
+                                            <i class="far fa-eye"></i>&nbsp;重置密码
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="text" style="display: none;" class="form-control" />
+                        </form>
+                    </div>
+                    <table id="grid_table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/user/userManage.js"></script>
+</body>
+</html>

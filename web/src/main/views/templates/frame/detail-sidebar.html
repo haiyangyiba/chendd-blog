@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>公共页面-明细右侧边栏</title>
+</head>
+<body>
+
+<template th:fragment="template">
+    <div class="col-lg-3" id="mantenanceInfo_id">
+        <div class="card">
+            <div class="card-body ribbon-box">
+                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i><th:block th:text="${article.title}">历史上的本站</th:block></div>
+                <h4 class="mb-2"></h4>
+                <p class="mb-2">&nbsp;<span class="font-weight-semibold mr-2" id="visitsNumber_id" th:text="'阅读：' + ${article.visitsNumber}"></span></p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body ribbon-box">
+                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i>本站信息</div>
+                <p class="mb-2"><i class="fe-calendar"></i>&nbsp;运营时间：<label id="createSiteTime_text_id"></label>&nbsp;天</p>
+                <p class="mb-2"><i class="fe-users"></i>&nbsp;用户数量：<label id="users_text_id"></label>&nbsp;人</p>
+                <p class="mb-2"><i class="fe-clipboard"></i>&nbsp;文章数量：<label id="articles_text_id"></label>&nbsp;篇</p>
+                <p class="mb-2"><i class="fe-message-square"></i>&nbsp;评论数量：<label id="comments_text_id"></label>&nbsp;条</p>
+                <p class="mb-2"><i class="fe-thumbs-up"></i>&nbsp;点赞个数：<label id="praises_text_id"></label>&nbsp;个</p>
+                <p class="mb-0"><i class="fe-calendar"></i>&nbsp;最后更新：<label id="lastUpdateTime_text_id"></label></p>
+            </div>
+        </div>
+        <div class="card-box ribbon-box">
+            <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="fe-share-2 mr-1"></i>&nbsp;文章推荐</div>
+            <ul class="nav nav-tabs  nav-bordered">
+                <li class="nav-item">
+                    <a href="#article_parise" data-toggle="tab" aria-expanded="true" class="nav-link active"><i class="fe-thumbs-up"></i>&nbsp;点赞最多</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#article_comment" data-toggle="tab" aria-expanded="false" class="nav-link"><i class="fe-message-square"></i>&nbsp;留言最多</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane show active" id="article_parise">
+                    <div class="card mt-0 mb-0">
+                        <div class="card-body pt-0 pb-0">
+                            <ul class="list-group list-group-flush" id="pariseArticle_box_id"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="article_comment">
+                    <div class="card mt-0 mb-0">
+                        <div class="card-body pt-0 pb-0">
+                            <ul class="list-group list-group-flush" id="commentArticle_box_id"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="card">
+            <div class="card-body ribbon-box" data-simplebar style="height:300px;overflow-x: hidden;">
+                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i>文章归档</div>
+                <ul id="years_box_id" class="list-group mt-4"></ul>
+            </div>
+        </div>-->
+        <div class="card">
+            <div class="card-body ribbon-box" style="">
+                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="fe-share-2 mr-1"></i>标签云</div>
+                <div class="row mt-4 text-nowrap" id="tags_box_id"></div>
+            </div>
+        </div>
+    </div>
+</template>
+
+</body>
+</html>

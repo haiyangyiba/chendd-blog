@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="${status}">5xx页面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-xl-4 mb-4">
+                        <div class="error-text-box">
+                            <div class="error-text-box text-center blink" style="font-size: 200px;width:100%;" th:text="${status}">500</div>
+                        </div>
+                        <div class="text-left">
+                            <h5 class="mt-0 mb-2" th:text="'错误信息：' + ${status} + ' ' + ${error}"></h5>
+                            <h5 class="mt-0 mb-2" th:text="'页面地址：' + ${path}"></h5>
+                            <h5 class="mt-0 mb-2" th:text="'操作时间：' + ${#dates.format(timestamp , 'yyyy年MM月dd日 HH时mm分ss秒')}"></h5>
+                            <h5 class="mt-0 mb-2" th:text="'错误描述：' + ${message}"></h5>
+                        </div>
+                        <div class="text-center">
+                            <a href="javascript:javascript:void(0);" onclick="history.back();" class="btn btn-primary waves-effect waves-light">
+                                <i class="mdi mdi-reply-all"></i> 返回上一页</a>
+                            <a href="javascript:javascript:void(0);" onclick="$('#error_message_id').toggle(200);"
+                               class="btn btn-danger waves-effect waves-light ml-4"><i class="mdi mdi-message-alert-outline"></i> 显示/隐藏错误堆栈</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xl-8 mb-4">
+                        <p class="text-muted mb-3 text-danger" id="error_message_id" th:text="${stackTrace}" style="display: none;"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="/frame/footer :: template">template</th:block>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootbox/bootbox.all.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+</body>
+</html>

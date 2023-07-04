@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.toolkit.operationlog.mapper.SysOperationLogMapper">
+
+    <!-- 用户信息列表查询 -->
+    <select id="querySysOperationPage" resultType="cn.chendd.toolkit.operationlog.vo.SysOperationLogResult"
+            parameterType="cn.chendd.toolkit.operationlog.po.SysOperationLogParam">
+        SELECT
+            a.id,
+            a.userId,
+            a.userName,
+            a.beginTime,
+            a.endTime,
+            a.runTime,
+            a.ip,
+            a.result,
+            a.description,
+            a.moduleId , b.moduleName , b.functionName
+        FROM Sys_operationlog a
+        LEFT JOIN sys_operationlog_module b on a.moduleId = b.moduleId
+        WHERE
+            a.endTime like concat(#{param.date} , '%')
+            <if test="param.userName != null and param.userName != ''">
+                and a.userName = #{param.userName}
+            </if>
+        ORDER BY a.endTime desc
+    </select>
+
+    <!-- 查询操作日志内容 -->
+    <select id="querySysOperationContent" resultType="java.lang.String"
+            parameterType="cn.chendd.toolkit.operationlog.po.SysOperationLogParam">
+        SELECT content FROM Sys_operationlog where id = #{param.id}
+    </select>
+
+    <!--更新操作日志结果-->
+    <update id="saveAfterOperationLog" parameterType="cn.chendd.toolkit.operationlog.model.SysOperationLog">
+        UPDATE Sys_operationlog SET
+               userId = #{userId , jdbcType=BIGINT} ,
+               userName = #{userName , jdbcType=VARCHAR} ,
+               endTime = #{endTime} ,
+               runTime = #{runTime} ,
+               result = #{resultEnum} ,
+               description = #{description , jdbcType=VARCHAR} ,
+               content = #{content} ,
+               moduleId = #{moduleId}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

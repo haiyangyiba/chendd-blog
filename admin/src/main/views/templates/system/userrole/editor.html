@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>角色菜单编辑</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/treeview/bootstrap-treeview.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="content-apge content-page-admin">
+    <div class="content">
+        <div class="table-responsive custom-scroll" style="height: 420px;overflow: auto;">
+            <form id="submit_form_id">
+                <table class="table table-bordered mb-0">
+                    <thead>
+                        <tr align="center">
+                            <th>选中</th>
+                            <th>角色名称</th>
+                            <th>角色标识</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item , itemStatus : ${dataList}">
+                            <td>
+                                <div class="checkbox checkbox-primary text-center">
+                                    <input th:id="'checkbox_' + ${itemStatus.count}" name="roleIds" type="checkbox" th:value="${item.roleId}" th:checked="${item.isChecked == 'true'}" />
+                                    <label th:for="'checkbox_' + ${itemStatus.count}">&nbsp;</label>
+                                </div>
+                            </td>
+                            <td><th:block th:text="${item.roleName}"></th:block></td>
+                            <td><th:block th:text="${item.roleKey}"></th:block></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <input type="hidden" id="userId_add_id" name="userId" th:value="${userId}" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/userrole/editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>访问量统计</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="访问量统计" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mt-2">
+                    <div class="col-lg-12">
+                        <div class="card-box ribbon-box">
+                            <div class="ribbon ribbon-primary float-left" style="margin-top: -10px;">访问量统计</div>
+                            <div class="ribbon-content">
+                                <div class="row">
+                                    <div class="col-xl-1"></div>
+                                    <div class="col-md-6 col-xl-2">
+                                        <div class="widget-rounded-circle card-box">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="avatar-lg rounded-circle bg-primary border-primary border shadow">
+                                                        <i class="fe-bar-chart font-24 avatar-title text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-right">
+                                                        <h3 class="mt-1"><span data-plugin="access-counterup" id="label_today_id"></span></h3>
+                                                        <p class="text-muted mb-1 text-truncate">今日访问</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-2">
+                                        <div class="widget-rounded-circle card-box">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="avatar-lg rounded-circle bg-pink border-pink border shadow">
+                                                        <i class="fe-bar-chart-2 font-24 avatar-title text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-right">
+                                                        <h3 class="text-dark mt-1"><span data-plugin="access-counterup" id="label_todayOutLink_id"></span></h3>
+                                                        <p class="text-muted mb-1 text-truncate">今日外链</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-2">
+                                        <div class="widget-rounded-circle card-box">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="avatar-lg rounded-circle bg-info border-info border shadow">
+                                                        <i class="fe-bar-chart-line- font-22 avatar-title text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-right">
+                                                        <h3 class="text-dark mt-1"><span data-plugin="counterup" id="label_yesterday_id"></span></h3>
+                                                        <p class="text-muted mb-1 text-truncate">昨日访问</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end col-->
+                                    <div class="col-md-6 col-xl-2">
+                                        <div class="widget-rounded-circle card-box">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="avatar-lg rounded-circle bg-success border-success border shadow">
+                                                        <i class="fe-award font-24 avatar-title text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-8">
+                                                    <div class="text-right">
+                                                        <h3 class="text-dark mt-1"><span data-plugin="counterup" id="label_maxCount_id"></span></h3>
+                                                        <p class="text-muted mb-1 text-truncate" id="label_maxDay_id"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-xl-2">
+                                        <div class="widget-rounded-circle card-box">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="avatar-lg rounded-circle bg-warning border-warning border shadow">
+                                                        <i class="fe-database font-24 avatar-title text-white"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-right">
+                                                        <h3 class="text-dark mt-1"><span data-plugin="counterup" id="label_total_id"></span></h3>
+                                                        <p class="text-muted mb-1 text-truncate">总访问数</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-1"></div>
+                                </div>
+                                <ul class="list-group list-group-flush font-14">
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">1</span>&nbsp;&nbsp;本站v2.0版本为重大版本升级，使用了最新掌握的技术栈开发实现，对于v1.0版本的访问量数据未作移植（作者始终只重文章质量）；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">2</span>&nbsp;&nbsp;今日外链表示今日的访问量中请求来源不是从本站发起的请求；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">3</span>&nbsp;&nbsp;请求次数不计算本站页面内发起的Ajax请求，一个请求只计算一个地址，请求页面发起的其它静态资源文件也不做计算；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">4</span>&nbsp;&nbsp;下列表格为系统最近10分钟内（从0开始，每隔10分钟重新即时；或不足10分钟到达500条时）的访问数据，按访问时间倒序；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">5</span>&nbsp;&nbsp;了解更多访问量统计实现，请参见站内文章《<a href="/blog/article/1634720538664157185.html" target="_blank">博客系统访问量统计</a>》；</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-box ribbon-box">
+                    <div class="ribbon ribbon-primary float-left" style="margin-top: -10px;">最新访问</div>
+                    <div class="ribbon-content">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="header-title mb-0 blink font-16"><strong><i class="fe-bar-chart-2"></i></strong>&nbsp;最新访问（准备存储）</h5>
+                                        <div class="collapse pt-3 show">
+                                            <div class="table-responsive">
+                                                <table class="table table-centered table-borderless mb-0">
+                                                    <thead class="thead-light">
+                                                    <tr>
+                                                        <th>序号</th>
+                                                        <th>URL</th>
+                                                        <th>来源</th>
+                                                        <th>设备</th>
+                                                        <th>访问时间</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="data , dataStatus : ${visits}">
+                                                        <td th:text="${dataStatus.count}"></td>
+                                                        <td th:text="${data.url}"></td>
+                                                        <td th:text="${data.referer}"></td>
+                                                        <td th:text="${data.userAgent}"></td>
+                                                        <td th:text="${data.createTime}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="/frame/footer :: template">template</th:block>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+</body>
+</html>

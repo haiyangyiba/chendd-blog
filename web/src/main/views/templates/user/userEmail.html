@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>用户Email修改</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="关键字文章列表" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-white">
+    <div class="table-responsive">
+        <div class="form-row align-items-center" style="width: 90%;">
+            <div class="col-auto">
+                <label class="sr-only">Username</label>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">Email</div>
+                    </div>
+                    <input type="email" id="email_add_id" autofocus class="form-control" th:value="${userInfo.email}" style="width:250px;" maxlength="32" placeholder="请输入Email" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary waves-effect waves-light mb-2" id="save_btn_id">
+                    <i class="fe-save"></i>&nbsp;保存&nbsp;
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="alert alert-warning" role="alert">
+                <i class="mdi mdi-alert-outline mr-1"></i>&nbsp;<strong>填写说明</strong>
+                <p class="mb-0 text-primary"><h6><span class="badge badge-pink badge-outline-primary mr-1">1</span>Email不是必须要填写的信息，如若填写请填写个人真实信息。</h6></p>
+                <p class="mb-0 text-primary"><h6><span class="badge badge-pink badge-outline-primary mr-1">2</span>本站承诺绝不会泄露任何人的Email等数据。</h6></p>
+                <p class="mb-0 text-primary"><h6><span class="badge badge-pink badge-outline-primary mr-1">3</span>填写Email后你的留言在被回复后系统将第一时间通过邮件的形式通知到。</h6></p>
+                <p class="mb-0 text-primary"><h6><span class="badge badge-pink badge-outline-primary mr-1">4</span>服务端校验Email格式，匹配正则：[a-zA-Z_]{0,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\.){1,3}[a-zA-z\-]{1,}</h6></p>
+                <p class="mb-0 text-primary"><h6 class="text-danger"><span class="badge badge-pink badge-outline-danger mr-1">5</span>仅首次登录提醒输入邮箱，后续不再提示。</h6></p>
+            </div>
+        </div>
+    </div>
+
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simplebar/5.1.0/simplebar.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.js"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/user/userEmail.js"></script>
+
+</body>
+</html>

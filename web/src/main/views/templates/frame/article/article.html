@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>公共页面-文章详细页模板</title>
+</head>
+<body>
+<!--点赞-->
+<template th:fragment="praises">
+    <h4 class="mt-3 font-22"><i class="far fa-thumbs-up text-primary"></i>&nbsp;点赞</h4>
+    <hr class="mt-0 mb-2"/>
+    <div class="row mt-0" id="praises_title_id">
+        <div class="col-xl-1 col-lg-1 col-md-1"></div>
+        <div class="col-xl-2 col-lg-3 col-md-3 text-center">
+            <p class="text-muted font-15 mb-1 text-truncate">
+                <img src="/statics/images/sgs/1.gif" />
+            </p>
+            <button type="button" style="margin: 0 auto;" onclick="handlePraises('Awesome')" class="input-group-text btn btn-primary waves-effect waves-light"><i class="fe-thumbs-up"></i>&nbsp;给力（<span id="Awesome_count_id">0</span>）</button>
+        </div>
+        <div class="col-xl-2 col-xl-2 col-lg-3 col-md-3 text-center">
+            <p class="text-muted font-15 mb-1 text-truncate">
+                <img src="/statics/images/sgs/2.gif" />
+            </p>
+            <button type="button" style="margin: 0 auto;" onclick="handlePraises('Boutique')" class="input-group-text btn btn-primary waves-effect waves-light"><i class="fe-heart"></i>&nbsp;精品（<span id="Boutique_count_id">0</span>）</button>
+        </div>
+        <div class="col-xl-2 col-xl-2 col-lg-3 col-md-3 text-center">
+            <p class="text-muted font-15 mb-1 text-truncate">
+                <img src="/statics/images/sgs/3.gif" />
+            </p>
+            <button type="button" style="margin: 0 auto;" onclick="handlePraises('Embarrassed')" class="input-group-text btn btn-primary waves-effect waves-light"><i class="fe-terminal"></i>&nbsp;囧（<span id="Embarrassed_count_id">0</span>）</button>
+        </div>
+        <div class="col-xl-2 col-xl-2 col-lg-3 col-md-3 text-center">
+            <p class="text-muted font-15 mb-1 text-truncate">
+                <img src="/statics/images/sgs/4.gif" />
+            </p>
+            <button type="button" style="margin: 0 auto;" onclick="handlePraises('Worship')" class="input-group-text btn btn-primary waves-effect waves-light"><i class="fe-twitter"></i>&nbsp;膜拜（<span id="Worship_count_id">0</span>）</button>
+        </div>
+        <div class="col-xl-2 col-xl-2 col-lg-3 col-md-3 text-center">
+            <p class="text-muted font-15 mb-1 text-truncate">
+                <img src="/statics/images/sgs/5.gif" />
+            </p>
+            <button type="button" style="margin: 0 auto;" onclick="handlePraises('Walk')" class="input-group-text btn btn-primary waves-effect waves-light"><i class="fe-navigation-2"></i>&nbsp;路过（<span id="Walk_count_id">0</span>）</button>
+        </div>
+        <div class="col-xl-1 col-lg-1 col-md-1"></div>
+    </div>
+</template>
+<!--评论-->
+<template th:fragment="comment">
+    <div class="row mt-2">
+        <div class="avatar-group mt-1" id="praises_list_id"></div>
+    </div>
+    <h5 class="mt-2 font-22"><i class="far fa-comment-dots text-primary"></i>&nbsp;发表评论</h5>
+    <hr class="mt-0 mb-2"/>
+    <textarea id="editor_content_id" data-autosave="editor-content" autofocus style="min-height: 200px;visibility: hidden;"></textarea>
+    <div style="position: relative;">
+        <button id="TencentCaptcha" data-appid="2057623068" data-cbfn="handleComment" type="button" class="input-group-text btn btn-primary waves-effect waves-light mt-2 mr-2">
+            <i class="fe-send mr-1"></i>提交
+        </button>
+        <span class="badge badge-soft-danger" id="commentDescritpion_text_id" style="position: absolute;top:10px;left: 80px;">当前回复：作者</span>
+        <span class="badge badge-soft-primary" id="commentDescritpion_default_id" onclick="resetCommentText()" style="position: absolute;top:10px;right: 0px;cursor: pointer;display: none;">点此回复作者</span>
+    </div>
+    <h4 class="mt-3 font-22"><i class="fas fa-list-ol text-primary"></i>&nbsp;评论列表</h4>
+    <hr class="mt-0 mb-2"/>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box pt-1 mb-0 pb-0">
+                <h4 class="header-title">留言区</h4>
+                <p class="sub-header" id="coment_pageHeader_id"></p>
+                <input type="hidden" value="" id="childId_hidden_id" />
+                <input type="hidden" value="" id="replyUserId_hidden_id" />
+            </div>
+            <div class="card-box pt-1 mb-0 pb-0" id="comment_box_id"></div>
+        </div>
+    </div>
+</template>
+
+<!--文章评论模板-->
+<template th:fragment="commentPage">
+<script type="temp/template" id="comment_template_id"
+        description="伤不起啊，thymeleaf 模板中使用js模板引擎时不兼容，它不允许在同一个标签中同时出现重复字符，比如不能出现多个“;、var、,、=”等等，只能通过增加一组新标签解决">
+    <![CDATA[
+    <%
+    for(var i=0 ;i < pageFinder.records.length ; i++){
+    var item = pageFinder.records[i] , childList = item.childList;
+    %>
+    <% var index = pageFinder.total - (pageFinder.current -1) * pageFinder.size -i -1; %>
+    <div class="media mb-3" id="<%=item.id%>">
+        <div class="chat-avatar">
+            <img src="<%=item.createUserPortrait%>" alt="Generic placeholder image" height="48" class="d-flex rounded-circle avatar-lg">
+            <div class="text-primary text-center pt-1 font-weight-bold" style="max-width: 62px;"><%=item.createUserName%></div>
+        </div>
+        <div class="media-body pl-2 ml-2 product-box" style="border-left: 1px solid #EEE;">
+            <h5 class="mt-0"><span>#<%=index+1%>楼</span><span class="ml-1 mr-1 badge <%=userSource[item.createUserSource.value]%>" style="padding:8px;"><i class="mdi mdi-cancel"></i> <%=item.createUserSource.text%></span> <span><%=item.createTime%></span></h5>
+            <div class="editor-style"><%=#item.editorContent%></div>
+            <div class="product-action">
+                <a href="javascript: void(0);" onclick="gotoComment('当前回复：#<%=index+1%> 楼层主 <%=item.createUserName%>' , '<%=item.id%>' , '<%=item.createUserId%>')" class="btn btn-success btn-xs waves-effect waves-light"><i class="mdi mdi-pencil"></i>&nbsp;回复</a>
+            </div>
+            <%for(var j=0 ;j < childList.length ; j++){
+            var childItem = childList[j];
+            %>
+            <hr/>
+            <div class="media mt-2">
+                <div class="chat-avatar">
+                    <img src="<%=childItem.createUserPortrait%>" alt="Generic placeholder image" height="48" class="d-flex rounded-circle avatar-lg">
+                    <div class="text-primary text-center pt-1" style="max-width: 62px;"><%=childItem.createUserName%></div>
+                </div>
+                <div class="media-body ml-3 product-box">
+                    <h5 class="mt-0"><span>#<%=index+1%>-<%=j+1%></span> <span><%=childItem.createTime%></span> <span class="text-primary"><%=childItem.createUserName%></span> @ <span class="text-primary"><%=childItem.replyUserName%></span></h5>
+                    <div class="editor-style"><%=#childItem.editorContent%></div>
+                    <div class="product-action">
+                        <a href="javascript: void(0);" onclick="gotoComment('当前回复：#<%=index+1%>-<%=j+1%> 楼用户 <%=childItem.createUserName%>' , '<%=item.id%>' , '<%=childItem.createUserId%>')" class="btn btn-success btn-xs waves-effect waves-light"><i class="mdi mdi-pencil"></i>&nbsp;回复</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+    <hr/>
+    <% } %>
+    <% if( pageFinder.pages > 1) { %>
+    <nav>
+        <ul class="pagination pagination-rounded justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="javascript: void(0);" onclick="reloadComment('1')" title="首页">
+                    <i class="fe-chevrons-left"></i>
+                </a>
+            </li>
+            <%
+            var begin = pageFinder.current - 2 < 1 ? 1 : pageFinder.current - 2;
+            var end = pageFinder.current + 2 > pageFinder.pages ? pageFinder.pages : pageFinder.current + 2;
+            for(var p = begin ; p <= end ; p++) {
+            if (begin < 1 || p > pages) {
+            continue;
+            }
+            if (p == pageFinder.current) {
+            %>
+            <li id="current_page_id" data-page="<%=p%>" class="page-item active"><a class="page-link" href="javascript: void(0);"><%=p%></a></li>
+            <%
+            } else {
+            %>
+            <li class="page-item"><a class="page-link" onclick="reloadComment('<%=p%>')" href="javascript: void(0);"><%=p%></a></li>
+            <%
+            }
+            }
+            %>
+            <li class="page-item">
+                <a class="page-link" href="javascript: void(0);" onclick="reloadComment('<%=pageFinder.pages%>')" data-page="<%=pageFinder.pages%>" title="末页">
+                    <i class="fe-chevrons-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <% } %>
+]]></script>
+</template>
+
+</body>
+</html>

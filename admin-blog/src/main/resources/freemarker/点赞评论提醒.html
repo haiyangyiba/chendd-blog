@@ -1,0 +1,43 @@
+<table style="font-size:12px;border-collapse:collapse;border-spacing:0;border-left:1px solid #888;border-top:1px solid #888;background:#efefef;">
+	<thead>
+		<tr>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" colspan="3">${commentTitle}</th>
+		</tr>
+		<tr>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;">文章标题</th>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" width="120">用户名</th>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" width="120">操作时间</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list commentList as item >
+		<tr>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.title}</td>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.userSource} ${item.createUserName}</td>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.createTime}</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>
+<br/>
+<table style="font-size:12px;border-collapse:collapse;border-spacing:0;border-left:1px solid #888;border-top:1px solid #888;background:#efefef;">
+	<thead>
+		<tr>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" colspan="3">${praisesTitle}</th>
+		</tr>
+		<tr>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;">文章标题</th>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" width="120">用户名</th>
+			<th style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;font-weight:bold;background:#ccc;" width="120">操作时间</th>
+		</tr>
+	</thead>
+	<tbody>
+		<#list praisesList as item >
+		<tr>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.title}</td>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.userSource} ${item.createUserName}</td>
+			<td style="font-size:12px;border-right:1px solid #888;border-bottom:1px solid #888;padding:5px;">${item.createTime}</td>
+		</tr>
+		</#list>
+	</tbody>
+</table>

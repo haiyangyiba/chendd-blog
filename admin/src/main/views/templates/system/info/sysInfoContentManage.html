@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>系统内容管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico">
+<link href="/statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body style="overflow: hidden;">
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div id="grid_toolbar">
+                        <form id="query_form_id">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">标题</div>
+                                        </div>
+                                        <input type="text" class="form-control enterSubmit" id="title_search_id" name="title" autocomplete="off" placeholder="请输入标题" />
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">标识</div>
+                                        </div>
+                                        <input type="text" class="form-control enterSubmit" id="key_search_id" name="key" autocomplete="off" placeholder="请输入关键字" />
+                                    </div>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="query_btn_id">
+                                        <i class="fas fa-search"></i>&nbsp;查询
+                                    </button>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light resetForm">
+                                        <i class="fas fa-redo"></i>&nbsp;重置
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="input-group-prepend mb-2">
+                                        <button type="button" id="add_btn_id" class="input-group-text btn btn-blue waves-effect waves-light">
+                                            <i class="fe-plus"></i>&nbsp;新增&nbsp;
+                                        </button>
+                                        <button type="button" id="modif_btn_id" class="input-group-text btn btn-blue waves-effect waves-light">
+                                            <i class="fe-edit-1"></i>&nbsp;修改
+                                        </button>
+                                        <button type="button" id="remove_btn_id" class="input-group-text btn btn-danger waves-effect waves-light">
+                                            <i class="fe-delete"></i>&nbsp;删除
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table id="grid_table" class="text-nowrap"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/statics/plugins/form/jquery.form.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script src="/statics/js/system/info/sysInfoContentManage.js"></script>
+</body>
+</html>

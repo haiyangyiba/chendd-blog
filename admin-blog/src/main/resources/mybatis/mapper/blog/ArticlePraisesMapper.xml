@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.article.mapper.ArticlePraisesMapper">
+    
+    <!-- 根据ID查询文章明细数据 -->
+    <select id="queryArticlePraisesResult" resultType="cn.chendd.blog.client.article.vo.ArticlePraisesResult" parameterType="long">
+        select
+            user.userId,user.realName userName,user.portrait,user.userSource,group_concat(praises.dataType SEPARATOR ',') dataTypes
+        from blog_article_praises praises
+        left join sys_user user on user.userId = praises.createUserId
+        where
+            praises.articleId = #{articleId}
+        group by user.userId,user.realName,user.portrait,user.userSource
+    </select>
+    <!--查询时间范围内的所有点赞数据-->
+    <select id="queryRemindPraises" resultType="cn.chendd.blog.admin.blog.article.vo.RemindPrausesAndCommentResult">
+        <![CDATA[
+            select
+                a.articleId , a.createUserId , a.createUserName , a.createTime, b.title , user.userSource
+            from blog_article_praises a
+            left join blog_article b on b.id = a.articleId
+            left join sys_user user on user.userId = a.createUserId
+            where a.createTime >= #{begin} and a.createTime <= #{end}
+            order by b.title , a.createTime
+        ]]>
+    </select>
+
+</mapper>

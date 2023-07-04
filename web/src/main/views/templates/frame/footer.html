@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>公共页面-页面底部</title>
+</head>
+<body>
+
+<template th:fragment="template">
+    <div style="width: 20px;bottom: 15%;right: 50px;position: fixed;">
+        <ul class="list-group p-1 font-16">
+            <li class="list-group-item p-0 mt-1 border-0" style="background: none;">
+                <button type="button" id="export_pdf_id" class="btn btn-soft-success waves-effect waves-effect waves-light font-18 rounded-circle" title="导出PDF"
+                        style="padding:0;width:36px;height:36px;display: none;"><i class="fe-printer"></i></button></li>
+            <li class="list-group-item p-0 mt-1 border-0" id="returnTop_id" style="background: none;">
+                <button type="button" class="btn btn-soft-success waves-effect waves-light font-24 rounded-circle" title="滚动至顶部"
+                        style="padding:0;width:36px;height:36px;"><i class="fe-arrow-up-circle"></i></button></li>
+            <li class="list-group-item p-0 mt-1 border-0" id="returnBottom_id" style="background: none;">
+                <button type="button" class="btn btn-soft-success waves-effect waves-light font-24 rounded-circle" title="滚动至底部"
+                        style="padding:0;width:36px;height:36px;"><i class="fe-arrow-down-circle"></i></button></li>
+        </ul>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    CopyRight &copy; 2015 ~ 2023&nbsp;<a target="_blank" href="https://beian.miit.gov.cn/"><nobr>京ICP备15041724</nobr></a>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="text-md-center footer-links d-sm-block">
+                        <a><i class="fe-trending-up"></i>&nbsp;昨日访问：<b id="access_yesterday_id"></b></a>
+                        <a class="blink font-14" href="/blog/page/visits.html"><i class="fe-trending-up"></i>&nbsp;今日访问：<b id="access_today_id"></b></a>
+                        <a><i class="fe-layers"></i>&nbsp;今日外链：<b id="access_todayOutLink_id"></b></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-md-right footer-links d-sm-block">
+                        <a href="/blog/page/website.html"><i class="fe-eye"></i>&nbsp;本站介绍</a>
+                        <a href="/blog/page/author.html"><i class="fe-github"></i>&nbsp;作者介绍</a>
+                        <a href="/blog/page/history.html"><i class="fe-award"></i>&nbsp;历史上的本站</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</template>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.sysmenu.mapper.SysMenuMapper">
+
+    <!-- 查询web一级菜单，排除首页 -->
+    <select id="queryWebMenus" resultType="cn.chendd.blog.admin.system.sysmenu.model.SysMenu">
+        select
+            menu.*
+        from sys_menu menu
+        where menu.menuKey like '#blog_web_menu_%' and menu.menuKey not in ('#blog_web_menu_types','#blog_web_menu_home')
+    </select>
+    <!-- 查询文章类型数量 -->
+    <select id="queryArticleCountByType" resultType="java.lang.Integer">
+        select count(*) from blog_article a where a.type in
+        <foreach collection="list" separator="," item="item" open="(" close=")">
+            #{item, jdbcType=NUMERIC}
+        </foreach>
+    </select>
+    <!-- 查询所有文章 -->
+    <select id="queryArticleCount" resultType="java.lang.Integer">
+        select count(*) from blog_article a where a.dataStatus = 'USABLE'
+    </select>
+</mapper>

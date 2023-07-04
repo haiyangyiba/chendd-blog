@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.ansj.moduletag.mapper.SysModuleTagsMapper">
+
+    <!-- 根据模块名称和目标ID查询标签关键字 -->
+    <select id="getModuleCountFor10" resultType="cn.chendd.ansj.moduletag.vo.ModuleResult">
+        SELECT
+            COUNT(tag) count, tag label
+        FROM
+            sys_module_tags
+        WHERE
+            moduleName = #{moduleName} AND targetId = #{targetId}
+        GROUP BY tag
+        ORDER BY COUNT(tag) DESC , CHAR_LENGTH(tag) DESC
+        LIMIT 10
+    </select>
+</mapper>

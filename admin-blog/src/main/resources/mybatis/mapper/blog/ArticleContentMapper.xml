@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.article.mapper.ArticleContentMapper">
+    
+    <!-- 根据ID查询文章明细数据 -->
+    <select id="getArticleContent" resultType="cn.chendd.blog.client.article.vo.ArticleSingleContentResult">
+        select
+             a.id , a.title , a.type , a.createTime , a.createUsername , a.updateTime , a.updateUsername , b.editorContent , a.sortOrder
+        from blog_article a
+        left join blog_article_content b on a.id = b.articleId
+        where a.id = #{articleId} and a.dataStatus = 'USABLE'
+    </select>
+    <!-- 根据ID查询文章的标签列表 -->
+    <select id="getArticleTags"
+            resultType="cn.chendd.blog.client.article.vo.ArticleSingleContentResult$ArticleTag">
+        select
+              tag.tag id, tag.tag, tag.strong from blog_tag_article ref
+        left join blog_tag tag on tag.id = ref.tagId
+        where ref.articleId = #{articleId} order by tag.sortOrder
+    </select>
+    <!-- 查询文章上一篇和下一篇 -->
+    <select id="getArticlePosition"
+            resultType="cn.chendd.blog.client.article.vo.ArticleSingleContentResult$ArticlePosition">
+        <![CDATA[
+        select art.id,art.title name,'next' position from blog_article art
+        where art.sortOrder =
+              (
+                  select min(main.sortOrder) from blog_article main
+                  right join blog_article_property prop on prop.articleId = main.id and prop.property = 'state' and prop.value = 'publish'
+                  where main.sortOrder > #{sortOrder} and main.type = #{type} and main.dataStatus = 'USABLE'
+              )
+        union
+        select art.id,art.title name,'prev' position from blog_article art
+        where art.sortOrder =
+             (
+                  select max(main.sortOrder) from blog_article main
+                  right join blog_article_property prop on prop.articleId = main.id and prop.property = 'state' and prop.value = 'publish'
+                  where main.sortOrder < #{sortOrder} and main.type = #{type} and main.dataStatus = 'USABLE'
+             )
+
+        ]]>
+    </select>
+    <!-- 查询感兴趣的文章 -->
+    <select id="getArticleDependent"
+            resultType="cn.chendd.blog.client.article.vo.ArticleSingleContentResult$ArticleDependent">
+        <![CDATA[
+            SELECT DISTINCT
+                  article.id, article.title, article.sortOrder
+            FROM blog_tag_article tag
+            LEFT JOIN blog_article article ON article.id = tag.articleId
+            WHERE tag.tagId IN (
+                SELECT b.tagId FROM blog_tag a
+                LEFT JOIN blog_tag_article b ON a.id = b.tagId
+                WHERE b.articleId = #{articleId}
+            )
+            AND article.id <> #{articleId}
+            ORDER BY article.sortOrder
+         ]]>
+    </select>
+</mapper>

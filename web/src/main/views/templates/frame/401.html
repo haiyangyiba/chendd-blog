@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>401 Unauthorized</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+    <div id="wrapper">
+        <th:block th:include="/frame/header :: template">template</th:block>
+        <th:block th:include="/frame/nav :: template">template</th:block>
+        <div class="content-page">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 col-xl-4 mb-4">
+                            <div class="error-text-box text-center blink" style="font-size: 200px;width:100%;">401</div>
+                            <div class="text-left">
+                                <h5 class="mt-0 mb-2">错误信息：401 Unauthorized</h5>
+                                <h5 class="mt-0 mb-2">错误描述：当前操作需要登录</h5>
+                                <p class="text-muted mb-3"></p>
+                            </div>
+                            <div class="text-center">
+                                <a href="javascript:" onclick="history.back();" class="btn btn-primary waves-effect waves-light">
+                                    <i class="mdi mdi-reply-all"></i> 返回上一页</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/frame/footer :: template">template</th:block>
+    </div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootbox/bootbox.all.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+</body>
+</html>

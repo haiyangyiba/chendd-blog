@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="cn.chendd.blog.admin" />
+    <context:component-scan base-package="cn.chendd.core" />
+    <context:component-scan base-package="cn.chendd.blog.base" />
+    <context:component-scan base-package="cn.chendd.toolkit.dbproperty" />
+    <context:component-scan base-package="cn.chendd.toolkit.operationlog" />
+    <context:component-scan base-package="cn.chendd.toolkit.quartz" />
+    <context:component-scan base-package="cn.chendd.third.login" />
+    <context:component-scan base-package="cn.chendd.ansj.moduletag" />
+    <context:component-scan base-package="cn.chendd.ueditor" />
+
+    <!-- 配置登录地址过滤拦截，支持多组拦截器参数配置 -->
+    <!--<bean id="loginInterceptor" class="cn.chendd.blog.base.spring.component.InterceptorConfiguration">
+        <property name="beanClassName" value="cn.chendd.blog.admin.commponents.UrlValidatorInterceptor"/>
+        <property name="includeMapping">
+            <list>
+                <value>/**/*.html</value>
+            </list>
+        </property>
+        <property name="excludeMapping">
+            <list>
+                <value>/statics/**</value>
+                <value>/</value>
+                <value>/login.html</value>
+                <value>/verificationCode.html</value>
+                &lt;!&ndash;队伍提供接口，以v+数字为前缀的匹配&ndash;&gt;
+                <value>/v{\d+}/**/*.html</value>
+                &lt;!&ndash;<value>/v{\d+}/**</value>&ndash;&gt;
+            </list>
+        </property>
+    </bean>-->
+
+
+    <!-- 配置登录地址过滤拦截，支持多组拦截器参数配置 -->
+    <bean id="urlInterceptor" class="cn.chendd.blog.base.spring.component.InterceptorConfiguration">
+        <property name="beanClassName" value="cn.chendd.blog.admin.commponents.UrlValidatorInterceptor"/>
+        <!--包含过滤的路径-->
+        <property name="includeMapping">
+            <list>
+                <value>/**/*</value>
+            </list>
+        </property>
+        <!--拦截器放行路劲-->
+        <property name="excludeMapping">
+            <list>
+                <value>/</value>
+                <value>/login.html</value>
+                <value>/error</value>
+                <value>/statics/**</value>
+                <value>/verificationCode.html</value>
+                <value>/v{\d+}/**/*.html</value>
+                <!--第三方登录-->
+                <value>/v1/third-login/*Callback</value>
+                <value>/ueditor/**</value>
+            </list>
+        </property>
+        <!--按请求方式放行，与之匹配到的地址，仅拦截对应请求方式，否则直接放行-->
+        <property name="excludeMappingTypes">
+            <list>
+                <value>/system/login POST</value><!--登录后台地址-->
+            </list>
+        </property>
+
+    </bean>
+
+</beans>

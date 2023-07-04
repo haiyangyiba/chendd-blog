@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>欢迎来到陈冬冬的个人经验分享平台</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="Java,个人博客,陈冬冬,Java个人博客" name="keywords" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <!-- end Topbar -->
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <!-- end topnav-->
+    <div class="content-page">
+        <div class="content">
+            <!-- Start Content-->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-box ribbon-box mb-2">
+                            <div class="ribbon ribbon-info float-left" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i> 系统介绍</div>
+                            <div class="card-body">
+                                <div id="systemInfoHomepage" class="carousel slide" style="line-height: 22px;" data-ride="carousel">
+                                    <ol class="carousel-indicators"><th:block th:each="item,itemState:${introduceList}">
+                                            <li data-target="#systemInfoHomepage" th:attr="data-slide-to=${itemState.index}" th:if="${itemState.first}" th:class="active"></li>
+                                            <li data-target="#systemInfoHomepage" th:attr="data-slide-to=${itemState.index}" th:if="${!itemState.first}"></li></th:block>
+                                    </ol>
+                                    <div class="carousel-inner" role="listbox">
+                                        <div style="height:320px;" th:attr="class=${itemState.first ? 'carousel-item active' : 'carousel-item'}" th:each="item,itemState:${introduceList}">
+                                            <h4 th:text="${item.title}" class="header-title mb-1">内容标题</h4>
+                                            <th:block th:utext="${item.editorContent}"></th:block>
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#systemInfoHomepage" role="button" data-slide="prev">
+                                        <i class="fas fa-angle-left" aria-hidden="true"></i>
+                                    </a>
+                                    <a class="carousel-control-next" href="#systemInfoHomepage" role="button" data-slide="next">
+                                        <i class="fas fa-angle-right" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-box ribbon-box mb-2">
+                            <div class="ribbon ribbon-info float-right" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i> 统计图表</div>
+                            <div id="reportChartHomepage" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    <li data-target="#reportChartHomepage" data-slide-to="0" class="active"></li>
+                                    <li data-target="#reportChartHomepage" data-slide-to="1"></li>
+                                    <li data-target="#reportChartHomepage" data-slide-to="2"></li>
+                                    <li data-target="#reportChartHomepage" data-slide-to="3"></li>
+                                    <!--<li data-target="#reportChartHomepage" data-slide-to="4"></li>-->
+                                </ol>
+                                <div class="carousel-inner" role="listbox" id="report_box_id">
+                                    <input type="hidden" id="reportSource_data_id" th:value="${reportChartHomepage}" />
+                                    <div class="carousel-item active" style="height: 342px;">
+                                        <div id="userSources_report_id" class="slide-item-report">用户来源统计</div>
+                                    </div>
+                                    <div class="carousel-item" style="height: 342px;">
+                                        <div id="articleYears_report_id" class="slide-item-report">年份数量统计</div>
+                                    </div>
+                                    <div class="carousel-item" style="height: 342px;">
+                                        <div id="articleVisits_report_id" class="slide-item-report">访问量前五名</div>
+                                    </div>
+                                    <!--<div class="carousel-item" style="height: 342px;">
+                                        <div id="articleNumbers_report_id" class="slide-item-report">文章分类数量统计</div>
+                                    </div>-->
+                                    <div class="carousel-item" style="height: 342px;">
+                                        <div id="amountNumbers_report_id" class="slide-item-report">各种数量统计</div>
+                                    </div>
+                                </div>
+                                <a class="carousel-control-prev" href="#reportChartHomepage" role="button" data-slide="prev">
+                                    <span class="fas fa-angle-left" aria-hidden="true"></span>
+                                </a>
+                                <a class="carousel-control-next" href="#reportChartHomepage" role="button" data-slide="next">
+                                    <i class="fas fa-angle-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card-box ribbon-box mb-2">
+                            <div class="ribbon-two ribbon-two-info"><span style="padding: 5px;">推荐标签</span></div>
+                            <div class="card-body text-secondary">
+                                <p class="card-text">
+                                    <a onclick="return showTags(this)" th:title="${tag.tag}" th:href="'/blog/tag/' + ${tag.tag} + '.html'" th:each="tag,tagState:${tagList}" th:style="${tag.style}">
+                                        <th:block th:text="${tag.tag}">标签云</th:block><span
+                                            th:text="'(' + ${tag.counts} + ')'">(520)</span>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card-box ribbon-box mb-2">
+                            <div class="ribbon-two ribbon-two-info"><span style="padding: 5px;">本站精粹</span></div>
+                            <div class="card-body text-secondary">
+                                <div class="row">
+                                    <div class="col-lg-6" th:each="item,itemState:${projectList}">
+                                        <div class="card-box mb-2" style="padding: 10px;">
+                                            <div class="row align-items-center">
+                                                <div class="col-sm-12">
+                                                    <div class="media">
+                                                        <img class="d-flex align-self-center mr-3 img-thumbnail" style="background: transparent;border: none;" th:src="${item.logo}" />
+                                                        <div class="media-body">
+                                                            <h4 class="font-18 mt-0 sp-line-1" th:text="${item.title}">标题</h4>
+                                                            <p class="mb-1 font-14" th:utext="${item.description}">描述内容</p>
+                                                            <div class="text-muted mr-3 mb-1">
+                                                                评分：
+                                                                <span class="fe-star-on text-warning" th:each="i:${#numbers.sequence(1 , item.score)}"></span><span
+                                                                    class="fe-star-on" th:if="${item.score < 5}" th:each="i:${#numbers.sequence(item.score , 4)}"></span>
+                                                            </div>
+                                                            <div class="mb-1">
+                                                                发布：<span class="mb-0 text-muted"><dd:format th:type="datetime" th:value="${item.createDate}">5个月前</dd:format></span>
+                                                            </div>
+                                                            <div class="mb-2">
+                                                                <a href="javascript: void(0);" th:href="${item.link}" class="btn btn-xs btn-primary waves-effect waves-light">查&nbsp;看</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="page-title">最新文章</h4>
+                <div class="row">
+                    <div class="col-lg-12" th:each="item,itemState:${articleList}">
+                        <div class="card-box mb-2">
+                            <div class="media mb-3">
+                                <img class="d-flex mr-3" th:if="${item.property.coverImageUrl != null}" th:src="'/file' + ${item.property.coverImageUrl}" alt="封面图片">
+                                <div class="media-body text-wrap text-truncate">
+                                    <h4 class="mt-0 mb-1">
+                                        <a th:text="${item.title}" style="text-decoration: underline;" th:href="'/blog/article/' + ${item.id} + '.html'">文章标题</a>
+                                    </h4>
+                                    <p th:text="${item.simpleContent}">文章内容</p>
+                                    <p class="text-muted" th:utext="'文章分类：' + ${item.typeText}">文章分类</p>
+                                    <a href="javascript: void(0);" style="cursor: default;" th:each="item,itemState:${item.tagList}" th:text="${item.tag}" th:if="${item.strong == 'yes'}" class="mr-1 btn- btn-xs btn-info">标签</a>
+                                    <a href="javascript: void(0);" style="cursor: default;" th:each="item,itemState:${item.tagList}" th:text="${item.tag}" th:if="${item.strong != 'yes'}" class="mr-1 btn- btn-xs btn-secondary">标签</a>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <a href="javascript: void(0);" style="cursor: default;" class="btn btn-sm btn-link text-muted pl-0"><i class="fe-flag"></i>
+                                    发布于：<dd:format th:type="datetime" th:value="${item.createTime}">发布时间</dd:format>
+                                </a>
+                                <a class="btn btn-sm btn-link text-muted pl-0" style="cursor: default;" th:if="${item.updateTime != null && item.updateTime != '' }">
+                                    最后更新：<dd:format th:type="datetime" th:value="${item.updateTime}">最后更新</dd:format>
+                                </a>
+                                <a href="javascript: void(0);" style="cursor: default;" class="btn btn-sm btn-link text-muted"> <i class="fe-thumbs-up"></i> 点赞：<th:block th:text="${item.praisesCount}"></th:block></a>
+                                <a href="javascript: void(0);" style="cursor: default;" class="btn btn-sm btn-link text-muted"><i class="fe-message-square"></i> 评论：<th:block th:text="${item.commentCount}"></th:block></a>
+                                <a href="javascript: void(0);" style="cursor: default;" class="btn btn-sm btn-link text-muted"><i class="fe-eye"></i> 浏览次数：<th:block th:text="${item.visitsCount}"></th:block></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 text-center mt-2" id="loadMoreArticle">
+                        <button class="input-group-text btn btn-primary btn-outline-primary mb-1" style="margin: 0 auto;" data-page-number="1" id="loadMoreArticle_id"><i class="fas fa-sync-alt"></i> 加载更多...</button>
+                        <button class="input-group-text btn btn-primary waves-effect waves-light mb-1" id="loadMoreArticle_status_id" style="display: none;margin: 0 auto;" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>Loading...
+                        </button>
+                    </div>
+                </div>
+                <!--<h4 class="page-title">友情链接</h4>-->
+                <div class="row m-2"></div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card mb-2">
+                            <div class="card-body text-secondary" style="min-height: 401px;">
+                                <h4 class="card-title"><b><i class="fe-users"></i>&nbsp;最新用户</b></h4>
+                                <div class="media  mt-2" th:each="userNewest : ${userNewsList}">
+                                    <th:block th:switch="${userNewest.userSource.value}">
+                                        <th:block th:case="'Baidu'">
+                                            <img class="mr-3 rounded-circle" src="/statics/assets/images/users/user-1.jpg" th:src="'/internet/image?url='+${userNewest.portrait}" width="40" alt="用户头像" th:alt="${userNewest.realName}">
+                                        </th:block>
+                                        <th:block th:case="'Sina_weibo'">
+                                            <img class="mr-3 rounded-circle" src="/statics/assets/images/users/user-1.jpg" th:src="'/internet/image?url='+${userNewest.portrait}" width="40" alt="用户头像" th:alt="${userNewest.realName}">
+                                        </th:block>
+                                        <th:block th:case="*">
+                                            <img class="mr-3 rounded-circle" src="/statics/assets/images/users/user-1.jpg" th:src="${userNewest.portrait}" width="40" alt="用户头像" th:alt="${userNewest.realName}">
+                                        </th:block>
+                                    </th:block>
+                                    <div class="media-body">
+                                        <span class="badge badge-soft-warning float-right mt-2">注册时间：<dd:format th:type="datetime" th:value="${userNewest.createTime}">5个月前</dd:format></span>
+                                        <h5 class="mt-0 mt-2 text-truncate" th:text="${userNewest.userSource.text} + '：' + ${userNewest.realName}">百度用户：不出色的小子</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card mb-2">
+                            <div class="card-body text-secondary" style="min-height: 401px;">
+                                <h4 class="card-title"><b><i class="fe-message-square">&nbsp;</i>最新评论</b></h4>
+                                <div class="media mt-2" th:each="commentNewest : ${commentNewestList}">
+                                    <th:block th:switch="${commentNewest.userSource.value}">
+                                        <th:block th:case="'Baidu'">
+                                            <img class="mr-3 rounded-circle" th:src="'/internet/image?url='+${commentNewest.portrait}" width="40" alt="用户头像" th:alt="${commentNewest.realName}">
+                                        </th:block>
+                                        <th:block th:case="'Sina_weibo'">
+                                            <img class="mr-3 rounded-circle" th:src="'/internet/image?url='+${commentNewest.portrait}" width="40" alt="用户头像" th:alt="${commentNewest.realName}">
+                                        </th:block>
+                                        <th:block th:case="*">
+                                            <img class="mr-3 rounded-circle" th:src="${commentNewest.portrait}" width="40" alt="用户头像" th:alt="${commentNewest.realName}">
+                                        </th:block>
+                                    </th:block>
+                                    <div class="media-body text-truncate">
+                                        <span class="badge badge-soft-warning float-right">评论时间：<dd:format th:type="datetime" th:value="${commentNewest.createTime}">5个月前</dd:format></span>
+                                        <h5 class="mt-0 mb-1" th:text="${commentNewest.userSource.text} + '：' + ${commentNewest.realName}">百度用户：不出色的小子</h5>
+                                        <span class="font-13" th:title="${commentNewest.content}" th:text="${commentNewest.content}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card mb-2">
+                            <div class="card-body text-secondary">
+                                <h4 class="card-title"><b><i class="fe-link"></i>&nbsp;友情链接</b><span class="font-14 text-danger">“【优先显示我站在贵站首页的链接】”</span></h4>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <button th:each="friendsLinkNewes : ${friendsLinkNewestList}" type="button" style="cursor: default;"
+                                                class="btn btn-white waves-effect waves-light mb-2 mr-1" th:title="${friendsLinkNewes.remark}">
+                                            <img th:if="${friendsLinkNewes.logo != null && friendsLinkNewes.logo != ''}" th:src="${friendsLinkNewes.logo}" class="img-fluid avatar-xs rounded" />
+                                            <a th:href="${friendsLinkNewes.link}" target="_blank">
+                                                <th:block th:if="${friendsLinkNewes.counts > 0}">
+                                                    <th:block th:text="${friendsLinkNewes.title}"></th:block><span class="badge badge-danger ml-1" th:text="${friendsLinkNewes.counts}">0</span>
+                                                </th:block>
+                                                <th:block th:text="${friendsLinkNewes.title}" th:if="${friendsLinkNewes.counts == 0}">本站</th:block>
+                                            </a>
+                                        </button>
+                                        <button type="button" class="btn btn-white waves-effect waves-light mb-2 mr-1" title="默认显示前15个友情链接，点击查看更多">
+                                            <a href="/blog/page/link.html"><i class="mdi mdi-heart-half-full mr-1"></i>更多...</a>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row m-2"></div>
+        </div> <!-- container -->
+    </div> <!-- content -->
+    <th:block th:include="/frame/footer :: template">template</th:block>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simplebar/5.1.0/simplebar.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.5.0/echarts.common.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/index.js"></script>
+<!--
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootbox/bootbox.all.min.js"></script>
+<script src="/statics/plugins/echarts/echarts.common.min.js"></script>
+<script src="/statics/plugins/art-template/template-web.js"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/index.js"></script>
+-->
+<script type="text/template" id="article_template_id"><![CDATA[
+<%
+for (var i=0 ; i < data.length; i++) {
+    var item = data[i];
+%>
+    <div class="col-lg-12">
+        <div class="card-box mb-2">
+            <div class="media mb-3">
+                <% if (item.property != null && item.property.coverImageUrl != null) {
+                    %>
+                    <img class="d-flex mr-3" src="<%='/file' + item.property.coverImageUrl%>" alt="封面图片" />
+                    <%
+                } %>
+                <div class="media-body">
+                    <h4 class="mt-0 mb-1">
+                        <a style="text-decoration: underline;" href="/blog/article/<%=item.id%>.html"><%=item.title%></a>
+                    </h4>
+                    <p><%=item.simpleContent%></p>
+                    <p class="text-muted"><%=item.tagList.length%>文章分类：<%=#item.typeText%></p>
+                    <%
+                        var tagList = item.tagList;
+                        for (var j=0 ; j < tagList.length ; j++) {
+                            var element = tagList[j];
+                            %>
+                                <a href="javascript: void(0);" class="mr-1 btn- btn-xs <%=element.strong === 'yes' ? 'btn-info' : 'btn-secondary' %>"><%=element.tag%></a>
+                            <%
+                        }
+                    %>
+
+                </div>
+            </div>
+            <div class="mt-2">
+                <a href="javascript: void(0);" style="cursor:default;" class="btn btn-sm btn-link text-muted pl-0"><i class="fe-flag"></i>
+                    发布于：<%=item.createTime%>
+                </a>
+                <%
+                    if (item.updateTime != null && item.updateTime != "" && item.createTime !== item.updateTime) {
+                        %>
+                            <a class="btn btn-sm btn-link text-muted pl-0" style="cursor:default;">最后更新：<%=item.updateTime%></a>
+                        <%
+                    }
+                %>
+                <a href="javascript: void(0);" style="cursor:default;" class="btn btn-sm btn-link text-muted"> <i class="fe-thumbs-up"></i>&nbsp;点赞：<%=item.praisesCount%></a>
+                <a href="javascript: void(0);" style="cursor:default;" class="btn btn-sm btn-link text-muted"><i class="fe-message-square"></i>&nbsp;评论：<%=item.commentCount%></a>
+                <a href="javascript: void(0);" style="cursor:default;" class="btn btn-sm btn-link text-muted"><i class="fe-eye"></i>&nbsp;浏览次数：<%=item.visitsCount%></a>
+            </div>
+        </div>
+    </div>
+<%
+}
+%>
+]]></script>
+</body>
+</html>

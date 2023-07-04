@@ -1,0 +1,89 @@
+application:
+  version: 1.0.0
+  formatted-version: vweb-${application.version}
+  title: chendd & jiangyou baobao 【开发环境】
+
+server:
+  port: 443
+  http-port: 80
+  servlet:
+    context-path: /
+  tomcat:
+    connection-timeout: 120s
+  ssl:
+    enabled: true
+    key-store: "classpath:config/ssl/www.chendd.cn.pfx"
+    key-store-password: uwsaxbfp
+
+logging:
+  config: classpath:config/logback/logback-spring.xml
+spring:
+  mvc:
+    async:
+      request-timeout: 120s
+  profiles:
+    active: dev
+  banner:
+    location: classpath:config/banner/banner.txt
+  main:
+    banner-mode: log #将banner输出至日志文件
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
+    prefix: classpath:/templates
+    suffix: .html
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/chendd-blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+  session:
+    store-type: jdbc
+    timeout: 3600m
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
+
+mybatis:
+  type-aliases-package: cn.chendd.blog.**.model
+  configuration:
+    map-underscore-to-camel-case: true #启用匈牙利转驼峰
+    jdbc-type-for-null: null #空类型时的默认识别类型
+
+mybatis-plus:
+  type-enums-package: cn.chendd.blog.**.enums
+  global-config:
+    db-config:
+      logic-delete-value: DISABLE
+      logic-not-delete-value: USABLE
+      #查询时动态sql的判定条件 != null && != ""（因为表单中提交过来的数据会为""的情况）
+      select-strategy: not_empty
+      update-strategy: not_empty
+  mapper-locations: classpath*:mybatis/mapper/**/*Mapper.xml
+
+#http客户端组件forest
+forest:
+  bean-id: forestConfiguration # 在spring上下文中bean的id, 默认值为forestConfiguration
+  backend: httpclient # 后端HTTP API： okhttp3
+  max-connections: 500 # 连接池最大连接数，默认值为500
+  max-route-connections: 500 # 每个路由的最大连接数，默认值为500
+  timeout: 30000 # 请求超时时间，单位为毫秒, 默认值为3000
+  connect-timeout: 20000 # 连接超时时间，单位为毫秒, 默认值为2000
+  retry-count: 0 # 请求失败后重试次数，默认为0次不重试
+  #ssl-protocol: TLSv1.2 # 若后端启用https后支持的协议
+  ssl-protocol: SSLv3 # 单向验证的HTTPS的默认SSL协议，默认为SSLv3
+  log-enabled: true # 打开或关闭日志，默认为true
+  log-request: true
+  log-response-content: true
+  log-response-status: true
+  variables:
+    #serverAdminPath: http://www.chendd.cn:8888/
+    serverAdminPath: http://localhost:8888/
+  interceptors:
+    - cn.chendd.blog.web.components.ForestApiInterceptor

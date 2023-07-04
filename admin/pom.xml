@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>chendd-parent</artifactId>
+        <groupId>cn.chendd</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+    <groupId>cn.chendd.blog</groupId>
+    <artifactId>chendd-admin</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>admin</name>
+    <description>admin后台管理</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-toolkit</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-third-login</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-admin-system</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-admin-blog</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-ueditor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <!-- 使用maven-assembly-plugin插件打包 -->
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!--该模块中的resources中的配置文件是否需要打包入jar文件中-->
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/views</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <!-- 排除一些过滤的文件，由于编译会更改相关文件内容，导致文件不可用，如www.chendd.cn.pfx -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <!-- 设置程序启动的Main Class -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <!--打包时排除jar中的资源文件-->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>/application*.yml</exclude>
+                        <exclude>/config/**</exclude>
+                        <exclude>/prod/**</exclude>
+                        <exclude>/test/**</exclude>
+                        <exclude>**/*.java</exclude>
+                        <exclude>config/**</exclude>
+                        <exclude>/statics/**</exclude>
+                        <exclude>/templates/**</exclude>
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix></classpathPrefix>
+                            <mainClass>cn.chendd.blog.Bootstrap</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <!--MANIFEST.MF 中 Class-Path 加入资源文件目录 -->
+                            <Class-Path>../conf/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                </configuration>
+            </plugin>
+            <!-- 文件拷贝重命名插件 -->
+            <!--<plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-file</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <ignoreFileNotFoundOnIncremental>true</ignoreFileNotFoundOnIncremental>
+                            <overWrite>true</overWrite>
+                            <sourceFile>${filters.envFolder}/application-test.yml</sourceFile>
+                            <destinationFile>${filters.envFolder}/application.yml</destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <!--重命名文件-->
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <move file="${project.build.directory}/classes/aa.txt"
+                                      tofile="${project.build.directory}/classes/bb.txt" />
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+            <!-- 打包插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <!-- 配置执行器 -->
+                    <execution>
+                        <id>assembly-admin</id>
+                        <!-- 绑定到package生命周期阶段上 -->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 只运行一次，会生拷贝响应的文件至输出目录 -->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--打包文件夹目录名称，默认格式为artifactId-version-->
+                    <finalName>chendd</finalName>
+                    <descriptors>
+                        <!--assembly配置文件路径-->
+                        <descriptor>src/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 打包环境参数 -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <!-- 默认打包采取的模式 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <filters.envFolder>src/main/resources</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName></filters.envName>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <filters.envFolder>src/main/resources/test</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName>-test</filters.envName>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <filters.envFolder>src/main/resources/prod</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName>-prod</filters.envName>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
+</project>

@@ -1,0 +1,66 @@
+application:
+  version: 1.0.0
+  formatted-version: v${application.version}
+  title: chendd & jiangyou baobao
+
+server:
+  port: 8888
+  servlet:
+    context-path: /admin
+
+logging:
+  config: classpath:config/logback/logback-spring.xml
+spring:
+  banner:
+    location: classpath:config/banner/banner.txt
+  main:
+    banner-mode: log #将banner输出至日志文件
+  mvc:
+    pathmatch:
+      use-registered-suffix-pattern: false
+      use-suffix-pattern: false
+  cache:
+    ehcache:
+      config: classpath:config/cache/ehcache.xml
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  freemarker:
+    template-loader-path: classpath:/templates/freemarker
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/chendd-blog?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: root
+  session:
+    store-type: jdbc
+
+mybatis:
+  type-aliases-package: cn.chendd.blog.**.model
+  configuration:
+    map-underscore-to-camel-case: true #启用匈牙利转驼峰
+    jdbc-type-for-null: null #空类型时的默认识别类型
+
+mybatis-plus:
+  type-enums-package: cn.chendd.blog.**.enums
+  global-config:
+    db-config:
+      logic-delete-value: DISABLE
+      logic-not-delete-value: USABLE
+      select-strategy: not_empty #查询时动态sql的判定条件 != null && != ""（因为表单中提交过来的数据会为""的情况）
+  mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
+
+
+#swagger-ui-bootstrap
+swagger:
+  markdowns: classpath*:markdown/*
+  basic:
+    enable: false
+    username: chendd
+    password: 123456

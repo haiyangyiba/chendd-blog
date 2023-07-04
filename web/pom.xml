@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>chendd-parent</artifactId>
+        <groupId>cn.chendd</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.chendd.blog</groupId>
+    <artifactId>chendd-web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>web</name>
+    <description>web前台</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.chendd.blog</groupId>
+            <artifactId>chendd-client-vo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!--第三方登录模块，因为腾讯地址无法修改回调，导致该登录的回调处理放置在web项目处理-->
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-third-login</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!--ueditor模块-->
+        <dependency>
+            <groupId>cn.chendd</groupId>
+            <artifactId>chendd-ueditor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!--开源的 Java HTTP 客户端框架-->
+        <dependency>
+            <groupId>com.dtflys.forest</groupId>
+            <artifactId>spring-boot-starter-forest</artifactId>
+            <!--<version>1.4.11</version>-->
+            <!--<version>1.5.0-RC3</version>-->
+            <version>1.5.0-RC5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-io</groupId>
+                    <artifactId>commons-io</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-configuration-processor</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- itextpdf组件html转pdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>4.0.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <!-- 打包单一Jar，所有依赖的Jar均被集成至此Jar中 -->
+    <!--<build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin}</version>
+                <configuration>
+                    <fork>true</fork>
+                    &lt;!&ndash; 指定该Main Class为全局的唯一入口 &ndash;&gt;
+                    <mainClass>cn.chendd.blog.Bootstrap</mainClass>
+                    <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>&lt;!&ndash;可以把依赖的包都打包到生成的Jar包中&ndash;&gt;
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>-->
+    <!-- 使用maven-assembly-plugin插件打包 -->
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!--该模块中的resources中的配置文件是否需要打包入jar文件中-->
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <!--<excludes>
+                    <exclude>**/*.*</exclude>
+                </excludes>-->
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/views</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <!-- 排除一些过滤的文件，由于编译会更改相关文件内容，导致文件不可用，如www.chendd.cn.pfx -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>pfx</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <!-- 设置程序启动的Main Class -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <!--打包时排除jar中的资源文件-->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>/application*.yml</exclude>
+                        <exclude>/config/**</exclude>
+                        <exclude>/prod/**</exclude>
+                        <exclude>/test/**</exclude>
+                        <exclude>**/*.java</exclude>
+                        <exclude>config/**</exclude>
+                        <exclude>/statics/**</exclude>
+                        <exclude>/templates/**</exclude>
+                    </excludes>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix></classpathPrefix>
+                            <mainClass>cn.chendd.blog.Bootstrap</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <!--MANIFEST.MF 中 Class-Path 加入资源文件目录 -->
+                            <Class-Path>../conf/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                </configuration>
+            </plugin>
+            <!-- 打包插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <!-- 配置执行器 -->
+                    <execution>
+                        <id>assembly-web</id>
+                        <!-- 绑定到package生命周期阶段上 -->
+                        <phase>package</phase>
+                        <goals>
+                            <!-- 只运行一次，会生拷贝响应的文件至输出目录 -->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--打包文件夹目录名称，默认格式为artifactId-version-->
+                    <finalName>chendd</finalName>
+                    <descriptors>
+                        <!--assembly配置文件路径-->
+                        <descriptor>src/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- 打包环境参数 -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <!-- 默认打包采取的模式 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <filters.envFolder>src/main/resources</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName></filters.envName>
+            </properties>
+        </profile>
+        <profile>
+            <id>test</id>
+            <properties>
+                <filters.envFolder>src/main/resources/test</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName>-test</filters.envName>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <filters.envFolder>src/main/resources/prod</filters.envFolder>
+                <filters.viewsFolder>src/main/views</filters.viewsFolder>
+                <filters.envName>-prod</filters.envName>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
+
+
+</project>

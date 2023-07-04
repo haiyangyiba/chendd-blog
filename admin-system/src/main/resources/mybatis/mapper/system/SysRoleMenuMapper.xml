@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.sysrolemenu.mapper.SysRoleMenuMapper">
+
+    <!-- 根据角色集合查询对应的菜单集合 -->
+    <select id="getUserMenusByRoles" resultType="cn.chendd.blog.admin.system.sysrolemenu.vo.SysRoleMenuDTO"
+            parameterType="cn.chendd.blog.admin.system.sysrole.vo.SysUserRoleDTO">
+        select
+            distinct b.* , a.roleId
+        from sys_role_menu a
+            left join sys_menu b on a.menuId = b.menuId
+        where a.roleId in
+            <foreach collection="list" item="item" separator="," open="(" close=")">
+                #{item.roleId}
+            </foreach>
+            and b.dataStatus = 'USABLE' order by b.menuOrder
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="insertBatch" parameterType="list">
+        insert into sys_role_menu(rmId, roleId, menuId) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.rmId},#{item.roleId},#{item.menuId})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -1,0 +1,118 @@
+/*公共样式*/
+.width6 {
+    width: 6px; display: inline-block;
+}
+/*dialog-alert*/
+.btn-default {
+    background-color: #d1d7df;
+    color: #757575;
+    border-color: #d1d7df;
+}
+.dialog-alert .modal-dialog .modal-content {
+    border: 1px solid #eee!important;
+}
+
+.dialog-alert .bootbox-close-button , .dialog-confirm .bootbox-close-button{
+    margin: 0; padding: 0;
+}
+.dialog-alert .bootbox-close-button:active:focus , .dialog-confirm .bootbox-close-button:active:focus{
+    outline: none;
+}
+
+.dialog-alert .modal-header , .dialog-confirm .modal-header{
+    padding: 10px;
+}
+.dialog-alert .modal-header h5 , .dialog-confirm .modal-header h5{
+    font-size: 18px;
+}
+.dialog-alert .modal-dialog , .dialog-confirm .modal-dialog {
+    max-width: 380px;
+}
+.dialog-alert .media-body , .dialog-confirm .media-body {
+    margin: auto;
+}
+.dialog-alert .modal-footer , .dialog-confirm .modal-footer{
+    padding: 5px;
+}
+.bootbox.modal {
+    overflow-y: hidden;
+}
+.dialog-page .modal-body {
+    padding: 5px;
+}
+
+.small-dialog-page .modal-dialog{
+    width: 600px;
+}
+    /*后台页面*/
+.content-page-admin {
+    margin-left: 0!important;
+    margin-top: 0px!important;
+}
+.content-page-admin .card-box {
+    padding: 10px;
+}
+.bootstrap-table .loading-text {
+    font-size: 1em!important;
+}
+.bootstrap-table .bs-bars {
+    margin-top: 0!important; margin-bottom: 0!important;
+}
+.bootstrap-table .fixed-table-toolbar .bs-bars, .bootstrap-table .fixed-table-toolbar .columns, .bootstrap-table .fixed-table-toolbar .search {
+    margin: 0px auto!important;
+}
+/*selectpicker*/
+.selectpickerbox[currentTheme='light'] button{
+    border: 1px solid #ced4da;
+}
+
+a[currentTheme="dark"] , div[currentTheme="dark"] , ul[currentTheme="dark"] {
+    background-color: #3B4651!important;
+}
+a[currentTheme="light"] , div[currentTheme="light"] , ul[currentTheme="light"] {
+    background-color: #fff!important;
+}
+/*bootstrap-select组件在dark主题下存在一点点的圆角*/
+.bootstrap-select{
+    border-radius: 0;
+}
+.list-group-item.disabled {
+    color:#ACA899;cursor: help!important;
+}
+/*左侧菜单*/
+.left-side-menu {
+    padding-top: 0!important;
+}
+/*左侧二级菜单*/
+/*
+.nav-second-level li {
+    margin-bottom: 10px;
+}
+.nav-second-level li a {
+    display: inline-block;
+    padding: 0px 5px;
+}*/
+blockquote {
+    background:#f9f9f9;
+    border-left:4px solid #ccc;
+    margin:1.5em 10px;
+    padding:.5em 10px;
+    quotes:"\201C""\201D""\2018""\2019";
+}
+blockquote::before{
+    content: "“ ";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote::after{
+    content: " ”";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote p {
+    display:inline;
+}

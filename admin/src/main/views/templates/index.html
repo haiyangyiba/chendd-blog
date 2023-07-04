@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>个人中心</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../statics/favicon.ico" type="image/x-icon" />
+<link href="../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../statics/plugins/nprogress/nprogress.css" rel="stylesheet" type="text/css" />
+<link href="../statics/plugins/contabs/contabs.css" rel="stylesheet" type="text/css" />
+<link href="../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body th:attr="data-sidebar-color=${session.systemCurrentUser.userConfig.adminTheme},data-topbar-color=${session.systemCurrentUser.userConfig.adminTheme}">
+<div id="wrapper">
+    <div class="navbar-custom">
+        <div class="container-fluid">
+            <ul class="list-unstyled topnav-menu float-right mb-0">
+                <li class="dropdown d-none d-lg-inline-block">
+                    <a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-toggle="fullscreen" href="#">
+                        <i class="fe-maximize noti-icon"></i>
+                    </a>
+                </li>
+                <li class="dropdown d-none d-lg-inline-block topbar-dropdown">
+                    <a class="nav-link dropdown-toggle arrow-none waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <i class="mdi mdi-theme-light-dark noti-icon"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a th:each="adminTheme : ${adminThemes}" href="javascript:void(0);" class="dropdown-item" onclick="changeAdminTheme(this)" th:attr="type=${adminTheme.type}">
+                            <span class="align-middle"
+                                  th:utext="'<i class=\'mdi mdi-view-compact-outline align-middle noti-icon\'></i>&nbsp;'
+                                  + ${adminTheme.text}">主题</span>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="dropdown notification-list topbar-dropdown">
+                    <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        <th:block th:switch="${session.systemCurrentUser.user.userSource}">
+                            <th:block th:case="'Baidu'">
+                                <img src="/statics/assets/images/users/user-1.jpg" th:src="'/internet/image?url='+${session.systemCurrentUser.user.portrait}" alt="你的头像" style="width: 24px;height: 24px;" class="rounded-circle avatar-xs">
+                            </th:block>
+                            <th:block th:case="'Sina_weibo'">
+                                <img src="/statics/assets/images/users/user-1.jpg" th:src="'/internet/image?url='+${session.systemCurrentUser.user.portrait}" alt="你的头像" style="width: 24px;height: 24px;" class="rounded-circle avatar-xs">
+                            </th:block>
+                            <th:block th:case="*">
+                                <img src="/statics/assets/images/users/user-1.jpg" th:src="${session.systemCurrentUser.user.portrait}" alt="你的头像" style="width: 24px;height: 24px;" class="rounded-circle avatar-xs">
+                            </th:block>
+                        </th:block>
+                        <span class="pro-user-name ml-1" th:text="${session.systemCurrentUser.user.realName}" th:title="${session.systemCurrentUser.user.userSource}">姓名</span>
+                        <i class="mdi mdi-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+                        <a href="javascript:void(0);" class="dropdown-item notify-item userRoles"
+                           th:each="item : ${session.systemCurrentUser.roles}" onclick="changeRole(this.id)" th:id="${item.roleId}">
+                            <i class="fe-square" roles_icon th:attr="id='role_icon_' + ${item.roleId}"></i>
+                            <span th:text="${item.roleName}" th:attr="id='role_' + ${item.roleId}">角色名称</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="javascript:void(0);" onclick="logout()" class="dropdown-item notify-item">
+                            <i class="fe-log-out"></i>
+                            <span>退出登录</span>
+                        </a>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- LOGO -->
+            <div class="logo-box">
+                <a class="logo logo-dark text-center">
+                    <span class="logo-sm">
+                        <img src="/statics/images/logo.png" alt="" height="24">
+                    </span>
+                    <span class="logo-lg">
+                         <img src="/statics/images/logo.gif" alt="" height="24">
+                    </span>
+                </a>
+                <a class="logo logo-light text-center">
+                    <span class="logo-sm">
+                        <img src="/statics/images/logo.png" alt="" height="24">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="/statics/images/logo.png" alt="" height="24" class="mr-2">后台管理
+                    </span>
+                </a>
+            </div>
+
+            <ul class="list-unstyled topnav-menu topnav-menu-left m-0">
+                <li>
+                    <button class="button-menu-mobile waves-effect waves-light">
+                        <i class="fe-menu"></i>
+                    </button>
+                </li>
+
+                <li>
+                    <!-- Mobile menu toggle (Horizontal Layout)-->
+                    <a class="navbar-toggle nav-link" data-toggle="collapse" data-target="#topnav-menu-content">
+                        <div class="lines">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </a>
+                    <!-- End mobile menu toggle-->
+                </li>
+
+                <li class="dropdown d-xl-block">
+                    <a class="nav-link dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                        快捷菜单<i class="mdi mdi-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <th:block th:each="menu , menuStatus : ${shortcutMenus}">
+                            <a th:href="${menu.value}" target="_blank" class="dropdown-item">
+                                <i class="fe-briefcase mr-1"></i>
+                                <span th:text="${menu.key}"></span>
+                            </a>
+                            <div class="dropdown-divider" th:if="${!menuStatus.last}"></div>
+                        </th:block>
+                    </div>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <!-- ========== Left Sidebar Start ========== -->
+    <div class="left-side-menu">
+
+        <div class="h-100" data-simplebar>
+
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+                <ul id="side-menu"></ul>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+
+    <div class="content-page">
+        <div class="content">
+            <!-- Start Content-->
+            <div class="container-fluid">
+                <div class="row content-tabs" th:attr="currentTheme=${session.systemCurrentUser.userConfig.adminTheme}">
+                    <button class="roll-nav roll-left J_tabLeft"><i class="fa fa-backward"></i></button>
+                    <nav class="page-tabs J_menuTabs">
+                        <div class="page-tabs-content">
+                            <a href="javascript:void(0);" class="active J_menuTab" data-id="/system/info/systemInfoManage.html">首页</a>
+                        </div>
+                    </nav>
+                    <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i></button>
+                    <div class="btn-group roll-nav roll-right close-group">
+                        <button class="dropdown roll-nav J_tabClose" data-toggle="dropdown"><i class=" icon-arrow-down"></i>&nbsp;关闭操作<span class="caret"></span>
+                        </button>
+                        <ul role="menu" class="dropdown-menu dropdown-menu-right">
+                            <li class="dropdown-item J_tabShowActive"><a>定位当前</a></li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item J_tabCloseAll"><a>关闭全部</a></li>
+                            <li class="dropdown-item J_tabCloseOther"><a>关闭其他</a></li>
+                        </ul>
+                    </div>
+                    <a href="javascript:void(0);" class="roll-nav roll-right J_tabExit J_tabRefresh"><i class="icon-reload"></i>&nbsp;刷新</a>
+                </div>
+                <div class="row J_mainContent">
+                    <iframe class="J_iframe" name="iframe_homepage" id="iframe_homepage" style="min-height:600px;width:100%;" height="100%" frameborder="0"
+                        data-id="/system/info/systemInfoManage.html" seamless></iframe>
+                </div>
+            </div> <!-- container -->
+
+        </div> <!-- content -->
+
+        <!-- Footer Start -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+                        2015 - 2022 &copy; UBold theme by <a href="mailto:88911006@qq.com">chendd</a>.
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-md-right footer-links d-none d-sm-block">
+                            <a href="javascript:void(0);">About Us</a>
+                            <a href="javascript:void(0);">Help</a>
+                            <a href="javascript:void(0);">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
+    </div>
+
+</div>
+
+<script type="text/template" id="roleMenu_template">
+<![CDATA[
+    <%
+    for (var i=0 ; i < data.length ; i++) {
+        var one = data[i];
+        var oneMenuType = one.menuType == null || one.menuType.value != "MENU";
+        if (menuType) {
+            continue;
+        }
+        var oneMenuId = one.menuId;
+        var oneRoleMenus = one.roleMenus;
+        var oneIcon = one.menuIcon;
+        if (oneIcon == null || oneIcon == "") {
+            oneIcon = "fe-grid";
+        }
+    %>
+        <li>
+            <a href="#role_menu_<%=oneMenuId%>" onclick="disposeMenu('<%=one.menuName%>' , '<%=one.menuKey%>' , '<%=one.menuUrl%>')" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                <i class="<%=oneIcon%>"></i>
+                <span><%=one.menuName%>
+                <%
+                    if (oneRoleMenus.length != 0) {
+                        %>（<%=oneRoleMenus.length%>）<%
+                    }
+                %>
+                </span>
+                <%
+                    if (oneRoleMenus.length != 0) {
+                        %><span class="menu-arrow"></span><%
+                    }
+                %>
+            </a>
+            <div class="collapse" id="role_menu_<%=oneMenuId%>">
+                <ul class="nav-second-level" currentTheme="<%=currentTheme%>">
+                    <%
+                    for (var j=0 ; j < oneRoleMenus.length ; j++) {
+                        var two = oneRoleMenus[j];
+                        var twoMenuType = two.menuType == null || two.menuType.value != "MENU";
+                        if (twoMenuType) {
+                            continue;
+                        }
+                        var twoMenuId = two.menuId;
+                        var twoRoleMenus = two.roleMenus;
+                        var twoIcon = two.menuIcon;
+                        if (twoIcon == null || twoIcon == "") {
+                            twoIcon = "fe-grid";
+                        }
+                        %>
+                        <li>
+                            <a href="#role_menu_<%=twoMenuId%>" onclick="disposeMenu('<%=two.menuName%>' , '<%=two.menuKey%>' , '<%=two.menuUrl%>')" data-toggle="collapse" class="collapsed" aria-expanded="false">
+                                <i class="<%=twoIcon%>"></i>&nbsp;<%=two.menuName%>
+                                <%
+                                if (twoRoleMenus.length != 0) {
+                                    for (var t=0 ; t < twoRoleMenus.length ; t++){
+                                        if (twoRoleMenus[t].menuType != null && twoRoleMenus[t].menuType.value === "MENU") {
+                                            %><span class="menu-arrow"></span><%
+                                            break;
+                                        }
+                                    }
+                                }
+                                %>
+                            </a>
+                            <%
+                            if (twoRoleMenus.length != 0) {
+                                %>
+                                <div class="collapse" id="role_menu_<%=twoMenuId%>">
+                                    <ul class="nav-second-level" currentTheme="<%=currentTheme%>">
+                                        <%
+                                            for (var k=0 ; k < twoRoleMenus.length ; k++) {
+                                                var three = twoRoleMenus[k];
+                                                var threeMenuType = three.menuType == null || three.menuType.value != "MENU";
+                                                if (threeMenuType) {
+                                                    continue;
+                                                }
+                                                var threeMenuId = three.menuId;
+                                                var threeRoleMenus = three.roleMenus;
+                                                var threeIcon = three.menuIcon;
+                                                if (threeIcon == null || threeIcon == "") {
+                                                    threeIcon = "fe-grid";
+                                                }
+                                                %>
+                                                <li>
+                                                    <a href="javascript: void(0);" onclick="disposeMenu('<%=three.menuName%>' , '<%=three.menuKey%>' , '<%=three.menuUrl%>')">
+                                                        <i class="<%=threeIcon%>"></i>&nbsp;<%=three.menuName%></a>
+                                                </li>
+                                                <%
+                                            }
+                                        %>
+                                    </ul>
+                                </div>
+                                <%
+                            }
+                            %>
+                        </li>
+                        <%
+                    }
+                    %>
+                </ul>
+            </div>
+        </li>
+    <%
+    }
+    %>
+]]></script>
+
+<script type="text/javascript" src="../statics/assets/js/vendor.min.js"></script>
+<script type="text/javascript" src="../statics/plugins/nprogress/nprogress.js"></script>
+<script type="text/javascript" src="../statics/assets/js/app.min.js"></script>
+<script type="text/javascript" src="../statics/plugins/bootbox/bootbox.all.min.js"></script>
+<script type="text/javascript" src="../statics/plugins/art-template/template-web.js"></script>
+<script type="text/javascript" src="../statics/plugins/contabs/contabs.js"></script>
+<script type="text/javascript" src="../statics/plugins/helper.js"></script>
+<script type="text/javascript" src="/statics/js/index.js"></script>
+</body>
+</html>

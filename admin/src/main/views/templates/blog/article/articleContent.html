@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>博客文章内容编辑</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico">
+<link href="/statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/ueditor/themes/default/_css/ueditor.all.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+<style type="text/css">.edui-editor {margin-left: 13px!important;}
+
+blockquote {
+    background:#f9f9f9;
+    border-left:4px solid #ccc;
+    margin:1.5em 10px;
+    padding:.5em 10px;
+    quotes:"\201C""\201D""\2018""\2019";
+}
+blockquote::before{
+    content: "“ ";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote::after{
+    content: " ”";
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #999;
+}
+blockquote p {
+    display:inline;
+}
+</style>
+</head>
+<body>
+
+<script type="text/plain" id="contentEditor" name="contentEditor" th:utext="${content?.editorContent}"></script>
+<div hidden class="row mt-3">
+    <input type="hidden" id="articleId_add_id" th:value="${articleId}" />
+    <div class="col-sm-6" align="right">
+        <button type="button" class="btn btn-blue" id="submit_id"><i class="fe-save"></i>&nbsp;确定</button>
+    </div>
+    <div class="col-sm-6" align="left">
+        <button type="button" class="btn btn-default" id="close_id"><i class="fe-x"></i>&nbsp;关闭</button>
+    </div>
+    <div class="col-sm-5"></div>
+    <button type="button" id="fullScreen_btn_id" class="btn btn-default" hidden data-toggle="fullscreen"]>全屏</button>
+</div>
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script type="text/javascript" src="/statics/plugins/ueditor/ueditor.config.js"></script>
+<script src="/statics/plugins/ueditor/dist/ueditor.all.min.js" type="text/javascript" ></script>
+<script src="/statics/js/blog/article/articleContent.js"></script>
+</body>
+</html>

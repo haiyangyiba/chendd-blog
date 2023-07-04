@@ -1,0 +1,15 @@
+# 线程池配置
+asycTask:
+  pool:
+    #核心线程数量
+    corePoolSize: 2
+    #线程的最大数量
+    maxPoolSize: 4
+    #缓存队列
+    queueCapacity: 200
+    #允许的空闲时间（秒）
+    keepAliveSeconds: 120
+    #线程名称前缀
+    threadNamePrefix: "asycTaskExecutor--"
+    #调度器shutdown被调用时等待当前被调度的任务完成
+    waitForTasksToCompleteOnShutdown: true

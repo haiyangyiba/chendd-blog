@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.sysuserrole.mapper.SysUserRoleMapper">
+
+    <!-- 用户与角色列表查询 -->
+    <select id="queryRolesByUserId" resultType="cn.chendd.blog.admin.system.sysuserrole.vo.UserRoleResult" parameterType="long">
+         SELECT
+            a.roleId , a.roleName , a.roleKey , case when b.surId is null then 'false' else 'true' end isChecked
+        FROM
+            sys_role a
+        LEFT JOIN
+            sys_user_role b ON a.roleId = b.roleId and b.userId = #{userId}
+        WHERE a.dataStatus = 'USABLE'
+        ORDER BY a.roleName asc
+    </select>
+
+</mapper>

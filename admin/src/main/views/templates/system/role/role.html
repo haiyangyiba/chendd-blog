@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>角色新增与修改</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="roleForm_save_id" action="/system/info/systemInfoManage">
+                        <div class="form-group mt-2 row">
+                            <label for="roleName_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span> 角色名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="roleName" id="roleName_add_id" maxlength="32"
+                                      th:value="${sysRole?.roleName}" placeholder="请输入角色名称" autocomplete="off" />
+                            </div>
+                            <label for="roleKey_add_id" class="col-sm-2 col-form-label"><span class="width6"></span> 角色标识</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="roleKey" id="roleKey_add_id"
+                                       th:value="${sysRole?.roleKey}" placeholder="请输入角色标识" autocomplete="off"  />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="remark_add_id" class="col-sm-2 col-form-label"><span class="width6"></span> 角色描述</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="remark" id="remark_add_id" maxlength="200" placeholder="角色描述不能超过200个字符" rows="6"
+                                          th:text="${sysRole?.remark}"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="roleId" id="roleId_add_id" th:value="${sysRole?.roleId}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/maxlength/bootstrap-maxlength.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/role/role.js"></script>
+</body>
+</html>

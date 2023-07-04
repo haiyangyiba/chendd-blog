@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>文章分类</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验整理分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta content="Java,个人博客,陈冬冬,Java个人博客" name="keywords" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <!-- end Topbar -->
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <!-- end topnav-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-9">
+                        <ul class="pagination justify-content-center pagination-rounded mt-0 mb-2" th:if="${pageFinder != null && pageFinder.pages > 1}">
+                            <li class="page-item">
+                                <a class="page-link" th:href="'?pageNumber=1'"  title="第一页"><i class="fe-chevrons-left"></i></a>
+                            </li>
+                            <th:block th:with="startIndex=${pageFinder.current - 3 > 0 ? pageFinder.current - 3 : 1},
+                                                           endIndex=${pageFinder.current + 3 >= pageFinder.pages ? pageFinder.pages : pageFinder.current + 3}">
+                                <th:block th:each="p , pStatus : ${#numbers.sequence(startIndex ,endIndex)}">
+                                    <th:block th:if="${p == pageFinder.current}">
+                                        <li class="page-item active"><a class="page-link" th:text="${p}">1</a></li>
+                                    </th:block>
+                                    <th:block th:if="${p != pageFinder.current}">
+                                        <li class="page-item"><a class="page-link" th:href="'?pageNumber=' + ${p}" th:title="'转至第 ' + ${p} + ' 页数据'" th:attr="data-page-number=${p}" th:text="${p}">1</a></li>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <li class="page-item">
+                                <a class="page-link" th:href="'?pageNumber=' + ${pageFinder.pages}" th:attr="data-page-number=${pageFinder.pages}" title="最后一页"><i class="fe-chevrons-right"></i></a>
+                            </li>
+                        </ul>
+                        <div class="card-box mb-2" th:each="item,itemState:${pageFinder.records}">
+                            <div class="media mb-3">
+                                <img class="d-flex mr-3" th:if="${item.property.coverImageUrl != null}" th:src="'/file' + ${item.property.coverImageUrl}" alt="封面图片">
+                                <div class="media-body text-wrap text-truncate">
+                                    <h3 class="mt-0 mb-1">
+                                        <th:block th:if="${item.property != null && item.property.topping != null}"><img src="/statics/images/top.png" title="热门文章" /></th:block>
+                                        <a th:text="${item.title}" style="text-decoration: underline;" th:href="'/blog/article/' + ${item.id} + '.html'">文章标题</a>
+                                        <th:block th:if="${item.property != null && item.property.recommend != null}"><img src="/statics/images/recommend.gif" title="热门文章" /></th:block>
+                                    </h3>
+                                    <p th:text="${item.simpleContent}">文章内容</p>
+                                    <p class="text-muted" th:utext="'文章分类：' + ${item.typeText}">文章分类</p>
+                                    <a href="javascript: void(0);" th:each="item,itemState:${item.tagList}" th:text="${item.tag}" th:if="${item.strong == 'yes'}" class="mr-1 btn- btn-xs btn-info">标签</a>
+                                    <a href="javascript: void(0);" th:each="item,itemState:${item.tagList}" th:text="${item.tag}" th:if="${item.strong != 'yes'}" class="mr-1 btn- btn-xs btn-secondary">标签</a>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <a class="btn-sm text-muted pl-0"><i class="mdi mdi-heart text-danger"></i>
+                                    发布于：<dd:format th:type="datetime" th:value="${item.createTime}">发布时间</dd:format>
+                                </a>
+                                <a class="btn-sm text-muted pl-0" th:if="${item.updateTime != null && item.updateTime != '' }">
+                                    最后更新：<dd:format th:type="datetime" th:value="${item.updateTime}">最后更新</dd:format>
+                                </a>
+                                <a class="btn-sm text-muted"> <i class="fe-thumbs-up"></i> 点赞：<th:block th:text="${item.praisesCount}"></th:block></a>
+                                <a class="btn-sm text-muted"><i class="fe-message-square"></i> 评论：<th:block th:text="${item.commentCount}"></th:block></a>
+                                <a class="btn-sm text-muted"><i class="fe-share-2"></i> 浏览次数：<th:block th:text="${item.visitsCount}"></th:block></a>
+                            </div>
+                        </div>
+                        <ul class="pagination justify-content-center pagination-rounded mt-0 mb-2" th:if="${pageFinder != null && pageFinder.pages > 1}">
+                            <li class="page-item">
+                                <a class="page-link" th:href="'?pageNumber=1'"  title="第一页"><i class="fe-chevrons-left"></i></a>
+                            </li>
+                            <th:block th:with="startIndex=${pageFinder.current - 3 > 0 ? pageFinder.current - 3 : 1},
+                                                           endIndex=${pageFinder.current + 3 >= pageFinder.pages ? pageFinder.pages : pageFinder.current + 3}">
+                                <th:block th:each="p , pStatus : ${#numbers.sequence(startIndex ,endIndex)}">
+                                    <th:block th:if="${p == pageFinder.current}">
+                                        <li class="page-item active"><a class="page-link" th:text="${p}">1</a></li>
+                                    </th:block>
+                                    <th:block th:if="${p != pageFinder.current}">
+                                        <li class="page-item"><a class="page-link" th:href="'?pageNumber=' + ${p}" th:title="'转至第 ' + ${p} + ' 页数据'" th:attr="data-page-number=${p}" th:text="${p}">1</a></li>
+                                    </th:block>
+                                </th:block>
+                            </th:block>
+                            <li class="page-item">
+                                <a class="page-link" th:href="'?pageNumber=' + ${pageFinder.pages}" th:attr="data-page-number=${pageFinder.pages}" title="最后一页"><i class="fe-chevrons-right"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3" id="mantenanceInfo_id">
+                        <div class="card">
+                            <div class="card-body ribbon-box">
+                                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="fe-share-2 mr-1"></i>本站信息</div>
+                                <p class="mb-2"><i class="fe-calendar"></i>&nbsp;运营时间：<span id="createSiteTime_text_id"></span>&nbsp;天</p>
+                                <p class="mb-2"><i class="fe-users"></i>&nbsp;用户数量：<span id="users_text_id"></span>&nbsp;人</p>
+                                <p class="mb-2"><i class="fe-linkedin"></i>&nbsp;文章数量：<span id="articles_text_id"></span>&nbsp;篇</p>
+                                <p class="mb-2"><i class="fe-message-square"></i>&nbsp;评论数量：<span id="comments_text_id"></span>&nbsp;条</p>
+                                <p class="mb-2"><i class="fe-thumbs-up"></i>&nbsp;点赞个数：<span id="praises_text_id"></span>&nbsp;个</p>
+                                <p class="mb-0"><i class="fe-calendar"></i>&nbsp;最后更新：<span id="lastUpdateTime_text_id"></span></p>
+                            </div>
+                        </div>
+                        <div class="card-box ribbon-box">
+                            <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="fe-share-2 mr-1"></i>文章推荐</div>
+                            <ul class="nav nav-tabs  nav-bordered">
+                                <li class="nav-item">
+                                    <a href="#article_parise" data-toggle="tab" aria-expanded="true" class="nav-link active"><i class="fe-thumbs-up"></i>&nbsp;点赞最多</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#article_comment" data-toggle="tab" aria-expanded="false" class="nav-link"><i class="fe-message-square"></i>&nbsp;留言最多</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="article_parise">
+                                    <div class="card mt-0 mb-0">
+                                        <div class="card-body pt-0 pb-0">
+                                            <ul class="list-group list-group-flush" id="pariseArticle_box_id"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="article_comment">
+                                    <div class="card mt-0 mb-0">
+                                        <div class="card-body pt-0 pb-0">
+                                            <ul class="list-group list-group-flush" id="commentArticle_box_id"></ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="card">
+                            <div class="card-body ribbon-box" data-simplebar style="height:300px;overflow-x: hidden;">
+                                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i>文章归档</div>
+                                <ul class="list-group mt-4" id="years_box_id"></ul>
+                            </div>
+                        </div>-->
+                        <div class="card">
+                            <div class="card-body ribbon-box" style="">
+                                <div class="ribbon ribbon-primary float-right" style="margin-top: -10px;"><i class="fe-share-2 mr-1"></i>标签云</div>
+                                <div class="row mt-4 text-nowrap" id="tags_box_id"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <th:block th:include="/frame/footer :: template">template</th:block>
+    </div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simplebar/5.1.0/simplebar.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.js"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/common-interactive/interactive-statistics.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+#Java Mail 的相关配置
+mail:
+  smtp:
+    host: smtp.qq.com
+    auth: true
+    port: 25
+    debug: true
+  user:
+    address: 88911006@qq.com
+    name: 88911006
+    pass: zpjbqosujxisbgdb
+  content:
+    type: text/html;charset=utf-8
+    encoding: utf-8
+  #邮件的个性化设置参数
+  send:
+    others: mail.smtp.ssl.enable\=true|mail.smtp.port\=465|mail.smtp.socketFactory.port\=465|mail.transport.protocol\=smtp

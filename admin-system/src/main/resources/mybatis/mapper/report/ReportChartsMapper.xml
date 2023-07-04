@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.report.mapper.ReportChartsMapper">
+
+    <!--根据条件查询列表数据 -->
+    <select id="queryUserSourcesCharts" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
+        SELECT userSource name, count(*) value FROM sys_user group by userSource
+    </select>
+    <!-- 按年份查询文章统计 -->
+    <select id="queryArticleYears" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
+        select
+            substring(createTime , 1 , 4) name , count(*) value
+        from blog_article group by substring(createTime , 1 , 4)
+    </select>
+    <!-- 按文章访问次数统计 -->
+    <select id="queryArticleVisits" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
+        select
+            case
+               when char_length(title) > 15 then concat(substr(title , 1 , 15) , '...')
+               else title end name , visitsNumber value
+        from blog_article order by ifnull(visitsNumber,0) desc limit 8
+    </select>
+    <!-- 查询文章留言个数 -->
+    <select id="queryArticleCommentCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM sys_comment a
+           WHERE a.moduleKey = 'Article' AND a.dataStatus = 'USABLE'
+    </select>
+    <!-- 查询文章点赞数量 -->
+    <select id="queryArticlePraisesCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM blog_article_praises a
+    </select>
+    <!-- 查询推荐标签 -->
+    <select id="queryTagNameList" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
+        SELECT
+            a.tag name ,
+            (SELECT COUNT(*) counts FROM blog_tag_article b WHERE b.tagId = a.id) value
+        FROM
+            blog_tag a
+        ORDER BY a.sortOrder ASC
+    </select>
+</mapper>

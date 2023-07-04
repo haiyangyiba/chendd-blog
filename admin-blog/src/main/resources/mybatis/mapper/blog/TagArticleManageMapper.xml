@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.tag.mapper.TagArticleManagerMapper">
+
+    <!-- 根据标签查询对应文章分页 -->
+    <select id="queryTagsArticlePage" resultType="cn.chendd.blog.admin.blog.tag.vo.TagArticleResult">
+        SELECT
+            a.id , a.title , c.menuName typeText , if(b.id is not null , 'true' , 'false') selected
+        FROM blog_article a
+        LEFT JOIN  blog_tag_article b ON a.id = b.articleId AND b.tagId = #{tagId}
+        LEFT JOIN
+           (SELECT
+                c.menuId, c.menuName FROM sys_menu c
+            WHERE c.parentId IN
+                (SELECT a.menuId FROM sys_menu a WHERE a.menuKey like '#blog_web_menu_%')
+            ) c ON a.`type` = c.menuId
+        WHERE 1=1
+        <if test="title != null and title != ''">
+           and a.title LIKE concat('%' , #{title} , '%')
+        </if>
+        ORDER BY a.sortOrder desc
+    </select>
+
+    <!-- 根据标签名称查询文章列表数据 -->
+    <select id="queryStrongTagsListByName" resultType="cn.chendd.blog.client.article.tag.TagArticleDto">
+        select
+            c.id , c.title , c.visitsNumber,
+            ifnull(c.updateTime , c.createTime) lastUpdateTime,
+            ifnull(c.updateUsername , c.createUsername) lastUpdateUser
+        from blog_tag a
+        right join blog_tag_article b on a.id = b.tagId
+        right join blog_article c on c.id = b.articleId
+        inner join blog_article_property d on c.id = d.articleId and d.property = 'state' and d.value = 'publish'
+        where a.tag = #{tag} and c.dataStatus = 'USABLE' order by c.sortOrder desc
+    </select>
+
+</mapper>

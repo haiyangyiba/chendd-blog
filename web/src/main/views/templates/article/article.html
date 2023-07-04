@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title th:text="${article.title}">欢迎来到陈冬冬的个人经验分享平台</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.bootcdn.net/ajax/libs/simditor/2.3.28/styles/simditor.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/plugins/prism/prism.css" rel="stylesheet" type="text/css" th:if="${article.hasCode}" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <!-- end Topbar -->
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <!-- end topnav-->
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mt-2">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-body content-view" id="articleContent_box_id">
+                                <h3 th:text="${article.title}" th:id="page_article_id" th:attr="articleId=${article.id}">文章标题</h3>
+                                <a href="javascript: void(0);" class="btn btn-xs btn-info ml-2" th:each="item : ${article.articleTags}" th:text="${item.tag}">文章标签</a>
+                                <hr/>
+                                <div class="media mb-2">
+                                    <img class="d-flex mr-2 rounded-circle" src="/images/user.png" alt="placeholder image" height="32">
+                                    <div class="media-body">
+                                        <h5 class="m-0 text-muted"><th:block th:text="${article.createUsername}" /> 发布于：<span th:text="${article.createTime}">发布时间</span></h5>
+                                        <h5 class="text-muted" id="visitsNumber_id">阅读：loading</h5>
+                                    </div>
+                                </div>
+                                <th:block th:utext="${article.editorContent}">文章内容</th:block>
+                                <div class="media mb-2 mt-2">
+                                    <div class="media-body text-left">
+                                        <h5>
+                                            <a th:if="${article.articlePosition.prevId == null}" class="m-1 text-muted">上一篇：没有了</a>
+                                            <a th:if="${article.articlePosition.prevId != null}" th:href="'/blog/article/' + ${article.articlePosition.prevId} + '.html'" style="color:blue!important;"
+                                               class="m-1 text-muted">上一篇：<th:block th:text="${article.articlePosition.prevTitle}"></th:block></a>
+                                        </h5>
+                                    </div>
+                                    <div class="media-body text-right">
+                                        <h5>
+                                            <a th:if="${article.articlePosition.nextId == null}" class="m-1 text-muted">下一篇：没有了</a>
+                                            <a th:if="${article.articlePosition.nextId != null}" th:href="'/blog/article/' + ${article.articlePosition.nextId} + '.html'" style="color:blue!important;"
+                                               class="m-1 text-muted">下一篇：<th:block th:text="${article.articlePosition.nextTitle}"></th:block></a>
+                                        </h5>
+                                    </div>
+                                </div>
+
+                                <th:block th:include="/frame/article/article :: praises"
+                                          th:if="${!(article.articleProperty != null && article.articleProperty.comment != null && article.articleProperty.comment.value == 'close')}">点赞</th:block>
+                                <th:block th:include="/frame/article/article :: comment"
+                                          th:if="${!(article.articleProperty != null && article.articleProperty.comment != null && article.articleProperty.comment.value == 'close')}">评论</th:block>
+                                <th:block th:if="${article.articleProperty != null && article.articleProperty.comment != null && article.articleProperty.comment.value == 'close'}">
+                                    <div class="mt-3 font-22 alert alert-warning text-center" role="alert">
+                                        <h4>当前管理员未开启点赞与评论</h4>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="card-box" th:if="${article.articleDependents != null && article.articleDependents.size() != 0}">
+                            <ul class="nav nav-tabs nav-bordered" style="border-bottom: none!important;">
+                                <li class="nav-item">
+                                    <a class="nav-link active">
+                                        <i class="fe-share-2"></i>&nbsp;可能感兴趣的</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane show active" id="home">
+                                    <div class="card mt-0 mb-0">
+                                        <div class="card-body pb-0 p-0">
+                                            <ul class="list-group list-group-flush">
+                                                <li th:each="item : ${article.articleDependents}"
+                                                    class="list-group-item d-flex justify-content-between align-items-center list-group-item-action">
+                                                    <a href="javascript:void(0);" class="text-dark text-truncate" th:href="'/blog/article/' + ${item.id} + '.html'" th:title="${item.title}" th:text="${item.title}">可能感兴趣的</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-box" id="articleWords_box_id" data-top="90px" data-min-width="800">
+                            <ul class="nav nav-tabs nav-bordered" style="border-bottom: none!important;">
+                                <li class="nav-item">
+                                    <a class="highlight-cancel nav-link active" href="javascript:void(0);" title="清除高亮选中">
+                                        <i class="fe-share-2"></i>&nbsp;关键字</a>
+                                </li>
+                            </ul>
+                            <div class="card-body text-secondary" style="padding: 10px;">
+                                <p class="card-text">
+                                    <a th:each="item : ${article.articleKeywords}" style="margin-right: 10px;line-height:25px;">
+                                        <a href="javascript:void(0);" th:style="${item.randomStyle}" class="highlight-event" th:attr="data-search=${item.label}" th:title="'搜索：' + ${item.label}"
+                                        ><th:block th:text="${item.label}"></th:block>(<th:block th:text="${item.count}"></th:block>)</a>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-box" id="directory_box_id" data-top="90px" data-min-width="800" style="padding: 10px 0;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/frame/footer :: template">template</th:block>
+    </div>
+</div>
+
+<th:block th:include="/frame/article/article :: commentPage">评论分页模板</th:block>
+
+<script type="text/template" id="directory_template_id"><![CDATA[
+<ul class="font-14" style="list-style: none;margin-left:-20px;line-height: 30px;">
+    <li><a class="text-uppercase font-weight-bold font-18"><i class="fe-list mr-1"></i>文章目录</a>
+        <ul style="list-style: none;">
+            <%
+            for(var i=0 ; i < data.length ; i++){
+            var item = data[i];
+            var childs = item.childs;
+            %>
+            <li>
+                <%
+                    if (childs.length == 0) {
+                        %>
+                        <i class="fe-chevrons-right"></i>&nbsp;<a href="javascript:void(0);" onclick="goArticleDirectory('<%=item.id%>')"><%=item.name %></a>
+                        <%
+                    } else {
+                        %>
+                        <i class="fe-chevrons-down"></i>&nbsp;<a href="javascript:void(0);" onclick="goArticleDirectory('<%=item.id%>')"><%=item.name %></a>
+                        <%
+                    }
+                %>
+                <%
+                if (childs.length > 0){
+                %><ul style="list-style: none;"><%
+                }
+                for(var j=0 ; j < item.childs.length ; j++){
+                var child = item.childs[j];
+                %><li><i class="fe-chevrons-right"></i>&nbsp;<a href="javascript:void(0);" onclick="goArticleDirectory('<%=child.id%>')"><%=child.name %></a></li><%
+                }
+                if (childs.length > 0){
+                %></ul><%
+                }
+                %>
+            </li>
+            <%
+            }
+            %>
+        </ul>
+    </li>
+</ul>
+]]></script>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simplebar/5.1.0/simplebar.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.js"></script>
+<script src="/statics/plugins/simditor/assets/scripts/module.js"></script>
+<script src="/statics/plugins/simditor/assets/scripts/hotkeys.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simditor/2.3.28/lib/simditor.min.js"></script>
+<script src="https://ssl.captcha.qq.com/TCaptcha.js" async="async"></script>
+<script src="/statics/plugins/highlight/jquery.highlight.js"></script>
+<script src="/statics/plugins/prism/prism.js" th:if="${article.hasCode}" ></script>
+<script src="/statics/plugins/scroll/jquery.smartFloat.js" ></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/article/article.js"></script>
+
+</body>
+</html>

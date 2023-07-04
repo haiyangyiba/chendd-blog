@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>博客文章新增与修改</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <form id="form_save_id">
+                        <div class="form-group row"></div>
+                        <div class="form-group row">
+                            <label for="title_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span> 文章标题</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="title" id="title_add_id" maxlength="64"
+                                      th:value="${article?.title}" placeholder="请输入文章标题" autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="typeText_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span> 文章分类</label>
+                            <div class="col-sm-10 input-group-prepend">
+                                <input type="text" class="form-control" id="typeText_add_id" maxlength="32"
+                                       th:value="${article?.typeText}" placeholder="请输入文章分类" autocomplete="off"
+                                       style="border-right: none;border-top-right-radius: 0;border-bottom-right-radius: 0;cursor: pointer;"
+                                />
+                                <a href="javascript:void(0);" class="input-group-text"
+                                   style="border-left: none;border-top-left-radius: 0;border-bottom-left-radius:0;"><i class="fas fa-edit"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group row selectpickerbox" >
+                            <label for="ascription_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span> 文章归属</label>
+                            <div class="col-sm-10 input-group-prepend">
+                                <select id="ascription_add_id" name="ascription" class="form-control" style="display: none;">
+                                    <option th:each="item : ${ascriptions}" th:value="${item.value}" th:text="${item.text}" th:selected="${item.value eq article?.ascription?.value}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="sortOrder_add_id" class="col-sm-2 col-form-label"><span class="text-danger">*</span> 文章排序</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="sortOrder" id="sortOrder_add_id" maxlength="32"
+                                       th:value="${article?.sortOrder}" placeholder="请输入文章排序（不可重复）" autocomplete="off" />
+                            </div>
+                        </div>
+                        <input type="hidden" name="type" id="type_add_id" th:value="${article?.type}" />
+                        <input type="hidden" name="id" id="id_add_id" th:value="${article?.id}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/blog/article/article.js"></script>
+</body>
+</html>

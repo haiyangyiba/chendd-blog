@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="cn.chendd.core" />
+    <context:component-scan base-package="cn.chendd.blog.base" />
+    <context:component-scan base-package="cn.chendd.toolkit.dbproperty" />
+    <context:component-scan base-package="cn.chendd.third.login" />
+
+    <!-- 配置登录地址过滤拦截，支持多组拦截器参数配置 -->
+    <bean id="loginInterceptor" class="cn.chendd.blog.base.spring.component.InterceptorConfiguration">
+        <property name="beanClassName" value="cn.chendd.blog.base.spring.interceptor.LoginValidatorInterceptor"/>
+        <property name="includeMapping">
+            <list>
+                <!--约定/vuser开头的为需要用户登录后才可以访问的资源-->
+                <!--<value>/**</value>-->
+                <value>/**/*.html</value>
+            </list>
+        </property>
+        <property name="excludeMapping">
+            <list>
+                <!--<value>/</value>-->
+                <value>/statics/**</value>
+                <value>/</value>
+                <value>/index.html</value>
+                <!-- 用户登录 -->
+                <value>/login.html</value>
+                <!-- 用户退出 -->
+                <value>/logout.html</value>
+                <value>/third-login/*.html</value>
+                <!-- 未登录页面 -->
+                <value>/blog/frame/login.html</value>
+                <!-- 查看文章明细页面，前面的articleId为controller中的@PathVariable变量名称，解析见AntPathStringMatcher的656行 -->
+                <value>/blog/article/{articleId:\d+}.html</value>
+                <!-- 加载文章明细页面的访问次数 -->
+                <value>/blog/article/visits/{articleId:\d+}.html</value>
+                <!-- 加载文章明细页面的点赞查询 -->
+                <value>/blog/article/praises/{articleId:\d+}.html</value>
+                <!--加载评论数据-->
+                <value>/blog/comment/{targetId:\d+}/{pageNumber:\d+}.html</value>
+                <!---->
+                <value>/blog/article/type/{articleId:\d+}.html</value>
+                <!-- 首页统计图表 -->
+                <value>/blog/chart/homepage.html</value>
+                <!-- 获取系统统计信息 -->
+                <value>/blog/maintenanceInfo.html</value>
+                <!--友情链接-->
+                <value>/blog/link.html</value>
+                <!-- 关于作者、本站介绍、历史上的本站-->
+                <value>/blog/aboat/author.html</value>
+                <value>/blog/aboat/website.html</value>
+                <value>/blog/aboat/history.html</value>
+                <!-- 项目介绍 -->
+                <value>/blog/project/{key:\w+}.html</value>
+                <value>/blog/project/{key:[a-zA-Z0-9_\-]+}.html</value>
+                <!-- 系统信息 -->
+                <value>/blog/aboat/server.html</value>
+                <!-- 标签管理文章查询，路径匹配了存在%20这种中文EncodeURI编码 -->
+                <value>/blog/tag/{tag:[^.]+}.html</value>
+                <!-- 自定义页面 -->
+                <value>/blog/page/{page:\w+}.html</value>
+                <!-- 关键字搜一搜页面 -->
+                <value>/blog/search.html</value>
+                <value>/blog/search/{pageNumber:\d+}.html</value>
+                <!-- 博客访问统计 -->
+                <value>/blog/access.html</value>
+            </list>
+        </property>
+        <!--按请求方式放行，与之匹配到的地址，仅拦截对应请求方式，否则直接放行-->
+        <property name="excludeMappingTypes">
+            <list>
+
+            </list>
+        </property>
+    </bean>
+
+</beans>

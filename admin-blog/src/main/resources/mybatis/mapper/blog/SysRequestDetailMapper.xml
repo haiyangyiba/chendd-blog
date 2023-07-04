@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.requestdetail.mapper.SysRequestDetailMapper">
+
+    <!-- 按日期查询统计访问次数 -->
+    <select id="queryRequestAccessDate" resultType="int" parameterType="String">
+        SELECT
+             count(*) counts
+        FROM
+            sys_request_detail t1
+        WHERE
+            t1.createDate = #{date}
+    </select>
+
+    <!-- 查询排名前limit个的友情链接数据 -->
+    <select id="queryRequestAccessOutLinkDate" resultType="int" parameterType="String">
+        SELECT
+             count(*) counts
+        FROM
+            sys_request_detail t1
+        WHERE
+            t1.createDate = #{date} and t1.isOutLink = 'true'
+    </select>
+
+</mapper>

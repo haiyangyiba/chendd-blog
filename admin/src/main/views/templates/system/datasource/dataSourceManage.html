@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>数据源连接池管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <h4 class="font-family-primary font-weight-semibold">基础参数</h4>
+                        <div class="row">
+                            <div class="col-lg-12 mt-1"><label>数据源名称：</label><th:block th:text="${item.name}" /></div>
+                            <div class="col-lg-12 mt-1"><label>driverClassName：</label><th:block th:text="${item.driverClassName}" /></div>
+                            <div class="col-lg-12 mt-1 text-truncate"><label>url：</label><th:block th:text="${item.url}" /></div>
+                            <div class="col-lg-12 mt-1"><label>用户名<span class="badge badge-danger">!</span>：</label><th:block th:text="${item.username}" /></div>
+                            <div class="col-lg-12 mt-1"><label>密码：</label><th:block th:text="${item.password}" /></div>
+                            <div class="col-lg-12 mt-1"><label>创建时间：</label><th:block th:text="${item.createTime}" /></div>
+                            <div class="col-lg-12 mt-1"><label>&nbsp;</label></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <h4 class="font-family-primary font-weight-semibold">连接参数</h4>
+                        <div class="row">
+                            <div class="col-lg-6 mt-1"><label>活跃连接：</label><th:block th:text="${item.activeCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>初始连接：</label><th:block th:text="${item.initialSize}" /></div>
+                            <div class="col-lg-6 mt-1"><label>最小连接：</label><th:block th:text="${item.minIdle}" /></div>
+                            <div class="col-lg-6 mt-1"><label>最大连接<span class="badge badge-danger">!</span>：</label><th:block th:text="${item.maxActive}" /></div>
+                            <div class="col-lg-6 mt-1"><label>创建连接数量：</label><th:block th:text="${item.createCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>销毁连接数量：</label><th:block th:text="${item.destroyCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>连接个数<span class="badge badge-danger">!</span>：</label><th:block th:text="${item.poolingCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>最大等待时间：</label><th:block th:text="${item.maxWait}" /></div>
+                            <div class="col-lg-6 mt-1"><label>连接次数：</label><th:block th:text="${item.connectCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>释放次数：</label><th:block th:text="${item.closeCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>执行查询次数：</label><th:block th:text="${item.executeQueryCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>执行更新次数：</label><th:block th:text="${item.executeUpdateCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>执行次数：</label><th:block th:text="${item.executeCount}" /></div>
+                            <div class="col-lg-6 mt-1"><label>其它执行次数：</label><th:block th:text="${item.executeCount2}" /></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <h4 class="font-family-primary font-weight-semibold">连接列表</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>连接编号</th>
+                                        <th>连接时间</th>
+                                        <th>最后活跃时间</th>
+                                        <th>使用次数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="data , dataStatus : ${item.dataSourceConnections}">
+                                        <td>
+                                            <th:block th:text="${dataStatus.count}">#</th:block>
+                                        </td>
+                                        <td><th:block th:text="${data.connectionId}"></th:block></td>
+                                        <td><th:block th:text="${data.connectTime}"></th:block></td>
+                                        <td><th:block th:text="${data.lastActiveTime}"></th:block></td>
+                                        <td><th:block th:text="${data.useCount}"></th:block></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-select/js/i18n/defaults-zh_CN.min.js"></script>
+<script src="../../../statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/datasource/dataSourceManage.js"></script>
+</body>
+</html>

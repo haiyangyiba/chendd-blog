@@ -1,0 +1,260 @@
+<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; font-size: medium; white-space: normal;">
+    <span style="font-size: 14px; font-family: 宋体, SimSun;"><span style="font-size: 14px; margin: 0px; padding: 0px;">easyui的某些组件还是比较不错的，比如说easyui-numberbox组件吧，使用它的时候拿来就用，发现在使用的时候，由于它只允许输入数字，即其他字符根本无法输入，而不是那种输入后一眼就看到被清空的效果，可能我个人比较洁癖吧，不做就不做，做了就必须做到自己认为是最好的一种实现方案。至于easyui的具体实现效果可自行去官网demo中查看其例子，这里不多赘述。<br style="margin: 0px; padding: 0px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种简单效果，真想具体实现的时候，发现好像不是那么好做的，但是总感觉不难的样子，看了下easyui的numberbox组件代码，发现没有什么帮助性的效果，于是就自己琢磨呀琢磨。琢磨出了两种可以实现的方案：</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-weight: bold;">第一种实现方案：&nbsp;</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;将input type=&quot;text&quot;&nbsp;设置成readonly只读的，然后根据onkeyup事件来判断当前点击的键盘按钮是否为数字，如果为数字则讲此值设置为此文本框的value，每次键盘按下时同样做此追加的动作，这种实现依赖浏览器的readonly的特殊效果实现，因为readonly天生就有那种无法按下的效果，在IE10下，FF下都可以达到我们想要的效果，但是Chrome下悲剧了，由于readonly的属性，文本框无法获得焦点，那么鼠标点击时无法获取焦点也就无法明显看到熟人状态，那么此种实现就显得略微鸡肋了。具体代码可以自己做效果试验。</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-weight: bold;">第二种实现方案：</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这种方案是我最终采取的方案，晚上吃饭时无意中想起来的，其实就是为了解决readonly的问题，那么把它的maxLength属性设置成0是否可以一试呢，虽然吃饭的时候显得略迫不及待，但还是再偏淡定中回来，立马程序例子走起，结果就有了下面的实现了。</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-weight: bold;">实现说明</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px;">1）限制此文本框合法的输入字符为&quot;0123456789.&quot; ；<br style="margin: 0px; padding: 0px;"/>2）当文本框内容为空时直接输入.也无效；<br style="margin: 0px; padding: 0px;"/>3）当在输入过程中如果已经输入.后再输入.则无效；<br style="margin: 0px; padding: 0px;"/>4）当输入的.为最后一个字符时，无效，会在失去焦点后消除此.&nbsp;；<br style="margin: 0px; padding: 0px;"/>5）由于使用了input的maxLength属性，如果用户设置了maxLength属性外，则不影响它的属性设置。&nbsp;</span><br style="margin: 0px; padding: 0px;"/><span style="font-size: 14px; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-weight: bold;">源代码&nbsp;</span></span>
+</p>
+<pre class="brush:html;toolbar:false" style="margin-top: 0px; margin-bottom: 0px; padding: 0px;">&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;numberbox&lt;/title&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+body {
+   font-size: 26px;
+}
+.demo {
+   height: 50px;
+   line-height: 50px;
+   text-align: center;
+}
+input {
+   height: 50px;
+   font-size: 30px;
+}
+&lt;/style&gt;
+&lt;script type=&quot;text/javascript&quot;
+   src=&quot;http://code.jquery.com/jquery-1.11.1.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+   (function($) {
+      /**
+       * numberbox插件，限制文本框只能输入数字和小数点.，且不能以.开头和结尾，其他字符按不下去
+       * @author chendd
+       */
+      $.fn.numberbox = function(options) {
+         var defaults = {
+         };
+         var options = $.extend(defaults, options);
+         var chars = &quot;.0123456789&quot;;
+         this.each(function() {
+            var thisElement = $(this);
+            var maxLength = thisElement.attr(&quot;maxLength&quot;);
+            thisElement.unbind(&quot;keypress&quot;).bind(&quot;keypress&quot;, function(evt) {
+               //获取默认的maxLength
+               var val = thisElement.val();
+               thisElement.attr(&quot;maxLength&quot;, &quot;0&quot;);
+               var charCode = null;
+               if (window.event) {
+                  charCode = evt.keyCode;
+               }
+               else {
+                  charCode = evt.which;
+               }
+               var currentCode = String.fromCharCode(charCode);
+               //判断其值是否为空，如果为空则，此时的值不能为.
+               if (val.length == 0) {
+                  if (currentCode == &quot;.&quot;) {
+                     return;
+                  }
+               } else {
+                  if (val.indexOf(&quot;.&quot;) != -1) {
+                     if (currentCode == &quot;.&quot;) {
+                        return;
+                     }
+                  }
+               }
+               //判断当前的文本框是否存在maxLength属性，如果有且大于0则最大的长度不能超过这个值，
+               if (maxLength &amp;&amp; maxLength &gt; 0) {
+                  if (val.length &gt;= maxLength) {
+                     return;
+                  }
+               }
+               if (chars.indexOf(currentCode) != -1) {
+                  thisElement.val(thisElement.val() + currentCode);
+               }
+            }).unbind(&quot;blur&quot;).bind(
+                  &quot;blur&quot;,
+                  function() {
+                     var val = $(this).val();
+                     if (val != &quot;&quot;) {
+                        var lastChar = val.substring(val.length - 1,
+                              val.length);
+                        if (lastChar == &quot;.&quot;) {
+                           $(this).val(
+                                 val.substring(0, val.length - 1));
+                        }
+                     }
+                  });
+         });
+      };
+      /**
+       * integerbox插件限制文本框只能输入数字
+       * @author chendd
+       */
+      $.fn.intbox = function(options) {
+         var defaults = {
+         };
+         var options = $.extend(defaults, options);
+         var chars = &quot;0123456789&quot;;
+         this.each(function() {
+            var thisElement = $(this);
+            var maxLength = thisElement.attr(&quot;maxLength&quot;);
+            thisElement.unbind(&quot;keypress&quot;).bind(&quot;keypress&quot;, function(evt) {
+               //获取默认的maxLength
+               var val = thisElement.val();
+               thisElement.attr(&quot;maxLength&quot;, &quot;0&quot;);
+               var charCode = null;
+               if (window.event) {
+                  charCode = evt.keyCode;
+               }
+               else {
+                  charCode = evt.which;
+               }
+               var currentCode = String.fromCharCode(charCode);
+               //判断当前的文本框是否存在maxLength属性，如果有且大于0则最大的长度不能超过这个值，
+               if (maxLength &amp;&amp; maxLength &gt; 0) {
+                  if (val.length &gt;= maxLength) {
+                     return;
+                  }
+               }
+               if (chars.indexOf(currentCode) != -1) {
+                  thisElement.val(thisElement.val() + currentCode);
+               }
+            });
+         });
+      };
+      //页面加载完成之后，渲染numberbox
+      $(function() {
+         $(&quot;.numberbox&quot;).numberbox();
+         $(&quot;.intbox&quot;).intbox();
+      });
+   })(jQuery);
+&lt;/script&gt;
+
+&lt;/head&gt;
+
+&lt;body&gt;
+   &lt;div class=&quot;demo&quot;&gt;
+      &lt;strong&gt;输入数字试试效果（可以有小数位数）：&lt;/strong&gt;&lt;input type=&quot;text&quot;
+         class=&quot;numberbox&quot; /&gt;
+   &lt;/div&gt;
+   &lt;div class=&quot;demo&quot;&gt;
+      &lt;strong&gt;输入数字试试效果（只能是整数）：&lt;/strong&gt;&lt;input type=&quot;text&quot; class=&quot;intbox&quot; /&gt;
+   &lt;/div&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;</pre>
+<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; font-size: medium; white-space: normal;">
+    <span style="margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-weight: bold; font-size: 14px; font-family: 宋体, SimSun;">效果截图</span>
+</p>
+<p>
+    <img src="/file/ueditor/jsp/upload/image/20220127/1643285934108063837.png" title="image" alt="image.png"/><br/>
+</p>
+<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; font-size: medium; white-space: normal;">
+    <span style="margin: 0px; padding: 0px; font-size: 14px; font-family: 宋体, SimSun;">界面就是一个输入框，只能输入Double类型的数字，小伙伴们拿走吧，去项目中实践实践吧。你们怎么看？</span>
+</p>
+<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; font-size: medium; white-space: normal;">
+    <span style="margin: 0px; padding: 0px; font-size: 14px; font-family: 宋体, SimSun;"><a href="http://sighttp.qq.com/authd?IDKEY=f5ce75cc1967322f03d8865d03e77fe07932834c2de239df" target="_blank" style="margin: 0px; padding: 0px; color: green; text-decoration-line: none;"></a><a href="http://sighttp.qq.com/authd?IDKEY=f5ce75cc1967322f03d8865d03e77fe07932834c2de239df" target="_blank" style="margin: 0px; padding: 0px; color: green; text-decoration-line: none; font-weight: bold;"><span style="font-family: 宋体, SimSun; font-size: 14px; margin: 0px; padding: 0px; color: rgb(0, 0, 0); font-weight: normal;"><span style="font-family: 宋体, SimSun; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-size: 24px;">@2014/6/17 更新日志</span><br style="margin: 0px; padding: 0px;"/>1、兼容其他浏览器<br style="margin: 0px; padding: 0px;"/>2、添加了intbox，只允许输入数字&nbsp;</span></a><br style="margin: 0px; padding: 0px;"/><a href="http://sighttp.qq.com/authd?IDKEY=f5ce75cc1967322f03d8865d03e77fe07932834c2de239df" target="_blank" style="margin: 0px; padding: 0px; color: green; text-decoration-line: none;"><br style="margin: 0px; padding: 0px;"/></a><a href="http://sighttp.qq.com/authd?IDKEY=f5ce75cc1967322f03d8865d03e77fe07932834c2de239df" target="_blank" style="margin: 0px; padding: 0px; color: green; text-decoration-line: none;"></a><a href="http://sighttp.qq.com/authd?IDKEY=f5ce75cc1967322f03d8865d03e77fe07932834c2de239df" target="_blank" style="margin: 0px; padding: 0px; color: green; text-decoration-line: none;"></a><span style="font-family: 宋体, SimSun; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-size: 24px;">@2014/6/18更新日志</span><br style="margin: 0px; padding: 0px;"/>&nbsp;今天发现此种实现在IE、Chrome浏览器下均出现校验不通过的提示，FF下是好使的，大概有两个问题吧。<br style="margin: 0px; padding: 0px;"/>1、当文本框输入1000，现在想把这个数改成1100&nbsp;，发现是改不了的。<br style="margin: 0px; padding: 0px;"/>2、当文本框存在maxlength属性时，再使用submit按钮提交form时会出现问题。<br style="margin: 0px; padding: 0px;"/></span>
+</p>
+<p>
+    <img src="/file/ueditor/jsp/upload/image/20220127/1643285951780098045.png" title="image" alt="image.png"/>
+</p>
+<p>
+    <img src="/file/ueditor/jsp/upload/image/20220127/1643285982519048333.png" title="image" alt="image.png"/>
+</p>
+<p style="margin-top: 0px; margin-bottom: 0px; padding: 0px; font-family: &quot;Microsoft YaHei&quot;; font-size: medium; white-space: normal;">
+    <span style="margin: 0px; padding: 0px; font-size: 14px; font-family: 宋体, SimSun;">这两种提示信息几乎很少很少遇见吧，没错，这是浏览器自带的提示信息，原因是由于input设置了maxLength=0,但是这里的值已经大于0了，导致，我采取的办法是当input存在此属性时，在失去焦点时还原它的maxLength值。<br style="margin: 0px; padding: 0px;"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;当然这些问题都能很好的解决，<span style="font-family: 宋体, SimSun; margin: 0px; padding: 0px; color: rgb(192, 0, 0); font-size: 24px; font-weight: bold;">不过今天放弃了这种实现，换成另外一种实现了</span>，发现同样好使，且兼容其他浏览器，也从numberbox可以直接当intbox来使用，详细代码如下：&nbsp;<br style="margin: 0px; padding: 0px;"/></span>
+</p>
+<pre class="brush:js;toolbar:false" style="margin-top: 0px; margin-bottom: 0px; padding: 0px;">(function($) {
+    /**
+     *
+     * numberbox插件，限制文本框只能输入数字和小数点.，且不能以.开头和结尾，其他字符按不下去
+     *
+     * @author chendd
+     *
+     */
+    $.fn.numberbox = function(options) {
+        var defaults = {
+            codes : [ 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 8, 37, 39 ]
+        // 有效的按键
+        };
+        var options = $.extend(defaults, options);
+        this.each(function() {
+            var thisElement = $(this);
+            thisElement.css(&quot;ime-mode&quot;, &quot;disabled&quot;);// 设置只能输入英文和数字
+            var codeLens = options.codes.length;
+            // 运行按下的键包括：小数点、0-9、删除键、Delete删除键、左右箭头
+            thisElement.unbind(&quot;keypress&quot;).bind(&quot;keypress&quot;, function(evt) {
+                // 获取默认的maxLength
+                var theEvent = window.event || evt;
+                var theCode = theEvent.keyCode || theEvent.which;
+                // 判断键入的是否再有效范围内
+                var flag = false;
+                for ( var i = 0; i &lt; codeLens; i++) {
+                    var code = options.codes[i];
+                    if (code == theCode) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag == false) {
+                    return false;
+                }
+                var currentCode = String.fromCharCode(theCode);
+                var val = thisElement.val();// 获取当前的value值
+                if (val.length == 0) {
+                    // 如果当前的值为空，则判断.点不能出现在首位置
+                    if (currentCode == &quot;.&quot;) {
+                        // theEvent.keyCode = 0;//IE下生效
+                        return false;// IE和Chrome下生效
+                    }
+                } else {
+                    // 如果当前的值不为空，则判断.不能重复出现
+                    if (val.indexOf(&quot;.&quot;) != -1) {
+                        if (currentCode == &quot;.&quot;) {
+                            // theEvent.keyCode = 0;//IE下生效
+                            return false;// IE和Chrome下生效
+                        }
+                    }
+                }
+                // return false;
+            }).unbind(&quot;blur&quot;).bind(&quot;blur&quot;, function() {
+                // 失去焦点时判断，是否以.点结尾，如果是，截取掉
+                var val = $(this).val();
+                if (val != &quot;&quot;) {
+                    var lastChar = val.substring(val.length - 1, val.length);
+                    if (lastChar == &quot;.&quot;) {
+                        $(this).val(val.substring(0, val.length - 1));
+                    }
+                }
+            })
+        });
+    };
+    // 页面加载完成之后，渲染numberbox
+    $(function() {
+        // 渲染数字框
+        $(&quot;.numberbox&quot;).numberbox();
+        // 渲染正整数
+        $(&quot;.intbox&quot;).numberbox({
+            codes : [ 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 8, 37, 39 ]
+        });
+    });
+})(jQuery);</pre>
+<p>
+    <span style="color: rgb(192, 0, 0); font-size: 14px; font-family: 宋体, SimSun;"><strong>注</strong></span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">上述许多内容已经过时和过期了，留存本篇文章仅为方便个人查看，原始文章的信息参考：</span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">原始链接：https://www.chendd.cn/information/viewInformation/other/108.a</span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">最后更新：2014-06-13 22:31:00</span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">访问次数：270</span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">评论次数：0</span>
+</p>
+<p>
+    <span style="font-size: 14px; font-family: 宋体, SimSun;">点赞个数：0</span>
+</p>

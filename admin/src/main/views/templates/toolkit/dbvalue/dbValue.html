@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8"/>
+<title>系统参数新增与修改</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description"/>
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser?.userConfig?.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser?.userConfig?.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="container-fluid">
+            <form id="form_save_id">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form id="roleForm_save_id" action="/system/info/systemInfoManage">
+                            <div class="form-group row">
+                                <label for="key_add_id" class="col-sm-2 col-form-label"><span
+                                        class="text-danger">*</span> 参数名称</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="key" id="key_add_id" maxlength="32"
+                                           th:value="${dbValue?.key}" placeholder="请输入参数名称" autocomplete="off"/>
+                                </div>
+                                <label for="value_add_id" class="col-sm-2 col-form-label"><span
+                                        class="text-danger">*</span> 参数值</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="value" id="value_add_id"
+                                           th:value="${dbValue?.value}" placeholder="请输入参数值" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="group_add_id" class="col-sm-2 col-form-label"><span
+                                        class="text-danger">*</span> 参数组名</label>
+                                <div class="col-sm-4">
+                                    <input type="text" class="form-control" name="group" id="group_add_id"
+                                           maxlength="32"
+                                           th:value="${dbValue?.group}" placeholder="请输入参数名称" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="remark_add_id" class="col-sm-2 col-form-label"><span class="width6"></span>
+                                    参数描述</label>
+                                <div class="col-sm-10">
+                                <textarea class="form-control" name="remark" id="remark_add_id" maxlength="200"
+                                          placeholder="参数描述不能超过200个字符" rows="6"
+                                          th:text="${dbValue?.remark}"></textarea>
+                                </div>
+                            </div>
+                            <input type="hidden" name="id" id="id_add_id" th:value="${dbValue?.id}"/>
+                        </form>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.min.js"></script>
+<script src="../../../statics/plugins/maxlength/bootstrap-maxlength.min.js"></script>
+<script src="../../../statics/plugins/form/jquery.form.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/toolkit/dbvalue/dbValue.js"></script>
+</body>
+</html>

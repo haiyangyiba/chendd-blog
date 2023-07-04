@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.toolkit.quartz.mapper.QuartzManageMapper">
+
+    <!-- 用户信息列表查询 -->
+    <select id="queryQuartzList" resultType="cn.chendd.toolkit.quartz.vo.QuartzManageResult"
+            parameterType="cn.chendd.toolkit.quartz.po.QuartzManageParam">
+
+        SELECT
+            a.JOB_NAME jobName, a.JOB_GROUP jobGroup,
+            a.DESCRIPTION jobDescription, a.JOB_CLASS_NAME jobClassName,
+            b.CRON_EXPRESSION cronExpression, c.DESCRIPTION triggerDescription,
+            from_unixtime(round(c.NEXT_FIRE_TIME/1000,0))  nextFireTime, from_unixtime(round(c.PREV_FIRE_TIME/1000,0)) prevFireTime,
+            c.TRIGGER_STATE triggerState, from_unixtime(round(c.START_TIME/1000,0)) startTime
+        FROM
+            QUARTZ_JOB_DETAILS a
+        LEFT JOIN QUARTZ_CRON_TRIGGERS b ON a.JOB_NAME = b.TRIGGER_NAME AND a.JOB_GROUP = b.TRIGGER_GROUP
+        LEFT JOIN QUARTZ_TRIGGERS c ON a.JOB_NAME = c.JOB_NAME AND a.JOB_GROUP = c.JOB_GROUP
+        WHERE
+            1 = 1
+            <if test="param.jobName != null and param.jobName != ''">
+                and a.JOB_NAME like concat('%',#{param.jobName},'%')
+            </if>
+            <if test="param.jobGroup != null and param.jobGroup != ''">
+                and a.JOB_GROUP like concat('%',#{param.jobGroup},'%')
+            </if>
+        order by a.JOB_GROUP asc , a.JOB_NAME asc
+    </select>
+
+</mapper>

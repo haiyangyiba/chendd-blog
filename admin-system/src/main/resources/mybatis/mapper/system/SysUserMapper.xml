@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.sysuser.mapper.SysUserMapper">
+
+    <!-- 用户信息列表查询 -->
+    <select id="querySysUserPage" resultType="cn.chendd.blog.admin.system.sysuser.vo.SysUserManageResult"
+            parameterType="map">
+         SELECT
+              a.accountId,
+              a.username,
+              a.status,
+              b.userId,
+              b.realName,
+              b.email,
+              b.createTime,
+              b.lastLoginTime,
+              b.userSource
+         FROM sys_account a
+         LEFT JOIN sys_user b ON a.accountId = b.accountId
+         WHERE
+              a.dataStatus = 'USABLE'
+              <if test="userParam.realName != null and userParam.realName != ''">
+                  and (a.username like concat('%',#{userParam.realName},'%') or b.realName like concat('%',#{userParam.realName},'%') )
+              </if>
+        <if test="userParam.userSource != null and !userParam.userSource.isEmpty()">
+            and b.userSource in
+            <foreach collection="userParam.userSource" item="item" separator="," open="(" close=")">#{item}</foreach>
+        </if>
+        <if test="userParam.userStatus != null and !userParam.userStatus.isEmpty()">
+            and a.status in
+            <foreach collection="userParam.userStatus" item="item" separator="," open="(" close=")">#{item}</foreach>
+        </if>
+          order by b.userSource asc , b.createTime asc
+    </select>
+
+    <!--根据用户ID查询用户 -->
+    <select id="getUserInfoViewById" resultType="cn.chendd.blog.admin.system.sysuser.vo.UserInfoViewResult" parameterType="long">
+        SELECT
+            a.accountId,a.username,a.password,a.status,
+            b.userId,b.userNumber,b.realName,b.portrait,b.email,b.createTime,b.lastLoginTime,b.userSource
+        FROM sys_account a
+        LEFT JOIN sys_user b on a.accountId = b.accountId and a.dataStatus = 'USABLE'
+        WHERE b.userId = #{userId}
+    </select>
+    <update id="editUser" parameterType="cn.chendd.blog.admin.system.sysuser.vo.UserInfoViewResult">
+        UPDATE
+            sys_user a
+        SET
+            a.realName = #{realName} , a.email = #{email} , a.portrait = #{userImage}
+        WHERE a.userId = #{userId} and a.dataStatus = 'USABLE'
+    </update>
+    <update id="editUserStatus">
+        UPDATE
+            sys_account a
+        SET
+            a.status = #{status}
+        WHERE a.accountId = (select b.accountId from sys_user b where b.userId = #{userId} and b.dataStatus = 'USABLE')
+    </update>
+    <!--查询用户创建的前N条数据-->
+    <select id="queryUserNewestList" resultType="cn.chendd.blog.client.user.vo.UserNewestDto">
+        SELECT
+            main.realName , main.portrait , main.userSource , main.createTime
+        FROM sys_user main order by main.createTime desc limit #{limit}
+    </select>
+    <!--根据Id查询用户基本信息数据-->
+    <select id="queryUserInfo" resultType="cn.chendd.blog.client.user.vo.UserInfoResult">
+        select
+               a.realName , a.portrait, a.email , a.createTime , a.lastLoginTime , a.userSource from sys_user a
+        where a.userId = #{userId}
+    </select>
+    <!-- 根据用户Id修改Email -->
+    <update id="updateEmailByUserId">
+        UPDATE sys_user a SET a.email = #{email} where a.userId = #{userId}
+    </update>
+</mapper>

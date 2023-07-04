@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>在线用户管理</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico">
+<link href="/statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div id="grid_toolbar">
+                        <form id="query_form_id" >
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend invisible width6">
+                                            <div class="input-group-text invisible">占位符</div>
+                                        </div>
+                                        <div class="checkbox checkbox-primary form-check-inline">
+                                            <input type="checkbox" name="scope" value="all" id="all_checkbox" checked onclick="changeQuery(this , 'only_checkbox')" />
+                                            <label for="all_checkbox" style="cursor: pointer;"> 查看全部</label>
+                                        </div>
+                                        <div class="input-group-prepend width6"></div>
+                                        <div class="checkbox checkbox-primary form-check-inline">
+                                            <input type="checkbox" name="scope" value="user" id="only_checkbox" onclick="changeQuery(this , 'all_checkbox')" />
+                                            <label for="only_checkbox" style="cursor: pointer;"> 仅查看用户</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table id="grid_table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/statics/plugins/form/jquery.form.min.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script src="/statics/js/blog/online/onlineUserManage.js"></script>
+</body>
+</html>

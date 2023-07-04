@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.requestdetail.mapper.SysRequestStatisticsMapper">
+
+    <!-- 查询访问量统计汇总数据 -->
+    <select id="queryAccessManagePage" parameterType="cn.chendd.blog.admin.blog.requestdetail.po.SysRequestDetailParam"
+            resultType="cn.chendd.blog.admin.blog.requestdetail.vo.SysRequestDetailResult">
+        select * from (
+            select  '-1' id , DATE_FORMAT(NOW(),'%Y-%m-%d') date , (
+                SELECT count(*) FROM `chendd-blog`.sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d')
+            ) count , (
+                SELECT count(*) FROM `chendd-blog`.sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d') and isOutLink = 'false'
+            ) outLinkCount
+            UNION
+            SELECT
+                a.id, a.date, a.count, a.outLinkCount
+            FROM
+                sys_request_statistics a
+        ) newTab order by date desc
+    </select>
+
+    <!-- 根据日期查询指定日期的访问明细 -->
+    <select id="queryAccessRequestManagePage" parameterType="cn.chendd.blog.admin.blog.requestdetail.model.SysRequestDetail"
+            resultType="cn.chendd.blog.admin.blog.requestdetail.model.SysRequestDetail">
+        SELECT
+             t1.*
+        FROM sys_request_detail t1
+        WHERE createDate = #{param.date}
+        <if test="param.url != null and param.url != ''"> and t1.url like concat('%' , #{param.url} , '%') </if>
+        <if test="param.isOutLink != null and param.isOutLink != ''"> and t1.isOutLink = #{param.isOutLink} </if>
+    </select>
+
+    <!-- 系统单日最高访问量 -->
+    <select id="queryRequestAccessMaxDay"
+            resultType="cn.chendd.blog.admin.blog.requestdetail.vo.SysRequestMaxDay">
+        select
+               t1.date maxDay , t1.count maxCount
+        from sys_request_statistics t1
+        where t1.count in (select max(count) from `chendd-blog`.sys_request_statistics) limit 0 , 1
+    </select>
+
+    <!-- 系统单日最高访问量 -->
+    <select id="queryRequestAccessTotal" resultType="java.lang.Integer">
+        select sum(t1.count) count from sys_request_statistics t1
+    </select>
+
+</mapper>

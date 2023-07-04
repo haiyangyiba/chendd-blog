@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>在线SQL查询</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="/statics/favicon.ico">
+<link href="/statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/plugins/codemirror/codemirror.css" rel="stylesheet" type="text/css"/>
+<link href="/statics/plugins/codemirror/theme/eclipse.css" rel="stylesheet" type="text/css"/>
+<link href="/statics/plugins/codemirror/theme/idea.css" rel="stylesheet" type="text/css"/>
+<link href="/statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.CodeMirror {
+    font-family: Consolas!important;
+    font-size: 14px!important;
+    line-height: 20px!important;height: 150px;
+}
+.CodeMirror-placeholder {
+    color: #3AB9DF!important;
+}
+</style>
+</head>
+<body style="overflow: hidden;">
+<div class="content-page content-page-admin">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <textarea id="code_template_id" hidden placeholder="--请书写SQL脚本"></textarea>
+                    <div id="grid_toolbar">
+                        <form id="query_form_id" >
+                            <div class="form-row align-items-center">
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-soft-blue waves-effect waves-light" style="padding: 2px 10px;" id="eclipse_theme_id">
+                                        <i class="mdi mdi-alpha-e-circle-outline font-20"></i>&nbsp;Eclipse主题</button>
+                                    <button type="button" class="btn btn-soft-secondary waves-effect" style="padding: 2px 10px;" id="idea_theme_id">
+                                        <i class="mdi mdi-alpha-i-circle-outline font-20"></i>&nbsp;IDEA主题</button>
+                                </div>
+                                <div class="col-auto mb-2 ml-5">
+                                    <button type="button" class="btn btn-primary waves-effect waves-light" id="execute_btn_id">
+                                        <i class="fas fa-search"></i>&nbsp;执行查询
+                                    </button>
+                                    <button type="button" class="btn btn-primary waves-effect waves-light resetForm" id="clear_btn_id">
+                                        <i class="fas fa-redo"></i>&nbsp;清空
+                                    </button>
+                                </div>
+                                <div class="col-auto mb-2">
+                                    <button type="button" class="btn btn-warning waves-effect waves-light" data-toggle="modal" data-target="#bs-example-modal-lg">
+                                        <i class="dripicons-question"></i>&nbsp;查询说明
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <table id="grid_table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myLargeModalLabel"><i class="dripicons-question"></i>&nbsp;查询说明</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><span class="badge badge-primary badge-pill mr-1">1</span>
+                    所有SQL语句限定必须为SELECT语句，必须出现SELECT 与 FROM 关键字（不区分大小写）；</li>
+                    <li class="list-group-item"><span class="badge badge-primary badge-pill mr-1">2</span>
+                    SQL语句中不能出现“create”、“drop”、“insert”、“update”、“delete”、“truncate”等关键字，但可出现包含的单词，如：updateTime（不区分大小写）；</li>
+                    <li class="list-group-item"><span class="badge badge-primary badge-pill mr-1">3</span>
+                    SQL语句为前端分页，服务端限制最多查询50条数据，语句中不需要使用limit语句，不需要“;”结尾；</li>
+                    <li class="list-group-item"><span class="badge badge-primary badge-pill mr-1">4</span>
+                    该功能服务端事务为只读，非只读类SQL无法被执行；</li>
+                    <li class="list-group-item"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+<script src="/statics/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+<script src="/statics/plugins/form/jquery.form.min.js"></script>
+<script type="text/javascript" src="/statics/plugins/codemirror/codemirror.js"></script>
+<script type="text/javascript" src="/statics/plugins/codemirror/mode/sql.js"></script>
+<script type="text/javascript" src="/statics/plugins/codemirror/mode/placeholder.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script src="/statics/js/system/online/onlineQueryManage.js"></script>
+</body>
+</html>

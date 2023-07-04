@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>角色菜单编辑</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/bootstrap.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" data-dd-theme="${session.systemCurrentUser.userConfig.adminTheme}" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/treeview/bootstrap-treeview.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.content {height: 460px; overflow: auto;}
+</style>
+</head>
+<body>
+
+<div class="content-page content-page-admin" style="padding: 0;">
+    <div class="content" data-simplebar>
+        <div hidden id="dataList_hidden_id"><th:block th:utext="${treeview}"></th:block></div>
+        <div hidden id="roleId_add_id"><th:block th:utext="${roleId}"></th:block></div>
+        <div class="btn-group mb-2" style="position:fixed;top:5px;right:30px;z-index: 1;">
+            <button class="btn btn-outline-primary" onclick="expandAll()"><i class="fas fa-chevron-down"></i>&nbsp;全部展开</button>
+            <button class="btn btn-outline-primary" onclick="collapseAll()"><i class="fas fa-chevron-right"></i>&nbsp;全部折叠</button>
+            <button class="btn btn-outline-primary" onclick="checkAll()"><i class="far fa-check-square"></i>&nbsp;全部选中</button>
+            <button class="btn btn-outline-primary" onclick="uncheckAll()"><i class="far fa-square"></i>&nbsp;全部不选</button>
+        </div>
+        <div id="treeview-checkable"></div>
+    </div>
+</div>
+
+<script src="../../../statics/assets/js/vendor.min.js"></script>
+<script src="../../../statics/assets/js/app.js"></script>
+<script src="../../../statics/plugins/treeview/bootstrap-treeview.min.js"></script>
+<script src="../../../statics/plugins/helper.js"></script>
+<script src="../../../statics/js/system/rolemnu/editor.js"></script>
+</body>
+</html>

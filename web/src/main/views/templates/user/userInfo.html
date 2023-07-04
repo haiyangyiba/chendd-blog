@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>用户基本信息</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="关键字文章列表" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-white">
+    <div class="table-responsive">
+        <table class="table table-bordered mb-0">
+            <tbody>
+                <tr>
+                    <td colspan="2"><label>用户名称：</label><th:block th:text="${userInfo.realName}">名称</th:block></td>
+                    <td rowspan="4" align="center" style="vertical-align: middle;">
+                        <img th:src="'/internet/image?url=' + ${userInfo.portrait}" class="avatar-xl rounded-circle" style="max-width: 160px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>&nbsp;&nbsp;&nbsp;&nbsp;Email：</label><th:block th:text="${userInfo.email}">Email</th:block></td>
+                </tr>
+                <tr>
+                    <td><label>注册时间：</label><th:block th:text="${userInfo.createTime}">注册时间</th:block></td>
+                    <td><label>最后登录：</label><th:block th:text="${userInfo.lastLoginTime}">最后登录</th:block></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>用户来源：</label><th:block th:text="${userInfo.userSource}">用户来源</th:block></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

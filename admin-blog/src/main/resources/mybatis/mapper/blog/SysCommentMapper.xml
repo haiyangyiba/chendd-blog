@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.comment.mapper.SysCommentMapper">
+
+    <!-- 根据目标（文章）ID和当前标记位ID查询最前面N层主回复数据 -->
+    <select id="queryPageSysComment" resultType="cn.chendd.blog.client.comment.vo.CommentQueryResult">
+        <![CDATA[
+            select
+                main.id , main.targetId , main.editorContent , main.childId , main.ip , main.createTime ,
+                createUser.userId createUserId , createUser.realName createUserName ,
+                createUser.userSource createUserSource , createUser.portrait createUserPortrait
+            from sys_comment main
+            left join sys_user createUser on main.createUserId = createUser.userId
+            where
+                main.targetId = #{targetId} and main.childId is null
+            order by main.id desc
+        ]]>
+    </select>
+
+    <!-- 查询所有回复数据 -->
+    <select id="querySysComment" resultType="cn.chendd.blog.client.comment.vo.CommentQueryResult">
+        select
+            main.id , main.targetId , case when main.dataStatus = 'USABLE' then main.editorContent else '当前回复已被管理员删除' end editorContent , main.childId , main.ip , main.createTime ,
+            createUser.userId createUserId , createUser.realName createUserName ,
+            createUser.userSource createUserSource , createUser.portrait createUserPortrait,
+            replyUser.userId replyUserId , replyUser.realName replyUserName ,
+            replyUser.userSource replyUserSource , replyUser.portrait replyUserPortrait , main.dataStatus
+        from sys_comment main
+        left join sys_user createUser on main.createUserId = createUser.userId
+        left join sys_user replyUser on main.replyUserId = replyUser.userId
+        where
+            main.targetId = #{targetId}
+            and main.childId in
+            <foreach collection="commentList" item="item" open="(" close=")" separator=",">
+                #{item.id}
+            </foreach>
+        order by main.id asc
+    </select>
+
+    <!-- 查询所有留言数据分页 -->
+    <select id="querySysCommentManagePage" resultType="cn.chendd.blog.admin.blog.comment.vo.SysCommentManageResult">
+        SELECT
+            main.id,
+            main.targetId,
+            article.title targetName,
+            main.createUserId,
+            main.ip,
+            main.createTime,
+            user.realName,
+            user.userSource,
+            main.dataStatus
+        FROM
+            sys_comment main
+                LEFT JOIN
+            blog_article article ON main.targetId = article.id
+                LEFT JOIN
+            sys_user user ON user.userId = main.createUserId
+        WHERE
+            main.moduleKey = 'Article'
+            <if test="param.beginDate != null and param.beginDate != ''">
+                and main.createTime &gt;= concat(#{param.beginDate} , ' 00:00:00')
+            </if>
+            <if test="param.endDate != null and param.endDate != ''">
+                and main.createTime &lt;= concat(#{param.endDate} , ' 23:59:59')
+            </if>
+            <if test="param.title != null and param.title != ''">
+                and article.title like concat('%' , #{param.title} , '%')
+            </if>
+        ORDER BY main.createTime desc
+    </select>
+    <!-- 修改数据使用状态 -->
+    <update id="updateDataStatusById" parameterType="map">
+        UPDATE sys_comment main SET main.dataStatus = #{dataStatus} WHERE main.id = #{id}
+    </update>
+    <!-- 根据id查询主键数据 -->
+    <select id="querySysCommentById" resultType="cn.chendd.blog.admin.blog.comment.model.SysComment">
+        select main.* from sys_comment main where main.id = #{id}
+    </select>
+    <!-- 查询留言总条数 -->
+    <select id="querySysCountById" resultType="java.lang.Integer">
+        select count(1) from sys_comment where targetId = #{targetId} and moduleKey = 'Article'
+    </select>
+    <!--查询最新的limit条评论数据-->
+    <select id="queryCommentNewestList" resultType="cn.chendd.blog.client.comment.vo.CommentNewestDto">
+        select
+            usr.realName , usr.portrait , usr.userSource , main.createTime , main.editorContent content
+        from
+            sys_comment main
+        left join sys_user usr on main.createUserId = usr.userId
+        where
+            main.moduleKey = 'Article'
+        order by main.createTime desc limit #{limit}
+    </select>
+    <!-- 查询提醒的评论数据 -->
+    <select id="queryRemindComment" resultType="cn.chendd.blog.admin.blog.article.vo.RemindPrausesAndCommentResult">
+        <![CDATA[
+            select
+                 distinct a.createUserId , c.realName createUserName , c.userSource , a.createTime , b.id articleId , b.title
+            from sys_comment a
+            left join blog_article b on a.targetId = b.id
+            left join sys_user c on c.userId = a.createUserId
+            where a.moduleKey = 'Article' and a.createTime >= #{begin} and a.createTime <= #{end}
+            order by b.title , a.createTime
+        ]]>
+    </select>
+    <!-- 查询提醒至用户的邮件数据 -->
+    <select id="queryRemindUserComment" resultType="cn.chendd.blog.admin.blog.article.vo.RemindUserCommentResult">
+        <![CDATA[
+            select a.targetId, a.editorContent , a.replyUserId , b.realName , c.title , b.email , b.userSource
+            from sys_comment a
+                     left join sys_user b on a.replyUserId = b.userId
+                     left join blog_article c on c.id = a.targetId
+            where a.moduleKey = 'Article' and a.createTime >= #{begin} and a.createTime <= #{end}
+                  and b.email is not null and childId is not null and a.dataStatus = 'USABLE'
+            order by a.createTime
+        ]]>
+    </select>
+</mapper>

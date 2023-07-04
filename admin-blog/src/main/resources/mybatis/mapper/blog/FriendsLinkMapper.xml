@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.blog.friendslink.mapper.FriendsLinkMapper">
+
+    <!-- 查询排名前limit个的友情链接数据 -->
+    <select id="queryFriendsLinkNewest" resultType="cn.chendd.blog.client.friendslink.FriendsLinkNewestDto">
+        SELECT
+            link.title,
+            link.link,
+            link.logo,
+            link.remark,
+            IFNULL(bflc.count, 0) counts
+        FROM
+            blog_friends_link link
+        LEFT JOIN blog_friends_link_count bflc ON bflc.flId = link.id
+        WHERE
+            link.status = 'ENABLE'
+        ORDER BY link.sortOrder limit ${limit}
+    </select>
+
+    <!-- 查询友情链接数据列表 -->
+    <select id="queryFriendsLink" resultType="cn.chendd.blog.client.friendslink.FriendsLinkDto" parameterType="String">
+        SELECT
+            link.id,
+            link.title,
+            link.link,
+            link.domainTag,
+            link.logo,
+            link.remark,
+            link.status,
+            link.sortOrder,
+            IFNULL(bflc.count, 0) counts
+        FROM
+            blog_friends_link link
+        LEFT JOIN blog_friends_link_count bflc ON bflc.flId = link.id
+        WHERE
+            1 = 1
+        <if test="title != null and title != ''">
+            and link.title like concat('%' , #{title} , '%')
+        </if>
+        ORDER BY link.sortOrder
+    </select>
+</mapper>

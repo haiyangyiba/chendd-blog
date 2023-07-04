@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>关键字文章列表</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="关键字文章列表" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar{
+    width: 4px;
+    height: 6px;
+    background-color: #F5F5F5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb{
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .8);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .8);
+    background-color: #c8c8c8;
+}
+</style>
+</head>
+<body class="bg-white">
+    <div class="table-responsive" style="height: 360px;overflow-y: auto;">
+        <table class="table table-bordered mb-0">
+            <tbody>
+                <tr th:each="data , dataStatus : ${dataList}">
+                    <td>
+                        <span class="badge badge-pink badge-outline-info"><th:block th:text="${dataStatus.count}">序号</th:block></span>
+                        <a style="text-decoration: underline;" target="_blank" th:href="'/blog/article/' + ${data.id} + '.html'"><th:block th:text="${data.title}">标题</th:block></a>
+                        <a class="text-muted"><i class="fe-share-2"></i> 浏览次数：
+                            <th:block th:text="${data.visitsNumber}">访问次数</th:block>
+                        </a>
+                        <a class="text-muted"><i class="fe-calendar"></i> 最后更新：
+                            <dd:format th:type="datetime" th:value="${data.lastUpdateTime}">最后更新</dd:format>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

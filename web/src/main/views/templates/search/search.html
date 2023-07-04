@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>关键字搜一搜</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="本站介绍" name="description" />
+    <meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="/statics/favicon.ico" />
+    <link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="search-result-box m-t-30 card-box">
+                            <div class="row">
+                                <div class="col-md-8 offset-md-0">
+                                    <div class="pt-3 pb-4">
+                                        <form method="post" action="/blog/search/1.html" id="searchForm_id">
+                                            <div class="input-group offset-md-2">
+                                                <input type="text" class="form-control" autofocus autocomplete="off" name="keyWords" th:value="${keyWords}" maxlength="50" required placeholder="关键字搜一搜" />
+                                                <span class="input-group-append">
+                                                <button type="submit" class="btn waves-effect waves-light btn-blue"><i class="fa fa-search mr-1"></i>搜一搜</button>
+                                            </span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="nav nav-tabs nav-bordered">
+                                <li class="nav-item">
+                                    <a href="#keyWords" data-toggle="tab" aria-expanded="true" class="nav-link active">文章内容
+                                        <span class="badge badge-success ml-1" th:text="${pageFinder.total}" th:if="${pageFinder != null}">1</span>
+                                        <span class="badge badge-success ml-1" th:if="${pageFinder == null}">?</span></a>
+                                </li>
+                                <li class="nav-item"><a href="#comment" data-toggle="tab" aria-expanded="false" class="nav-link">评论留言
+                                    <span class="badge badge-danger ml-1"><i class="fe-x-circle"></i></span></a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="keyWords">
+                                    <div class="row" th:if="${pageFinder == null}">
+                                        <div class="font-16 text-left font-italic text-dark">
+                                            <i class="fe-at-sign font-20"></i>输入关键字查询<i class="fe-x-circle font-20"></i>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="row" th:if="${pageFinder != null && pageFinder.total == 0}">
+                                        <div class="font-16 text-left font-italic text-danger">
+                                            <i class="fe-at-sign font-20"></i>未找到查询匹配的数据<i class="fe-x-circle font-20"></i>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="row mb-2" th:each="item,itemState:${pageFinder?.records}" th:if="${pageFinder != null && pageFinder.total > 0}">
+                                        <div class="col-md-12">
+                                            <div class="search-item">
+                                                <h4 class="mb-1"><a th:href="'/blog/article/' + ${item.id} + '.html'" th:utext="${item.title}">标题</a></h4>
+                                                <div class="font-13 text-success mb-0 text-truncate">
+                                                    <i class="fe-clock"></i>最后更新：<dd:format th:type="datetime" th:value="${item.lastTime}">最后更新</dd:format>
+                                                    <i class="fe-tag" style="margin-left: 10px;"></i>匹配词数：<th:block th:text="${item.counts}">匹配词数</th:block>
+                                                    <i class="fe-linkedin" style="margin-left: 10px;"></i>匹配个数：<th:block th:text="${item.sums}">匹配个数</th:block>
+                                                </div>
+                                                <p class="mb-0 text-muted" th:utext="${item.simpleContent}"></p>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                    <ul class="pagination justify-content-end pagination-rounded mt-0" th:if="${pageFinder != null && pageFinder.total > 0}">
+                                        <li class="page-item">
+                                            <a class="page-link" data-page-number="1" href="javascript:void(0);" title="第一页"><i class="fe-chevrons-left"></i></a>
+                                        </li>
+                                        <th:block th:with="startIndex=${pageFinder.current - 3 > 0 ? pageFinder.current - 3 : 1},
+                                                           endIndex=${pageFinder.current + 3 >= pageFinder.pages ? pageFinder.pages : pageFinder.current + 3}">
+                                            <th:block th:each="p , pStatus : ${#numbers.sequence(startIndex ,endIndex)}">
+                                                <th:block th:if="${p == pageFinder.current}">
+                                                    <li class="page-item active"><a class="page-link" th:text="${p}">1</a></li>
+                                                </th:block>
+                                                <th:block th:if="${p != pageFinder.current}">
+                                                    <li class="page-item"><a class="page-link" href="javascript:void(0);" th:title="'转至第 ' + ${p} + ' 页数据'" th:attr="data-page-number=${p}" th:text="${p}">1</a></li>
+                                                </th:block>
+                                            </th:block>
+                                        </th:block>
+                                        <li class="page-item">
+                                            <a class="page-link" href="javascript:void(0);" th:attr="data-page-number=${pageFinder.pages}" title="最后一页"><i class="fe-chevrons-right"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-pane" id="comment">
+                                    <div class="font-16 text-left font-italic text-dark" style="margin-left: -12px;">
+                                        <i class="fe-x font-20"></i>不准备实现该类型的内容检索<i class="fe-x font-20"></i>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <th:block th:include="/frame/footer :: template">template</th:block>
+    </div>
+</div>
+
+<script src="/statics/assets/js/vendor.min.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="/statics/plugins/bootbox/bootbox.all.min.js"></script>
+<script src="/statics/plugins/art-template/template-web.js"></script>
+<script src="/statics/plugins/helper.js"></script>
+<script src="/statics/js/search/search.js"></script>
+</body>
+</html>

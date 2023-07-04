@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.toolkit.operationlog.mapper.AutoCreateTableMapper">
+
+    <!-- 查询表，判断表是否存在 -->
+    <select id="getTableExist" resultType="boolean" parameterType="String">
+        SELECT
+            case when count(*) = 1
+            then true else false end tableExist
+        FROM INFORMATION_SCHEMA.TABLES WHERE table_name = #{tableName,jdbcType=VARCHAR}
+
+    </select>
+
+    <!-- 创建表，根据旧表创建新表 -->
+    <update id="createTable" parameterType="map">
+        create table if not exists ${newTableName} as select * from ${oldTableName} where 1 = 2
+    </update>
+
+</mapper>

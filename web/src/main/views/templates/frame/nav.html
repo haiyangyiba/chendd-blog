@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>公共页面-页面导航</title>
+</head>
+<body>
+
+<template th:fragment="template">
+    <div class="topnav">
+        <div class="container-fluid">
+            <nav class="navbar navbar-dark navbar-expand-lg topnav-menu">
+                <div class="collapse navbar-collapse" id="topnav-menu-content">
+                    <ul class="navbar-nav mr-2" th:each="oneLevel,oneLevelState:${application.menuList}">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none non-href" th:if="${oneLevel.values.url == 'javascript:void(0);'}"
+                               th:id="'topnav-' + ${oneLevel.id}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i th:if="${oneLevel.values.icon != null && oneLevel.values.icon != ''}" th:class="${oneLevel.values.icon} + ' mr-1'">
+                                </i><th:block th:text="${oneLevel.text}">text</th:block>
+                                <div th:if="${oneLevel.nodes != null}" class="arrow-down"></div>
+                            </a>
+                            <a class="nav-link dropdown-toggle arrow-none" th:href="${oneLevel.values.url}" onclick="window.location.href = this.href;return false;"
+                               th:if="${oneLevel.values.url != 'javascript:void(0);'}"
+                               th:id="'topnav-' + ${oneLevel.id}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i th:if="${oneLevel.values.icon != null && oneLevel.values.icon != ''}" th:class="${oneLevel.values.icon} + ' mr-1'">
+                                </i><th:block th:text="${oneLevel.text}">text</th:block>
+                                <div th:if="${oneLevel.nodes != null}" class="arrow-down"></div>
+                            </a>
+                            <div class="dropdown-menu" th:attr="aria-labelledby='topnav-' + ${oneLevel.id}" th:if="${oneLevel.nodes != null}">
+                                <div class="dropdown" th:each="twoLevel : ${oneLevel.nodes}" th:id="'topnav-' + ${twoLevel.id}">
+                                    <a class="dropdown-item non-href" th:if="${twoLevel.values.url == 'javascript:void(0);'}">
+                                        <i th:if="${twoLevel.values.icon != null && twoLevel.values.icon != ''}" th:class="${twoLevel.values.icon} + ' mr-1'">
+                                        </i><th:block th:text="${twoLevel.text}">text</th:block>
+                                        <div th:if="${twoLevel.nodes != null}" class="arrow-down"></div>
+                                    </a>
+                                    <a class="dropdown-item" th:href="${twoLevel.values.url}" th:if="${twoLevel.values.url != 'javascript:void(0);'}">
+                                        <i th:if="${twoLevel.values.icon != null && twoLevel.values.icon != ''}" th:class="${twoLevel.values.icon} + ' mr-1'">
+                                        </i><th:block th:text="${twoLevel.text}">text</th:block>
+                                        <div th:if="${twoLevel.nodes != null}" class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" th:if="${twoLevel.nodes != null}" th:attr="aria-labelledby='topnav-' + ${twoLevel.id}">
+                                        <a th:each="threeLevel : ${twoLevel.nodes}" class="dropdown-item" th:href="${threeLevel.values.url}">
+                                            <i th:if="${threeLevel.values.icon != null && threeLevel.values.icon != ''}" th:class="${threeLevel.values.icon} + ' mr-1'">
+                                            </i><th:block th:text="${threeLevel.text}">text</th:block>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</template>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:dd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<title>友情链接</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="友情链接" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../statics/favicon.ico" />
+<link href="/statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcdn.net/ajax/libs/simditor/2.3.28/styles/simditor.min.css" rel="stylesheet" type="text/css" />
+<link href="/statics/css/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body data-layout-mode="horizontal">
+<div id="wrapper">
+    <th:block th:include="/frame/header :: template">template</th:block>
+    <th:block th:include="/frame/nav :: template">template</th:block>
+    <div class="content-page">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row mt-2">
+                    <div class="col-lg-9">
+                        <th:block th:utext="${custom.content}"></th:block>
+                        <div class="card-box ribbon-box">
+                            <div class="ribbon-two ribbon-two-primary"><span>友情链接</span></div>
+                            <div class="row">
+                                <div class="col-md-4 mb-2" th:each="link : ${friendsLinkList}" th:if="${link.status != null && link.status.value eq 'ENABLE'}">
+                                    <div class="card-body border border-success">
+                                        <span class="badge badge-danger float-right" title="这表示直接从友链站点直连本站的次数" th:if="${link.counts gt 0}"><th:block th:text="${link.counts}">0</th:block></span>
+                                        <h5 class="mt-0">
+                                            <a th:href="${link.link}" target="_blank">
+                                                <span class="d-none d-md-inline-block font-weight-semibold font-16" th:text="${link.title}"></span>
+                                            </a>
+                                        </h5>
+                                        <p th:text="${link.remark}" th:title="${link.remark}" class="sp-line-2" style="height:42px;"></p>
+                                        <div class="clearfix"></div>
+                                        <div class="row">
+                                            <div class="col"></div>
+                                            <div class="col-auto">
+                                                <a class="text-reset" th:href="${link.link}" target="_blank">
+                                                    <img th:src="${link.logo}" title="站点logo" class="img-fluid avatar-xs rounded" th:if="${link.logo != null && link.logo != ''}" />
+                                                    <span class="d-none d-md-inline-block blink font-16" style="height: 24px;" th:text="${link.domainTag}"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-box ribbon-box">
+                            <div class="ribbon-two ribbon-two-warning"><span>已过期站点</span></div>
+                            <div class="row" th:each="link : ${friendsLinkList}" th:if="${link.status != null && link.status.value eq 'DISABLE'}">
+                                <div class="alert alert-success" role="alert" th:if="${link.domainTag eq 'https://www.chendd.cn'}">
+                                    <b class="fe-check"></b>
+                                    <strong th:text="${link.title}" class="mr-2"></strong>
+                                    <strong th:text="${link.domainTag}" class="mr-2"></strong>
+                                    <th:block th:text="${link.remark}"></th:block>
+                                </div>
+                                <div class="alert alert-warning" role="alert" th:if="${link.domainTag ne 'https://www.chendd.cn'}">
+                                    <i class="fe-trash-2"></i>
+                                    <strong th:text="${link.title}" class="mr-2"></strong>
+                                    <strong th:text="${link.domainTag}" class="mr-2"></strong>
+                                    <th:block th:text="${link.remark}"></th:block>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body pt-2 pb-2">
+                                <th:block th:include="/frame/article/article :: praises">点赞</th:block>
+                                <input type="hidden" id="article_id" name="articleId" value="" th:value="${article.id}" />
+                                <th:block th:include="/frame/article/article :: comment">评论</th:block>
+                            </div>
+                        </div>
+                    </div>
+                    <th:block th:include="/frame/detail-sidebar :: template">统计信息</th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="/frame/footer :: template">template</th:block>
+</div>
+
+<th:block th:include="/frame/article/article :: commentPage">评论分页模板</th:block>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/statics/assets/js/vendor.simplify.js"></script>
+<script src="/statics/assets/js/app.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simplebar/5.1.0/simplebar.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/art-template/4.13.2/lib/template-web.js"></script>
+<script src="/statics/plugins/simditor/assets/scripts/module.js"></script>
+<script src="/statics/plugins/simditor/assets/scripts/hotkeys.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/simditor/2.3.28/lib/simditor.min.js"></script>
+<script src="https://ssl.captcha.qq.com/TCaptcha.js" async="async"></script>
+<script src="/statics/plugins/helper.min.js"></script>
+<script src="/statics/js/common-interactive/interactive.js"></script>
+</body>
+</html>

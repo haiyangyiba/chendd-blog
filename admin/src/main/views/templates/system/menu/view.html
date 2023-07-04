@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>菜单查看</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta content="欢迎来到陈冬冬的个人经验分享平台" name="description" />
+<meta content="88911006@qq.com,雪地里走,陈冬冬" name="author" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="shortcut icon" href="../../../statics/favicon.ico">
+<link href="../../../statics/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="bs-default-stylesheet" />
+<link href="../../../statics/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+<link href="../../../statics/plugins/helper.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="bg-white">
+
+<div class="content-page content-page-admin">
+    <div class="content">
+        <form id="roleForm_save_id" action="/system/info/systemInfoManage">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">菜单名称：</label>
+                <div class="col-sm-3">
+                    <span th:text="${sysMenu.menuName}" class="form-control border-0"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">显示序号：</label>
+                <div class="col-sm-4">
+                    <span th:text="${sysMenu.menuOrder}" class="form-control border-0"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">菜单类型：</label>
+                <div class="col-sm-3">
+                    <span th:text="${sysMenu.menuType.text}" class="form-control border-0"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">菜单标识：</label>
+                <div class="col-sm-4">
+                    <span th:text="${sysMenu.menuKey}" class="form-control border-0"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">菜单地址：</label>
+                <div class="col-sm-10">
+                    <span th:text="${sysMenu.menuUrl}" class="form-control border-0"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">菜单图标：</label>
+                <div class="col-sm-3">
+                    <div class="input-group-prepend">
+                        <span class="form-control border-0">
+                            <th:block th:utext="(${sysMenu.menuIcon} != null and ${sysMenu.menuIcon} != '') ? '<i class=\'' + ${sysMenu.menuIcon} + '\'></i>' : ''"></th:block>
+                        </span>
+                    </div>
+                </div>
+                <label class="col-sm-2 col-form-label">可用状态：</label>
+                <div class="col-sm-4">
+                    <span th:text="${sysMenu.menuStatus.text}" class="form-control border-0"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="remark_add_id" class="col-sm-2 col-form-label"><span class="text-danger invisible width6"></span>描述信息：</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control border-0" name="remark" id="remark_add_id" maxlength="200" placeholder="描述不能超过200个字符" rows="6"
+                            style="resize: none;" readonly th:text="${sysMenu.remark}"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
