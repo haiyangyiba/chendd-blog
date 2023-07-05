@@ -135,6 +135,7 @@
 3. 使用IDEA导入项目代码，启动admin模块的Bootstrap启动类，默认端口8888；启动web模块的启动类，默认端口80和443，分别是http和https协议；
 4. 先启动后端服务再启动前端，访问地址分别是`http://localhost:8888/`和`https://localhost`，登录用户和密码为：`admin`、`chenddblog`，验证码为 4 位数字和字母组合，为 gif 图片，每一帧都只显示3个字符；
 5. 所有图片和附件上传的路径默认存储在`/app/BLOG_FILES`路径下，若为Windows则在部署程序的磁盘根路径下；
+6. 项目功能运行时会将用户的操作写入操作日志表中，表为分表存储，可能会存在表不存在，可根据实际日期从`sys_operationlog`中拷贝生成即可；
 
 # 7. 其它说明
 1.  [本站介绍](https://www.chendd.cn/blog/page/website.html)
