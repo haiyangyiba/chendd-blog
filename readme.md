@@ -117,7 +117,7 @@
 - forest 1.5.0-rc5
 # 5. 特色功能
 1. SpringBoot 项目支持http和https，访问http时自动跳转至https；
-2. SpringBoot 项目的多模块构建打包与部署，支持多环境打包，如生成环境打包命令：`clean compile package -Dmaven.test.skip=true -Pprod -f pom.xml`，即使用-P参数，-Pprod标识打包prod生产环境对应的参数文件，默认不加-P为开发环境；
+2. SpringBoot 项目的多模块构建完美打包与部署，支持多环境打包，如生成环境打包命令：`clean compile package -Dmaven.test.skip=true -Pprod -f pom.xml`，即使用-P参数，-Pprod标识打包prod生产环境对应的参数文件，默认不加-P为开发环境；
 3. SpringSession 管理用户，支持在前台和后台任一方登录后的用户单点支持，前后端分离；
 4. Mybatis-Plus 的日志表分表；
 5. 全站图片上传增加水印，包括 gif 图片，也可根据特殊规则不增加水印；
@@ -129,7 +129,14 @@
 11. 一些个人分享的独到且深度的开源项目学习实践案例；
 12. ......
 
-# 6. 其它说明
+# 6. 项目部署
+1. 使用MySQL数据库，创建数据库名称`chendd-blog`;
+2. 使用MySQL Workbench 之类的客户端导入《[数据库脚本](https://github.com/haiyangyiba/statics/blob/master/blog/database.zip)》，并执行；
+3. 使用IDEA导入项目代码，启动admin模块的Bootstrap启动类，默认端口8888；启动web模块的启动类，默认端口80和443，分别是http和https协议；
+4. 先启动后端服务再启动前端，访问地址分别是`http://localhost:8888/`和`https://localhost`，登录用户和密码为：`admin`、`chenddblog`，验证码为 4 位数字和字母组合，为 gif 图片，每一帧都只显示3个字符；
+5. 所有图片和附件上传的路径默认存储在`/app/BLOG_FILES`路径下，若为Windows则在部署程序的磁盘根路径下；
+
+# 7. 其它说明
 1.  [本站介绍](https://www.chendd.cn/blog/page/website.html)
 2.  [作者介绍](https://www.chendd.cn/blog/page/author.html)
 3.  [历史上的本站](https://www.chendd.cn/blog/page/history.html)
