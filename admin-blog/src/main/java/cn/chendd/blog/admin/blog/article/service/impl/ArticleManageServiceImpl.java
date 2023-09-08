@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -171,6 +172,10 @@ public class ArticleManageServiceImpl extends ServiceImpl<ArticleManageMapper, A
         //查询文章分类
         List<ArticleContentResult> dataList = pageFinder.getRecords();
         //每一页都要显示置顶的数据
+        if (dataList.isEmpty()) {
+            dataList = new ArrayList<>();
+            pageFinder.setRecords(dataList);
+        }
         dataList.addAll(0 , this.queryArticleTypeTop(articleType));
         List<Long> ids = dataList.stream().map(ArticleContentResult::getId).collect(Collectors.toList());
         //根据当前页的文章id数据，查询对应的属性数据

@@ -9,9 +9,9 @@
             resultType="cn.chendd.blog.admin.blog.requestdetail.vo.SysRequestDetailResult">
         select * from (
             select  '-1' id , DATE_FORMAT(NOW(),'%Y-%m-%d') date , (
-                SELECT count(*) FROM `chendd-blog`.sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d')
+                SELECT count(*) FROM sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d')
             ) count , (
-                SELECT count(*) FROM `chendd-blog`.sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d') and isOutLink = 'false'
+                SELECT count(*) FROM sys_request_detail a where a.createDate = DATE_FORMAT(NOW(),'%Y-%m-%d') and isOutLink = 'false'
             ) outLinkCount
             UNION
             SELECT
@@ -38,7 +38,7 @@
         select
                t1.date maxDay , t1.count maxCount
         from sys_request_statistics t1
-        where t1.count in (select max(count) from `chendd-blog`.sys_request_statistics) limit 0 , 1
+        where t1.count in (select max(count) from sys_request_statistics) limit 0 , 1
     </select>
 
     <!-- 系统单日最高访问量 -->

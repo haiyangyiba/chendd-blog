@@ -90,7 +90,7 @@
             <div class="text-primary text-center pt-1 font-weight-bold" style="max-width: 62px;"><%=item.createUserName%></div>
         </div>
         <div class="media-body pl-2 ml-2 product-box" style="border-left: 1px solid #EEE;">
-            <h5 class="mt-0"><span>#<%=index+1%>楼</span><span class="ml-1 mr-1 badge <%=userSource[item.createUserSource.value]%>" style="padding:8px;"><i class="mdi mdi-cancel"></i> <%=item.createUserSource.text%></span> <span><%=item.createTime%></span></h5>
+            <h5 class="mt-0"><span>#<%=index+1%>楼</span><span class="ml-1 mr-1 badge <%=userSource[item.createUserSource.value]%>" style="padding:8px;"><i class="fe-award"></i> <%=item.createUserSource.text%></span> <span><%=item.createTime%></span></h5>
             <div class="editor-style"><%=#item.editorContent%></div>
             <div class="product-action">
                 <a href="javascript: void(0);" onclick="gotoComment('当前回复：#<%=index+1%> 楼层主 <%=item.createUserName%>' , '<%=item.id%>' , '<%=item.createUserId%>')" class="btn btn-success btn-xs waves-effect waves-light"><i class="mdi mdi-pencil"></i>&nbsp;回复</a>
@@ -105,7 +105,10 @@
                     <div class="text-primary text-center pt-1" style="max-width: 62px;"><%=childItem.createUserName%></div>
                 </div>
                 <div class="media-body ml-3 product-box">
-                    <h5 class="mt-0"><span>#<%=index+1%>-<%=j+1%></span> <span><%=childItem.createTime%></span> <span class="text-primary"><%=childItem.createUserName%></span> @ <span class="text-primary"><%=childItem.replyUserName%></span></h5>
+                    <h5 class="mt-0"><span>#<%=index+1%>-<%=j+1%></span>
+                        <span><%=childItem.createTime%></span>
+                        <span class="ml-1 mr-1 badge <%=userSource[childItem.createUserSource.value]%>" style="padding:6px;"><i class="fe-award"></i> <%=childItem.createUserSource.text%></span>
+                        <span class="text-primary"><%=childItem.createUserName%></span> @ <span class="text-primary"><%=childItem.replyUserName%></span></h5>
                     <div class="editor-style"><%=#childItem.editorContent%></div>
                     <div class="product-action">
                         <a href="javascript: void(0);" onclick="gotoComment('当前回复：#<%=index+1%>-<%=j+1%> 楼用户 <%=childItem.createUserName%>' , '<%=item.id%>' , '<%=childItem.createUserId%>')" class="btn btn-success btn-xs waves-effect waves-light"><i class="mdi mdi-pencil"></i>&nbsp;回复</a>

@@ -42,4 +42,14 @@ public class SysCommentParam {
     @ApiModelProperty(value = "被回复者用户ID")
     private Long replyUserId;
 
+    /**
+     * 默认的页码
+     * @return 页码
+     */
+    public Long getPageNumber() {
+        if (this.pageNumber == null) {
+            this.pageNumber = 1L;
+        }
+        return pageNumber;
+    }
 }

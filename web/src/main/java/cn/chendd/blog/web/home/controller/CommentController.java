@@ -10,6 +10,7 @@ import cn.chendd.blog.web.home.po.CommentPutParam;
 import cn.chendd.blog.web.home.service.CommentService;
 import cn.chendd.core.exceptions.ValidateDataException;
 import cn.chendd.core.result.BaseResult;
+import cn.chendd.core.utils.Html;
 import cn.chendd.core.utils.Ip;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.*;
@@ -63,10 +64,11 @@ public class CommentController extends BaseController {
         }
         String editorContent = param.getEditorContent();
         String[] codes = {
-             "<a" , "<img" , "<image" , "<style" , "<script" , "javascript" , "alert" , "while" , "for " , "console"
+             "<a" , "<img" , "<image" , "<style" , "<script" , "<link"
         };
         if (StringUtils.containsAny(StringUtils.lowerCase(editorContent) , codes)) {
-            throw new ValidateDataException("校验失败：不能包含特殊字符（以提交的富文本为准）！");
+            editorContent = Html.getSimpleHtml(editorContent);
+            param.setEditorContent(editorContent);
         }
 
         SysUserResult userResult = super.getCurrentUser(SysUserResult.class);
