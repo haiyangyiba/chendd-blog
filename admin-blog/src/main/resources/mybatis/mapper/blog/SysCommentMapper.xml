@@ -114,7 +114,7 @@
                      left join blog_article c on c.id = a.targetId
             where a.moduleKey = 'Article' and a.createTime >= #{begin} and a.createTime <= #{end}
                   and b.email is not null and childId is not null and a.dataStatus = 'USABLE'
-            order by a.createTime
+            order by c.title
         ]]>
     </select>
 </mapper>
