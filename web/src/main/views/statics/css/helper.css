@@ -61,6 +61,8 @@
     /*设置高度*/
     min-height: 230px!important;
     max-height: 230px!important;
+    /*设置文字间距*/
+    padding-left: 10px!important;
 }
 /*首页的左右滑动块*/
 #reportChartHomepage .carousel-control-prev ,
@@ -72,7 +74,7 @@
 /*文章详情页*/
 .content-view p {
     margin: 5px!important;
-    color: rgb(77, 77, 77);
+    color: black;
 }
 #articleContent_box_id img {
     max-width: 100% !important;

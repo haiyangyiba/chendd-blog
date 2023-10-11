@@ -46,7 +46,7 @@ public class SessionRepositoryFilterConfiguration {
         log.warn("注意：已使用SessionRepositoryFilterConfiguration重载实现");
         //定义session 拦截路径范围
         FilterRegistrationBean<SessionRepositoryFilter<?>> registration = new FilterRegistrationBean<>(filter);
-        registration.addUrlPatterns("*.html" , "*.zip" , "*.exe" , "/system/login" , "/" , "/index.html" ,
+        registration.addUrlPatterns("*.html" , "*.zip" , "*.exe" , "*.txt" , "/system/login" , "/" , "/index.html" ,
                 "/third-login/loginCallback" , "/third-login/baiduCallback" ,  "/tencent-login/tencentCallback" ,
                 "/swagger-resources" , "/swagger-resources/**");
         registration.addInitParameter("excludeUrls", "/statics/**");

@@ -31,9 +31,14 @@ function initElement() {
         upload: false
         /*不开启图片上传功能*/
     });
-    window.setTimeout(function () {
-        //window.editor.focus();
-    } , 10000)
+
+    //设置默认数据
+    getCacheComment();
+
+    window.editor.on('blur', function() {
+        setCacheComment();
+    });
+
     //高亮支持
     $.highlight();
     //处理导出PDF
@@ -269,7 +274,7 @@ function handleCommentCommit(ticket , randstr) {
         data: JSON.stringify(datas),
         success: function(result){
             //清空掉数据、新增数据后刷新当前页数据
-            window.editor.setValue("");
+            clearCacheComment();
             //判断当前是子回复文章呢还是回复某一条留言，如果是前者直接定位到第一页，如果是后者直接刷新本业
             if (childId !== "") {
                 reloadComment(pageNumber);
@@ -309,4 +314,36 @@ function goArticleDirectory(id) {
     $("html, body").animate({
         scrollTop : $("#" + id).offset().top - 70
     }, 300);
+}
+
+/**
+ * 设置编辑内容缓存
+ */
+function setCacheComment() {
+    var editorContent = window.editor.getValue();
+    if (editorContent.length === 0) {
+        return;
+    }
+    var name = window.location.pathname.replace(/\//g , "");
+    window.sessionStorage.setItem(name , editorContent);
+}
+
+/**
+ * 清除编辑内容缓存
+ */
+function clearCacheComment() {
+    window.editor.setValue("");
+    var name = window.location.pathname.replace(/\//g , "");
+    window.sessionStorage.removeItem(name);
+}
+
+/**
+ * 清除编辑内容缓存
+ */
+function getCacheComment() {
+    var name = window.location.pathname.replace(/\//g , "");
+    var value = window.sessionStorage.getItem(name);
+    if (value && value.length > 0) {
+        window.editor.setValue(value);
+    }
 }

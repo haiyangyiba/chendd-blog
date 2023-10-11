@@ -1,4 +1,4 @@
-Title = chendd-blog-examples-80
+Title = chendd-blog-examples-admin
 
 set JAVA_DEBUG=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=60606
 set JAVA_OPTS=-Xmx256m -Xms256m -Xmn256m -XX:+UseG1GC -XX:+PrintGCDetails -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCTimeStamps -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=../runtime
@@ -7,7 +7,7 @@ set JAVA_OPTS_TEMPDIR=-Djava.io.tmpdir=../runtime
 set JAVA_OPTS_ENCODING=-Dfile.encoding=utf-8
 set JAVA_OPTS_TIMEZONE=-Duser.timezone=GMT+8
 set JAVA_OPTS_CONF=-cp ../conf;../lib-local/*;../lib-project/*;../lib-jar/*
-set JAVA_OPTS_MAIN_CLASS=cn.chendd.Bootstrap
+set JAVA_OPTS_MAIN_CLASS=cn.chendd.blog.Bootstrap
 
 chcp 65001
 

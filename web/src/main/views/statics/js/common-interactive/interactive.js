@@ -28,9 +28,14 @@ function initElement() {
         upload: false
         /*不开启图片上传功能*/
     });
-    window.setTimeout(function () {
-        //window.editor.focus();
-    } , 2000)
+
+    //设置默认数据
+    getCacheComment();
+
+    window.editor.on('blur', function() {
+        setCacheComment();
+    });
+
 }
 
 /**
@@ -305,7 +310,7 @@ function handleCommentCommit(ticket , randstr) {
         data: JSON.stringify(datas),
         success: function(result){
             //清空掉数据、新增数据后刷新当前页数据
-            window.editor.setValue("");
+            clearCacheComment();
             var pageNumber = $("#current_page_id ").data("page");
             if (!pageNumber) {
                 pageNumber = 1;
@@ -351,4 +356,36 @@ function showVideo() {
         buttons: {}
     });
     return false;
+}
+
+/**
+ * 设置编辑内容缓存
+ */
+function setCacheComment() {
+    var editorContent = window.editor.getValue();
+    if (editorContent.length === 0) {
+        return;
+    }
+    var name = window.location.pathname.replace(/\//g , "");
+    window.sessionStorage.setItem(name , editorContent);
+}
+
+/**
+ * 清除编辑内容缓存
+ */
+function clearCacheComment() {
+    window.editor.setValue("");
+    var name = window.location.pathname.replace(/\//g , "");
+    window.sessionStorage.removeItem(name);
+}
+
+/**
+ * 清除编辑内容缓存
+ */
+function getCacheComment() {
+    var name = window.location.pathname.replace(/\//g , "");
+    var value = window.sessionStorage.getItem(name);
+    if (value && value.length > 0) {
+        window.editor.setValue(value);
+    }
 }

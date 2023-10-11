@@ -100,7 +100,7 @@ public class FilterConfiguration {
         FilterRegistrationBean<DownloadFilter> filterBean = new FilterRegistrationBean<>();
         filterBean.setFilter(new DownloadFilter());
         filterBean.setName("downloadFilter");
-        filterBean.addUrlPatterns("*.zip" , "*.exe");
+        filterBean.addUrlPatterns("*.zip" , "*.exe" , "*.txt");
         //该过滤器需要获取用户信息，所以优先级必须低于spring session的过滤器优先级
         filterBean.setOrder(SessionRepositoryFilter.DEFAULT_ORDER + 1);
         filterBean.setEnabled(true);
