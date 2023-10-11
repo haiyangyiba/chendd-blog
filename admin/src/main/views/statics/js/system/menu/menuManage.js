@@ -29,7 +29,7 @@ function initElement() {
                     return {};
                 }
             },
-            {"title" : "角色标识" , "field": "menuKey",
+            {"title" : "菜单标识" , "field": "menuKey",
                 cellStyle: function (value , rowData , rowIndex) {
                     if(rowData.menuKeyMatch) {
                         return {

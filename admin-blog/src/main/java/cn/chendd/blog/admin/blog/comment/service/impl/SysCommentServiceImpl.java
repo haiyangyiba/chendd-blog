@@ -1,5 +1,6 @@
 package cn.chendd.blog.admin.blog.comment.service.impl;
 
+import cn.chendd.blog.admin.blog.article.enums.ArticleAscriptionEnum;
 import cn.chendd.blog.admin.blog.article.vo.RemindPrausesAndCommentResult;
 import cn.chendd.blog.admin.blog.article.vo.RemindUserCommentResult;
 import cn.chendd.blog.admin.blog.comment.mapper.SysCommentMapper;
@@ -9,6 +10,9 @@ import cn.chendd.blog.admin.blog.comment.po.SysCommentParam;
 import cn.chendd.blog.admin.blog.comment.service.SysCommentService;
 import cn.chendd.blog.admin.blog.comment.vo.SysCommentManageResult;
 import cn.chendd.blog.admin.system.constants.CacheNameConstant;
+import cn.chendd.blog.admin.system.info.model.SysInfoContent;
+import cn.chendd.blog.admin.system.info.service.SysInfoContentService;
+import cn.chendd.blog.admin.system.shortcut.config.ShortcutMenuParamComponent;
 import cn.chendd.blog.base.enums.EnumDataStatus;
 import cn.chendd.blog.client.comment.vo.CommentNewestDto;
 import cn.chendd.blog.client.comment.vo.CommentQueryResult;
@@ -19,6 +23,7 @@ import cn.chendd.toolkit.operationlog.annotions.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
@@ -41,6 +46,10 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper , SysCom
 
     @Resource
     private SysCommentMapper sysCommentMapper;
+    @Resource
+    private SysInfoContentService sysInfoContentService;
+    @Resource
+    private ShortcutMenuParamComponent shortcutMenuParam;
 
     @Override
     @Caching(
@@ -162,6 +171,27 @@ public class SysCommentServiceImpl extends ServiceImpl<SysCommentMapper , SysCom
 
     @Override
     public List<RemindUserCommentResult> queryRemindUserComment(String begin, String end) {
-        return this.sysCommentMapper.queryRemindUserComment(begin , end);
+        List<RemindUserCommentResult> dataList = this.sysCommentMapper.queryRemindUserComment(begin, end);
+        List<SysInfoContent> sysInfoList = this.sysInfoContentService.list();
+        for (RemindUserCommentResult result : dataList) {
+            if (ArticleAscriptionEnum.Custom.getValue().equals(result.getAscription())) {
+                SysInfoContent sysInfoContent = sysInfoList.stream().filter(item -> StringUtils.contains(item.getEditorContent(), result.getTargetId())).findFirst().orElse(null);
+                if (sysInfoContent == null) {
+                    continue;
+                }
+                String key = sysInfoContent.getKey();
+                if (StringUtils.startsWith(key , "systemProject_")) {
+                    String url = String.format("%sblog/project/%s.html" , shortcutMenuParam.getShortcutMenus().get("web首页") , StringUtils.substringAfter(key , "systemProject_"));
+                    result.setUrl(url);
+                } else if (StringUtils.startsWith(key , "customPage_")) {
+                    String url = String.format("%sblog/page/%s.html" , shortcutMenuParam.getShortcutMenus().get("web首页") , StringUtils.substringAfter(key , "customPage_"));
+                    result.setUrl(url);
+                }
+            } else {
+                String url = String.format("%sblog/article/%s.html" , shortcutMenuParam.getShortcutMenus().get("web首页") , result.getTargetId());
+                result.setUrl(url);
+            }
+        }
+        return dataList;
     }
 }

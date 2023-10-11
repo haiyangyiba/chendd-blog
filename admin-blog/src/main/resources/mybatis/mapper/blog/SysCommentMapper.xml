@@ -108,7 +108,7 @@
     <!-- 查询提醒至用户的邮件数据 -->
     <select id="queryRemindUserComment" resultType="cn.chendd.blog.admin.blog.article.vo.RemindUserCommentResult">
         <![CDATA[
-            select a.targetId, a.editorContent , a.replyUserId , b.realName , c.title , b.email , b.userSource
+            select distinct a.targetId , a.replyUserId , b.realName , c.title , c.ascription , b.email , b.userSource
             from sys_comment a
                      left join sys_user b on a.replyUserId = b.userId
                      left join blog_article c on c.id = a.targetId

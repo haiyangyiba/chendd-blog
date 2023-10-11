@@ -14,11 +14,12 @@ public class RemindUserCommentResult {
 
     private String targetId;
     private String title;
+    private String url;
+    private String ascription;
     private Long replyUserId;
     private String userSource;
     private String realName;
     private String email;
-    private String editorContent;
 
     public String getUserSource() {
         if (this.userSource != null) {

@@ -1,36 +1,40 @@
 <table style=" border-collapse:collapse;border-spacing:0;background:#efefef;" align="center">
 <thead>
-	<tr>
-		<td style="  padding:5px 15px;font-weight:bold;background:#429D47;" colspan="3">
-			<h1><a href="https://www.chendd.cn" style="color:#FFFFFF;">www.chendd.cn</a></h1>
-		</td>
-	</tr>
-	<tr>
-		<td colspan="3" style="padding:15px 15px;">
-			Hi 来自 ${userSource} 的用户 ${realName}，您的留言有新的信息回复的了。
-		</td>
-	</tr>
+    <tr>
+        <td style="padding:15px 15px 0px;font-weight:bold;background:#429D47;" colspan="3">
+            <h1><a style="color:#FFFFFF;">留言通知</a></h1>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding:15px 15px;">
+            Hi 来自 ${userSource} 的用户 ${realName}，您的留言有新的信息回复的了。
+        </td>
+    </tr>
 </thead>
 <tbody>
-	<#list resultList as item >
-	<tr>
-		<td style="padding:15px 15px;">
-			${item.title}
-		</td>
-	</tr>
-	</#list>
+    <#list resultList as item >
+    <tr>
+        <td style="padding:15px 15px;">
+            <#if (item.url)??>
+                <a href="${item.url}" target="_blank" style="color: blue;text-decoration: underline;cursor: pointer;">${item.title}</a>
+            <#else>
+                ${item.title}
+            </#if>
+        </td>
+    </tr>
+    </#list>
 </tbody>
 <tfoot>
-	<tr>
-		<td style="padding:15px 15px;">
-			本邮件为系统自动发送，如有问题可发送邮件至“88911006@qq.com”与博主联系。
-		</td>
-	</tr>
-	<tr>
-		<th style="padding:15px 15px;text-align: right;">
-			陈冬冬个人博客 敬上
-		</th>
-	</tr>
-	
+    <tr>
+        <td style="padding:15px 15px;">
+            本邮件为系统自动发送，如有需要可发送邮件至“88911006@qq.com”与博主联系。
+        </td>
+    </tr>
+    <tr>
+        <th style="padding:15px 15px;text-align: right;">
+            <a href="https://www.chendd.cn" target="_blank" style="color: blue;text-decoration: underline;cursor: pointer;">陈冬冬个人博客</a> 敬上
+        </th>
+    </tr>
+    
 </tfoot>
 </table>

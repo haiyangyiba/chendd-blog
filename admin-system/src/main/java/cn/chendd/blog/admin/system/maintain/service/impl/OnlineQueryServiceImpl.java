@@ -5,6 +5,7 @@ import cn.chendd.blog.admin.system.maintain.service.OnlineQueryService;
 import cn.chendd.core.exceptions.ValidateDataException;
 import cn.chendd.toolkit.operationlog.annotions.Log;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
  * @date 2022/2/24 10:10
  */
 @Service
+@Slf4j
 public class OnlineQueryServiceImpl implements OnlineQueryService {
 
     /**
@@ -42,8 +44,9 @@ public class OnlineQueryServiceImpl implements OnlineQueryService {
 
     @Override
     @Transactional(readOnly = true)
-    @Log(description = "sql在线查询")
+    ///@Log(description = "sql在线查询") 由于开启了事务只读，故无法记录操作日志，使用Log记录
     public Page<Map<String, Object>> executeQuery(String sql) {
+        log.info("execute sql: {}" , sql);
         this.validatorSql(sql);
         Page<Map<String, Object>> page = new Page<>(1 , 50);
         return onlineQueryMapper.queryForList(sql , page);
