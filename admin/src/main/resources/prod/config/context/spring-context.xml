@@ -48,7 +48,7 @@
                 <value>/**/*</value>
             </list>
         </property>
-        <!--拦截器放行路劲-->
+        <!--拦截器放行路径-->
         <property name="excludeMapping">
             <list>
                 <value>/</value>
