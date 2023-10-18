@@ -36,7 +36,7 @@ function initEvent() {
     $("#add_btn_id").click(function () {
         var url = "/toolkit/quartz/quartz.html";
         $.openWindow("新增定时任务" , url , {
-            height: "230px"
+            height: "365px"
         });
     });
     //修改按钮
@@ -50,7 +50,7 @@ function initEvent() {
         var jobName = encodeURI(rows[0].jobName);
         var url = "/toolkit/quartz/" + jobGroup + "/" + jobName + ".html";
         $.openWindow("修改定时任务" , url , {
-            height: "230px"
+            height: "365px"
         });
     });
     //删除按钮

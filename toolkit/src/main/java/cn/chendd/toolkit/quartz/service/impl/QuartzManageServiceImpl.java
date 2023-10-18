@@ -14,6 +14,9 @@ import cn.chendd.toolkit.quartz.po.QuartzManageParam;
 import cn.chendd.toolkit.quartz.po.QuartzParam;
 import cn.chendd.toolkit.quartz.service.QuartzManageService;
 import cn.chendd.toolkit.quartz.vo.QuartzManageResult;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -21,6 +24,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 定时任务管理接口实现
@@ -51,7 +56,7 @@ public class QuartzManageServiceImpl implements QuartzManageService {
     @Log(description = "定时任务管理-新增或修改" , scope = LogScopeEnum.ALL)
     public BaseResult saveQuartz(QuartzParam param) throws SchedulerException {
         String jobClassName = param.getJobClassName();
-        Object jobInstance = null;
+        Object jobInstance;
         try {
             jobInstance = Class.forName(jobClassName).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
@@ -73,10 +78,25 @@ public class QuartzManageServiceImpl implements QuartzManageService {
         CronTriggerImpl trigger = (CronTriggerImpl) TriggerBuilder.newTrigger().withIdentity(name, group)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression)).withDescription(param.getTriggerDescription()).build();
         if(scheduler.checkExists(jobKey)) {
-            scheduler.rescheduleJob(TriggerKey.triggerKey(name , group) , trigger);
+            Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
+            if (Trigger.TriggerState.BLOCKED.equals(triggerState)) {
+                throw new ValidateDataException(String.format("定时任务处于 %s 不允许修改！" , triggerState.name()));
+            }
+            /**
+             * 发现使用 rescheduleJob 重置定时任务时，存在 JobDataMap 和 Description 不生效，故而使用先删除再增加的方式
+             * scheduler.rescheduleJob(TriggerKey.triggerKey(name , group) , trigger);
+             * 需要注意的是，使用 `deleteJob` 和 `scheduleJob`
+             * 方法进行任务更新存在一个缺点：在删除任务之后，在新任务添加到调度程序之前，调度程序可能会出现空闲状态，因此在这段时间内可能会丢失一些任务。
+             * 因此，如果可能的话，建议使用 `rescheduleJob` 方法进行任务更新，因为它可以确保任何被删除的任务都会在新任务添加到调度程序之前进行重新安排。
+             */
+            scheduler.deleteJob(jobKey);
+            JobDetail jobDetail = JobBuilder.newJob(jobClass.getClass()).withIdentity(name, group).withDescription(param.getJobDescription())
+                    .usingJobData(this.getJobDataMap(param.getJobData())).build();
+            scheduler.scheduleJob(jobDetail , trigger);
             return new SuccessResult<>("定时任务修改成功！");
         } else {
-            JobDetail jobDetail = JobBuilder.newJob(jobClass.getClass()).withIdentity(name, group).withDescription(param.getJobDescription()).build();
+            JobDetail jobDetail = JobBuilder.newJob(jobClass.getClass()).withIdentity(name, group).withDescription(param.getJobDescription())
+                    .usingJobData(this.getJobDataMap(param.getJobData())).build();
             scheduler.scheduleJob(jobDetail , trigger);
             trigger.getTimeZone().setID("");
             return new SuccessResult<>("定时任务新增成功！");
@@ -98,6 +118,7 @@ public class QuartzManageServiceImpl implements QuartzManageService {
         param.setJobClassName(jobDetail.getJobClass().getName());
         param.setJobDescription(jobDetail.getDescription());
         param.setTriggerDescription(jobTrigger.getDescription());
+        param.setJobData(JSON.toJSONString(jobDetail.getJobDataMap() , true));
         return new SuccessResult<>(param);
     }
 
@@ -133,5 +154,27 @@ public class QuartzManageServiceImpl implements QuartzManageService {
             return new SuccessResult<>(String.format("定时任务 [%s] 成功！" , operation.getText()));
         }
         return new ErrorResult<>("当前选择任务不存在！");
+    }
+
+    /**
+     * 根据jobData参数构造对应的参数对象
+     * @param jobData jobData
+     * @return jobDataMap
+     */
+    private JobDataMap getJobDataMap(String jobData) {
+        JobDataMap jobDataMap = new JobDataMap();
+        if (StringUtils.isBlank(jobData)) {
+            return jobDataMap;
+        }
+        JSONValidator.Type type = JSONValidator.from(jobData).getType();
+        if (! JSONValidator.Type.Object.equals(type)) {
+            throw new ValidateDataException("任务参数json应为`{}`对象格式！");
+        }
+        JSONObject json = JSON.parseObject(jobData);
+        Set<Map.Entry<String, Object>> entrySet = json.entrySet();
+        for (Map.Entry<String, Object> entry : entrySet) {
+            jobDataMap.put(entry.getKey() , entry.getValue());
+        }
+        return jobDataMap;
     }
 }

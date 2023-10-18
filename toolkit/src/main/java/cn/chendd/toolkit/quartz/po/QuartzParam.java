@@ -26,5 +26,7 @@ public class QuartzParam {
     private String cronExpression;
     @ApiModelProperty("任务触发描述")
     private String triggerDescription;
+    @ApiModelProperty("任务参数json")
+    private String jobData;
 
 }
