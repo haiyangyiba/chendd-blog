@@ -52,12 +52,12 @@
                         </div>
                         <div class="card-box ribbon-box">
                             <div class="ribbon ribbon-primary float-left" style="margin-top: -10px;"><i class="mdi mdi-access-point mr-1"></i> 相关文章</div>
-                            <h5 class="text-primary float-right mt-0"><a th:href="${article.tag}" th:if="${article.tag != ''}" onclick="return showTags(this)"><i class="fe-corner-up-right"></i>&nbsp;查看</a></h5>
+                            <h5 class="text-primary float-right mt-0" hidden><a th:href="${article.tag}" th:if="${article.tag != ''}" onclick="return showTags(this)"><i class="fe-corner-up-right"></i>&nbsp;查看</a></h5>
                             <div class="ribbon-content">
                                 <ul class="list-group list-group-flush font-14">
                                     <li th:each="art,artState:${article.articles}" class="list-group-item list-group-item-action border-0 pt-1 pb-1">
                                         <span class="badge badge-pink badge-outline-info" th:text="${artState.count}"></span>&nbsp;&nbsp;
-                                        <th:block th:text="${art}">标签</th:block>
+                                        <th:block th:utext="${art}">标签</th:block>
                                     </li>
                                 </ul>
                             </div>
