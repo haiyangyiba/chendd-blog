@@ -20,7 +20,7 @@
                   'yearly' changefreq ,
                   '0.5' priority
               from sys_menu a where a.menuKey like '#blog_web_menu%' and dataStatus = 'USABLE'
-      ) newTab order by priority desc , lastmod
+      ) newTab order by priority desc , lastmod desc
     </select>
 
 </mapper>
