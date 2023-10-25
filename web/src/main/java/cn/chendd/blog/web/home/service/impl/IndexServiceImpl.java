@@ -5,11 +5,13 @@ import cn.chendd.blog.client.friendslink.FriendsLinkNewestDto;
 import cn.chendd.blog.client.user.vo.UserNewestDto;
 import cn.chendd.blog.web.home.client.HomepageChartClient;
 import cn.chendd.blog.web.home.client.IndexClient;
+import cn.chendd.blog.web.home.client.SitemapClient;
 import cn.chendd.blog.web.home.client.vo.*;
 import cn.chendd.blog.web.home.service.IndexService;
 import cn.chendd.core.common.treeview.stratified.Treeview;
 import cn.chendd.core.result.BaseResult;
 import cn.chendd.core.utils.RandomUtil;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +30,8 @@ public class IndexServiceImpl implements IndexService {
     private IndexClient indexClient;
     @Resource
     private HomepageChartClient chartClient;
+    @Resource
+    private SitemapClient sitemapClient;
 
     @Override
     public List<Treeview> queryMenus() {
@@ -80,6 +84,12 @@ public class IndexServiceImpl implements IndexService {
     @Override
     public ReportChartHomepage queryHomepageCharts() {
         BaseResult<ReportChartHomepage> baseResult = chartClient.queryHomepageCharts();
+        return baseResult.getData();
+    }
+
+    @Override
+    public String getSitemap() {
+        BaseResult<String> baseResult = this.sitemapClient.getSitemap();
         return baseResult.getData();
     }
 }

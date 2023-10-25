@@ -72,4 +72,9 @@ public interface IndexService {
      */
     ReportChartHomepage queryHomepageCharts();
 
+    /**
+     * 获取网站文章地图
+     * @return 文章地图
+     */
+    String getSitemap();
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chendd.blog.admin.system.sitemap.mapper.SitemapMapper">
+
+    <!-- 查询web一级菜单，排除首页 -->
+    <select id="getSitemap" resultType="cn.chendd.blog.admin.system.sitemap.dto.SitemapArticleDto">
+        select * from (
+              SELECT
+                  concat('https://www.chendd.cn/blog/article/' , id , '.html') loc ,
+                  ifnull(updateTime , createTime) lastmod,
+                  'yearly' changefreq ,
+                  '0.8' priority
+              from blog_article t where ascription = 'Content' and dataStatus = 'USABLE'
+              union all
+              select
+                  concat('https://www.chendd.cn/blog/article/type/' , menuId , '.html') loc ,
+                  ifnull(updateDate , createDate) lastmod,
+                  'yearly' changefreq ,
+                  '0.5' priority
+              from sys_menu a where a.menuKey like '#blog_web_menu%' and dataStatus = 'USABLE'
+      ) newTab order by priority desc , lastmod
+    </select>
+
+</mapper>
