@@ -56,6 +56,7 @@
                 <value>/error</value>
                 <value>/statics/**</value>
                 <value>/verificationCode.html</value>
+                <value>/verificationCode/test.html</value>
                 <value>/v{\d+}/**/*.html</value>
                 <!--第三方登录-->
                 <value>/v1/third-login/*Callback</value>

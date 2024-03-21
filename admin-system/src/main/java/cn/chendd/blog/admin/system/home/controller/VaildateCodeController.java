@@ -3,6 +3,7 @@ package cn.chendd.blog.admin.system.home.controller;
 import cn.chendd.blog.base.controller.BaseController;
 import cn.chendd.core.common.constant.Constant;
 import cn.chendd.core.utils.GifImageUtil;
+import cn.chendd.core.utils.GifVerificationCodeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiSort;
@@ -36,7 +37,23 @@ public class VaildateCodeController extends BaseController {
     /**
      * 生成验证码的源字符，去掉大写字符O和小写字母l和数字4
      */
-    private static final String RANDOM_CHAR  = "abcdefijkmnopqrstuvwxyzABCDEFJKLMNPQRSTUVWXYZ2356789";
+    private static final String RANDOM_CHAR  = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23567890";
+
+    @GetMapping(value = "/test" , produces = MediaType.IMAGE_GIF_VALUE)
+    @ApiOperation(value = "验证码" , notes = "生成gif验证码")
+    @ResponseBody
+    public BufferedImage bigImage() throws IOException {
+        //生成 N 位长度的随机数，做为验证码
+        char[] randCodes = new char[CODE_LENS];
+        for(int i = 0 ; i < CODE_LENS ; i ++){
+            randCodes[i] = getRandomChar();
+        }
+        try (OutputStream bos = response.getOutputStream()) {
+            BufferedImage image = GifVerificationCodeUtil.createVaildateCodeImage(bos , randCodes);
+            session.setAttribute(Constant.LOGIN_VALIDATE_KEY, new String(randCodes));
+            return image;
+        }
+    }
 
     @GetMapping(produces = MediaType.IMAGE_GIF_VALUE)
     @ApiOperation(value = "验证码" , notes = "生成gif验证码")
