@@ -53,12 +53,112 @@
     <hr class="mt-0 mb-2"/>
     <textarea id="editor_content_id" data-autosave="editor-content" autofocus style="min-height: 200px;visibility: hidden;"></textarea>
     <div style="position: relative;">
-        <button id="TencentCaptcha" data-appid="2057623068" data-cbfn="handleComment" type="button" class="input-group-text btn btn-primary waves-effect waves-light mt-2 mr-2">
+        <button data-toggle="modal" data-target="#ChenddCaptcha" type="button" class="input-group-text btn btn-primary waves-effect waves-light mt-2 mr-2">
             <i class="fe-send mr-1"></i>提交
         </button>
         <span class="badge badge-soft-danger" id="commentDescritpion_text_id" style="position: absolute;top:10px;left: 80px;">当前回复：作者</span>
         <span class="badge badge-soft-primary" id="commentDescritpion_default_id" onclick="resetCommentText()" style="position: absolute;top:10px;right: 0px;cursor: pointer;display: none;">点此回复作者</span>
     </div>
+
+    <div id="ChenddCaptcha" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-content p-0">
+                <div id="accordion">
+                    <div class="card mb-0">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="m-0">
+                                <a href="#collapseOne" data-toggle="collapse" aria-expanded="true" aria-controls="collapseOne"><b style="font-size: 14px;">安全验证</b></a>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" id="ChenddCaptchaClose_id">×</button>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card p-2 m-2" style="height:280px;">
+                                <div class="card-body text-center ChenddCaptchaLoading">
+                                    <div class="spinner-grow text-success m-2" role="status"></div>
+                                    <div class="spinner-grow text-danger m-2" role="status"></div>
+                                    <div class="spinner-grow text-warning m-2" role="status"></div>
+                                </div>
+                                <div class="card-body text-center p-0 m-0 ChenddCaptchaLoaded" style="display: none;">
+                                    <img id="ChenddCaptchaImage" onload="loadCaptchaImage(this)" alt="验证码" class="img-fluid img-thumbnail"/>
+                                    <div class="form-row align-items-center m-2 pl-3">
+                                        <div class="col-auto text-center">
+                                            <label class="sr-only" for="captchaCode_id">验证码</label>
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">验证码</div>
+                                                </div>
+                                                <input type="text" class="form-control" autocomplete="off" style="width: 120px;letter-spacing: 4px;" maxlength="4" id="captchaCode_id" placeholder="输入验证码" />
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" id="submitArticle_id" class="btn btn-info waves-effect waves-light" style="margin-top: -13px;"><i class="fe-check"></i>&nbsp;确定</button>
+                                            <button type="button" id="refreshCaptchaImage" class="btn btn-outline-info waves-effect waves-light" style="margin-top: -13px;"><i class="fe-refresh-ccw"></i>&nbsp;换一个</button>
+                                        </div>
+                                    </div>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-0">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="m-0">
+                                <a href="#collapseTwo" class="collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="collapseTwo"><b class="blink" style="font-size: 14px;">验证码说明</b></a>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush font-14">
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">1</span>&nbsp;&nbsp;验证码为Gif图片，共4个字符和4帧图像交替闪烁，循环闪烁；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">2</span>&nbsp;&nbsp;验证码每搁1秒闪烁一次，每次只显示3个字符和1个<b class="blink" style="font-size: 14px;">问号</b>；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">3</span>&nbsp;&nbsp;验证码为动态图片，问号出现位置交替变化；</li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">4</span>&nbsp;&nbsp;验证码输入不区分字母大小写，参考以下为<b class="blink" style="font-size: 14px;">A123</b>的验证码：
+                                        <div class="row" style="margin-left: 10px;line-height: 25px;padding-top:15px;">
+                                            <div style="padding-top:10px;" class="text-danger">
+                                                <small>① 示例图片中没有字符角度旋转；</small><br/>
+                                                <small>② 示例图片中没有干扰线；</small><br/>
+                                                <small>③ 示例图片中没有网址信息；</small><br/>
+                                            </div>
+                                            <div>
+                                                <img src="/statics/images/A123.gif" alt="验证码示例" class="img-fluid img-thumbnail"/>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                        <span class="badge badge-pink badge-outline-info">5</span>&nbsp;&nbsp;<b>再三权衡，还是将问号字符去除了，后台登录入口我个人使用予以保留；</b></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card mb-0">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="m-0">
+                                <a href="#collapseThree" class="collapsed" data-toggle="collapse" aria-expanded="false" aria-controls="collapseThree"><b style="font-size: 14px;">吐槽一下</b></a>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                                <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                    <span class="badge badge-pink badge-outline-info">1</span>&nbsp;&nbsp;如果您觉得验证码很难接收的话，欢迎给我反馈，我会继续改善，见顶部菜单栏的
+                                    <a href="/blog/page/author.html" style="text-decoration: underline;" target="_blank">作者介绍</a>；</li>
+                                <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                    <span class="badge badge-pink badge-outline-info">2</span>&nbsp;&nbsp;访问我站的朋友十有八九都是IT技术类大佬，这样式的验证码看起来不至于太复杂；</li>
+                                <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                    <span class="badge badge-pink badge-outline-info">3</span>&nbsp;&nbsp;此处验证码前身使用的是腾讯防水墙免费验证码组件，由于一些原因切换为个人自定义的验证码；</li>
+                                <li class="list-group-item list-group-item-action border-0 pt-1 pb-1">
+                                    <span class="badge badge-pink badge-outline-info">4</span>&nbsp;&nbsp;所爱隔山海，山海界可平，欢迎留言评论；</li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <h4 class="mt-3 font-22"><i class="fas fa-list-ol text-primary"></i>&nbsp;评论列表</h4>
     <hr class="mt-0 mb-2"/>
     <div class="row">

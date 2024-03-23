@@ -291,7 +291,9 @@ function handleComment(result) {
 function handleCommentCommit(ticket , randstr) {
     var editorContent = window.editor.getValue();
     if (editorContent.length === 0) {
-        $.alert.warn("还没有输入内容呢");
+        $.alert.warn("还没有输入内容呢" , function() {
+            $("#ChenddCaptchaClose_id").click();
+        });
         return;
     }
     var childId = $("#childId_hidden_id").val();
@@ -316,6 +318,7 @@ function handleCommentCommit(ticket , randstr) {
                 pageNumber = 1;
             }
             reloadComment(pageNumber);
+            $("#ChenddCaptchaClose_id").click();
         }
     });
 }
@@ -388,4 +391,54 @@ function getCacheComment() {
     if (value && value.length > 0) {
         window.editor.setValue(value);
     }
+}
+
+$(function() {
+
+    //验证码
+    $("#ChenddCaptcha").on("show.bs.modal" , function() {
+        $("#captchaCode_id").val("");
+        $("#ChenddCaptchaImage").attr("src" , "/verificationCode/gif.html?" + Math.random());
+    });
+
+    //验证码
+    $("#ChenddCaptcha").on("hide.bs.modal" , function() {
+        $("#ChenddCaptcha .ChenddCaptchaLoaded").hide();
+        $("#ChenddCaptcha .ChenddCaptchaLoading").show();
+    });
+
+    //刷新验证码
+    $("#refreshCaptchaImage").click(function() {
+        $("#ChenddCaptchaImage").attr("src" , "/verificationCode/gif.html?" + Math.random());
+        $(this).html("loading...");
+    });
+
+    $("#submitArticle_id").click(function () {
+        var code = $("#captchaCode_id").val();
+        if (code === "") {
+            $.alert.warn("请输入验证码！" , function () {
+                $("#captchaCode_id").focus();
+            });
+            return false;
+        }
+        handleCommentCommit(code , "");
+    });
+
+    $("#captchaCode_id").keyup(function () {
+        var which = event.charCode || event.keyCode
+        if (which === 13) {
+            $("#submitArticle_id").click();
+        }
+    });
+});
+
+function loadCaptchaImage(img) {
+    if (img.src.indexOf("/verificationCode/") !== -1) {
+        $("#ChenddCaptcha .ChenddCaptchaLoading").hide();
+        $("#ChenddCaptcha .ChenddCaptchaLoaded").show();
+        $("#refreshCaptchaImage").html("<i class='fe-refresh-ccw'></i>&nbsp;换一个");
+        return;
+    }
+    $("#ChenddCaptcha .ChenddCaptchaLoaded").hide();
+    $("#ChenddCaptcha .ChenddCaptchaLoading").show();
 }

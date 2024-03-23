@@ -11,6 +11,8 @@ import com.dtflys.forest.annotation.Request;
  * @author chendd
  * @date 2021/2/23 20:20
  */
+
+@Deprecated
 public interface TencentCaptchaClient {
 
     /**

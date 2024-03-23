@@ -44,7 +44,7 @@ spring:
     password: root
   session:
     store-type: jdbc
-    timeout: 3600m
+    timeout: 60m
   servlet:
     multipart:
       max-file-size: 20MB
@@ -83,7 +83,7 @@ forest:
   log-response-content: true
   log-response-status: true
   variables:
-    serverAdminPath: http://www.chendd.cn:8888/
-    #serverAdminPath: http://localhost:8888/
+    #serverAdminPath: http://www.chendd.cn:8888/
+    serverAdminPath: http://localhost:8888/
   interceptors:
   - cn.chendd.blog.web.components.ForestApiInterceptor

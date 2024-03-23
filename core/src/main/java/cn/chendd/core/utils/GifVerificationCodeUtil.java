@@ -86,10 +86,10 @@ public class GifVerificationCodeUtil {
             g.rotate(a * Math.PI / 180);
             g.translate(0, -a);
             ///当前帧的图片所在位置的字符显示为“*”
-            if (i == index) {
+            /*if (i == index) {
                 g.drawString("？", 100 * i + 20, 100);
                 continue;
-            }
+            }*/
             g.drawString(String.valueOf(randCodes[i]), 100 * i + 20, 100);
         }
         //画线

@@ -1,4 +1,4 @@
-package cn.chendd.blog.admin.system.home.controller;
+package cn.chendd.blog.web.captcha.controller;
 
 import cn.chendd.blog.base.controller.BaseController;
 import cn.chendd.core.common.constant.Constant;
@@ -37,7 +37,7 @@ public class VaildateCodeController extends BaseController {
     /**
      * 生成验证码的源字符，去掉大写字符O和小写字母l和数字4
      */
-    private static final String RANDOM_CHAR  = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23567890";
+    private static final String RANDOM_CHAR  = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ2356789";
 
     @GetMapping(value = "/gif" , produces = MediaType.IMAGE_GIF_VALUE)
     @ApiOperation(value = "验证码" , notes = "生成gif验证码")

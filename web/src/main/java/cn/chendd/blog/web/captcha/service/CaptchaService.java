@@ -9,6 +9,7 @@ import cn.chendd.blog.web.captcha.vo.CaptchaResult;
  * @author chendd
  * @date 2021/2/23 20:21
  */
+@Deprecated
 public interface CaptchaService {
 
     /**

@@ -1,9 +1,9 @@
 package cn.chendd.blog.base.filters;
 
+import cn.chendd.blog.base.log.BaseLog;
+import cn.chendd.blog.base.model.UserInfo;
 import cn.chendd.core.user.UserContext;
 import cn.chendd.core.utils.Http;
-import org.springframework.core.annotation.Order;
-import org.springframework.session.web.http.SessionRepositoryFilter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +28,14 @@ public class DownloadFilter implements Filter {
             String basePath = Http.getBasePath(request);
             response.sendRedirect(basePath + "/blog/frame/login.html");
             return;
+        }
+        UserInfo userInfo = UserContext.getCurrentUser(UserInfo.class);
+        if (userInfo != null) {
+            final UserInfo.SysAccount account = userInfo.getAccount();
+            final UserInfo.SysUser user = userInfo.getUser();
+            if (account != null && user != null) {
+                BaseLog.getLogger().info("{} 用户 {} 下载文件 {}" , user.getUserSource().getText() , account.getUsername() , request.getRequestURI());
+            }
         }
         filterChain.doFilter(request , response);
     }

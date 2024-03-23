@@ -71,6 +71,8 @@
                 <value>/blog/access.html</value>
                 <!-- 网站地图 -->
                 <value>/Sitemap.xml</value>
+                <value>/verificationCode.html</value>
+                <value>/verificationCode/gif.html</value>
             </list>
         </property>
         <!--按请求方式放行，与之匹配到的地址，仅拦截对应请求方式，否则直接放行-->

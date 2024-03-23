@@ -1,8 +1,7 @@
 package cn.chendd.blog.web.captcha.po;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * 验证码接口验证发送请求对象
@@ -12,6 +11,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class CaptchaParam {
 
     @ApiModelProperty("接口请求url地址")

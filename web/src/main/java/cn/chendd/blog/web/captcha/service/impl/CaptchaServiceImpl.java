@@ -17,6 +17,7 @@ import javax.annotation.Resource;
  * @date 2021/2/23 20:23
  */
 @Service
+@Deprecated
 public class CaptchaServiceImpl implements CaptchaService {
 
     @Resource

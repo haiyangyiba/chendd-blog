@@ -43,7 +43,7 @@ spring:
     password: root
   session:
     store-type: jdbc
-    timeout: 120m
+    timeout: 60m
   servlet:
     multipart:
       max-file-size: 20MB

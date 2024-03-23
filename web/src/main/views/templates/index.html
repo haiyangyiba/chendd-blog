@@ -96,7 +96,7 @@
                         <div class="card-box ribbon-box mb-2">
                             <div class="ribbon-two ribbon-two-info"><span style="padding: 5px;">推荐标签</span></div>
                             <div class="card-body text-secondary">
-                                <p class="card-text">
+                                <p class="card-text" style="font-weight: bold;">
                                     <a onclick="return showTags(this)" th:title="${tag.tag}" th:href="'/blog/tag/' + ${tag.tag} + '.html'" th:each="tag,tagState:${tagList}" th:style="${tag.style}">
                                         <th:block th:text="${tag.tag}">标签云</th:block><span
                                             th:text="'(' + ${tag.counts} + ')'">(520)</span>

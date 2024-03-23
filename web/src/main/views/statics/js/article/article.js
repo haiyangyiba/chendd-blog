@@ -235,56 +235,6 @@ function getUserSourceObject() {
     return object;
 }
 
-/**
- * 弹出验证码，并提交验证
- * @param result 回调结果
- */
-function handleComment(result) {
-    if(result.ret === 0){
-        handleCommentCommit(result.ticket , result.randstr);
-    }
-}
-
-/**
- * 页面验证成功则将请求发至服务器校验
- * @param ticket 票据
- * @param randstr 随机数
- */
-function handleCommentCommit(ticket , randstr) {
-    var editorContent = window.editor.getValue();
-    if (editorContent.length === 0) {
-        $.alert.warn("还没有输入内容呢");
-        return;
-    }
-    var childId = $("#childId_hidden_id").val();
-    var replyUserId = $("#replyUserId_hidden_id").val();
-    var targetId = getArticleId();
-    var pageNumber = getPageNumber();
-    var datas = {
-        "moduleKey" : "Article",
-        "pageNumber": pageNumber,
-        "targetId": targetId,
-        "childId": childId,
-        "replyUserId": replyUserId,
-        "editorContent": editorContent
-    };
-    $.ajaxRequest({
-        url: "/blog/comment.html?ticket=" + ticket + "&randstr=" + randstr,
-        type: "put",
-        data: JSON.stringify(datas),
-        success: function(result){
-            //清空掉数据、新增数据后刷新当前页数据
-            clearCacheComment();
-            //判断当前是子回复文章呢还是回复某一条留言，如果是前者直接定位到第一页，如果是后者直接刷新本业
-            if (childId !== "") {
-                reloadComment(pageNumber);
-                return;
-            }
-            reloadComment(1);
-        }
-    });
-}
-
 function getPageNumber() {
     var pageElement = $("#current_page_id");
     if (pageElement.length === 1) {
@@ -346,4 +296,99 @@ function getCacheComment() {
     if (value && value.length > 0) {
         window.editor.setValue(value);
     }
+}
+
+
+$(function() {
+
+    //验证码
+    $("#ChenddCaptcha").on("show.bs.modal" , function() {
+        $("#captchaCode_id").val("");
+        $("#ChenddCaptchaImage").attr("src" , "/verificationCode/gif.html?" + Math.random());
+    });
+
+    //验证码
+    $("#ChenddCaptcha").on("hide.bs.modal" , function() {
+        $("#ChenddCaptcha .ChenddCaptchaLoaded").hide();
+        $("#ChenddCaptcha .ChenddCaptchaLoading").show();
+    });
+
+    //刷新验证码
+    $("#refreshCaptchaImage").click(function() {
+        $("#ChenddCaptchaImage").attr("src" , "/verificationCode/gif.html?" + Math.random());
+        $(this).html("loading...");
+    });
+
+    $("#submitArticle_id").click(function () {
+        var code = $("#captchaCode_id").val();
+        if (code === "") {
+            $.alert.warn("请输入验证码！" , function () {
+                $("#captchaCode_id").focus();
+            });
+            return false;
+        }
+        handleCommentCommit(code , "");
+    });
+
+    $("#captchaCode_id").keyup(function () {
+        var which = event.charCode || event.keyCode
+        if (which === 13) {
+            $("#submitArticle_id").click();
+        }
+    });
+});
+
+function loadCaptchaImage(img) {
+    if (img.src.indexOf("/verificationCode/") !== -1) {
+        $("#ChenddCaptcha .ChenddCaptchaLoading").hide();
+        $("#ChenddCaptcha .ChenddCaptchaLoaded").show();
+        $("#refreshCaptchaImage").html("<i class='fe-refresh-ccw'></i>&nbsp;换一个");
+        return;
+    }
+    $("#ChenddCaptcha .ChenddCaptchaLoaded").hide();
+    $("#ChenddCaptcha .ChenddCaptchaLoading").show();
+}
+
+
+/**
+ * 页面验证成功则将请求发至服务器校验
+ * @param ticket 票据
+ * @param randstr 随机数
+ */
+function handleCommentCommit(ticket , randstr) {
+    var editorContent = window.editor.getValue();
+    if (editorContent.length === 0) {
+        $.alert.warn("还没有输入内容呢" , function() {
+            $("#ChenddCaptchaClose_id").click();
+        });
+        return;
+    }
+    var childId = $("#childId_hidden_id").val();
+    var replyUserId = $("#replyUserId_hidden_id").val();
+    var targetId = getArticleId();
+    var pageNumber = getPageNumber();
+    var datas = {
+        "moduleKey" : "Article",
+        "pageNumber": pageNumber,
+        "targetId": targetId,
+        "childId": childId,
+        "replyUserId": replyUserId,
+        "editorContent": editorContent
+    };
+    $.ajaxRequest({
+        url: "/blog/comment.html?ticket=" + ticket + "&randstr=" + randstr,
+        type: "put",
+        data: JSON.stringify(datas),
+        success: function(result){
+            //清空掉数据、新增数据后刷新当前页数据
+            clearCacheComment();
+            //判断当前是子回复文章呢还是回复某一条留言，如果是前者直接定位到第一页，如果是后者直接刷新本业
+            if (childId !== "") {
+                reloadComment(pageNumber);
+                return;
+            }
+            reloadComment(1);
+            $("#ChenddCaptchaClose_id").click();
+        }
+    });
 }
