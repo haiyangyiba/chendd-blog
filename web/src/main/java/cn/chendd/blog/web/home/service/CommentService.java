@@ -26,4 +26,13 @@ public interface CommentService {
      * @return 数据ID
      */
     Long saveComment(CommentPutParam param);
+
+    /**
+     * 保存评论数据对象
+     * @param targetId 数据对象
+     * @param userId 用户ID
+     * @param ip ip地址
+     * @return 数据ID
+     */
+    Long saveComment(Long targetId, Long userId, String ip);
 }

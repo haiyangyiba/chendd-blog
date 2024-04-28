@@ -40,13 +40,17 @@ public class UserContext {
     /**
      * 判断用户是否登录，特地传递session因为全局的session与某个过滤器先后顺序的session不为同一个
      * @param session session
-     * @return true ？ 登录 ：未登录
+     * @return 用户对象或null
      */
-    public static Boolean isLogin(HttpSession session){
+    public static <T> T getCurrentUser(HttpSession session , Class<T> beanClass){
         if(session == null) {
-            return false;
+            return null;
         }
-        return session.getAttribute(Constant.SYSTEM_CURRENT_USER) != null;
+        JSONObject userInfo = (JSONObject) session.getAttribute(Constant.SYSTEM_CURRENT_USER);
+        if (userInfo != null) {
+            return userInfo.toJavaObject(beanClass);
+        }
+        return null;
     }
 
     /**
