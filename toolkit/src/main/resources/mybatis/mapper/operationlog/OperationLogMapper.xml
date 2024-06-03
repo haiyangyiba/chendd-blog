@@ -21,17 +21,32 @@
         FROM Sys_operationlog a
         LEFT JOIN sys_operationlog_module b on a.moduleId = b.moduleId
         WHERE
-            a.endTime like concat(#{param.date} , '%')
+            a.beginTime like concat(#{param.date} , '%')
             <if test="param.userName != null and param.userName != ''">
                 and a.userName = #{param.userName}
             </if>
-        ORDER BY a.endTime desc
+        ORDER BY a.beginTime desc
     </select>
 
     <!-- 查询操作日志内容 -->
     <select id="querySysOperationContent" resultType="java.lang.String"
             parameterType="cn.chendd.toolkit.operationlog.po.SysOperationLogParam">
         SELECT content FROM Sys_operationlog where id = #{param.id}
+    </select>
+
+    <!-- 查询操作日志内容 -->
+    <select id="querySysOperationById" resultType="cn.chendd.toolkit.operationlog.model.SysOperationLog"
+            parameterType="cn.chendd.toolkit.operationlog.po.SysOperationLogParam">
+        SELECT a.id,
+               a.userId,
+               a.userName,
+               a.beginTime,
+               a.endTime,
+               a.runTime,
+               a.ip,
+               a.result,
+               a.description, a.content,
+               a.moduleId FROM Sys_operationlog a where a.id = #{param.id}
     </select>
 
     <!--更新操作日志结果-->

@@ -28,7 +28,7 @@ function initElement() {
             {"title" : "描述" , "field": "description"},
             {"title" : "IP地址" , "field": "ip"},
             {"title" : "操作" , "field": "remark" , "align" : "center" , formatter: function (index , row) {
-                    var view = "<a href='javascript:void(0);' onclick=\"viewDetail('" + row.id +"' , '" + row.endTime.substr(0 , 10) + "')\">查看" + "</a>";
+                    var view = "<a href='javascript:void(0);' onclick=\"viewDetail('" + row.id +"' , '" + row.beginTime.substr(0 , 10) + "')\">查看" + "</a>";
                     return view;
                 }
             }

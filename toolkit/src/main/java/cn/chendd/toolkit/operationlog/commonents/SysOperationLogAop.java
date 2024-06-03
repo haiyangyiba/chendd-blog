@@ -60,24 +60,27 @@ public class SysOperationLogAop {
         MethodSignature signature = (MethodSignature) methodPoint.getSignature();
         String message = "方法名：%s，参数个数：%s，返回类型：%s";
         log.debug(String.format(message, signature.getName() , methodPoint.getArgs().length , signature.getReturnType()));
-        Log logAnnotation = signature.getMethod().getDeclaredAnnotation(Log.class);
         //存储操作日志
         Object returnValue;
         Long id = IdWorker.getId();
         //记录方法执行时间
         long beginTime = System.currentTimeMillis();
-        String begin = DateFormat.formatDatetime(beginTime);
         try {
+            Log logAnnotation = signature.getMethod().getDeclaredAnnotation(Log.class);
+            //如果出现错误，操作日志的描述信息将被重置为异常信息
+            String moduleId = logAnnotation.name();
+            if (StringUtils.isEmpty(moduleId)) {
+                //将日志名称按照默认规则保存
+                moduleId = signature.getDeclaringType().getSimpleName() + "." + signature.getMethod().getName();
+            }
             //存储开始执行日志，请求开始执行时就开始记录，某些操作耗时将在执行之前记录
-            this.operationLogService.storageBeforeOperationLog(id , begin , Ip.getIpAddress(UserContext.getRequest()));
+            this.operationLogService.storageBeforeOperationLog(id , beginTime , moduleId , Ip.getIpAddress(UserContext.getRequest()));
             returnValue = point.proceed();
-            long endTime = System.currentTimeMillis();
             //执行完毕后更新日志
-            this.storageAfterOperationLog(methodPoint , returnValue , ResultEnum.success , begin , DateFormat.formatDatetime(endTime) , endTime - beginTime , id);
+            this.storageAfterOperationLog(methodPoint , returnValue , ResultEnum.success , beginTime , id);
         } catch (Exception e) {
             //发生错误时更新日志
-            long endTime = System.currentTimeMillis();
-            this.storageAfterOperationLog(methodPoint, e , ResultEnum.error , begin , DateFormat.formatDatetime(endTime) , endTime - beginTime , id);
+            this.storageAfterOperationLog(methodPoint, e , ResultEnum.error , beginTime , id);
             throw e;
         }
         return returnValue;
@@ -97,19 +100,14 @@ public class SysOperationLogAop {
      * @param methodPoint 方法切面
      * @param returnValue 返回值
      * @param resultEnum 执行结果
-     * @param runTime 运行时间
+     * @param beginTime 开始执行时间
      */
-    private void storageAfterOperationLog(MethodInvocationProceedingJoinPoint methodPoint, Object returnValue, ResultEnum resultEnum , String beginTime , String endTime , Long runTime , Long id) {
+    private void storageAfterOperationLog(MethodInvocationProceedingJoinPoint methodPoint, Object returnValue, ResultEnum resultEnum , Long beginTime , Long id) {
+        Long endTime = System.currentTimeMillis();
+        Long runTime = endTime - beginTime;
         SysOperationLog entity = new SysOperationLog();
-        //设置保存参数
-        JSONObject userInfo = UserContext.getCurrentUser();
-        if(userInfo != null) {
-            JSONObject account = userInfo.getJSONObject("account");
-            JSONObject user = userInfo.getJSONObject("user");
-            entity.setUserId(user.getLong("userId")).setUserName(account.getString("username"));
-        }
-        entity.setId(id).setTableDate(beginTime).setEndTime(endTime).setRunTime(runTime).setResultEnum(resultEnum);
-
+        entity.setId(id);
+        entity.setEndTime(DateFormat.formatDatetime(endTime)).setRunTime(runTime).setResultEnum(resultEnum);
         MethodSignature signature = (MethodSignature) methodPoint.getSignature();
         String message = "方法名：%s，参数个数：%s，返回类型：%s";
         log.debug(String.format(message, signature.getName() , methodPoint.getArgs().length , signature.getReturnType()));
@@ -119,12 +117,6 @@ public class SysOperationLogAop {
         //如果出现错误，操作日志的描述信息将被重置为异常信息
         String description = this.getDescription(logAnnotation.description() , returnValue , methodSignatureResult);
         entity.setDescription(description);
-        String logName = logAnnotation.name();
-        if (StringUtils.isEmpty(logName)) {
-            //将日志名称按照默认规则保存
-            logName = signature.getDeclaringType().getSimpleName() + "." + signature.getMethod().getName();
-        }
-        entity.setModuleId(logName);
         entity.setContent(JSON.toJSONString(methodSignatureResult, SerializerFeature.WriteMapNullValue));
         //存储操作日志
         operationLogService.saveAfterOperationLog(entity);

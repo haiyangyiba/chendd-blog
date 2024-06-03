@@ -17,9 +17,10 @@ public interface SysOperationLogService extends IService<SysOperationLog> {
      * 保存操作日志
      * @param id 主键ID
      * @param beginTime 开始时间
+     * @param moduleId 模块ID
      * @param ip ip地址
      */
-    void storageBeforeOperationLog(Long id , String beginTime , String ip);
+    void storageBeforeOperationLog(Long id , Long beginTime , String moduleId , String ip);
 
     /**
      * 更新操作日志

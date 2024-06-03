@@ -31,6 +31,13 @@ public interface SysOperationLogMapper extends BaseMapper<SysOperationLog> {
     String querySysOperationContent(@Param("param") SysOperationLogParam param);
 
     /**
+     * 根据ID查询数据对象
+     * @param param 查询参数
+     * @return 日志内容信息
+     */
+    SysOperationLog querySysOperationById(@Param("param") SysOperationLogParam param);
+
+    /**
      * 更新操作日志具体执行结果
      * @param entity 操作日志
      */
