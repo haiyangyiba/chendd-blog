@@ -52,9 +52,8 @@ public class SysDbValueGetAop {
         //方法结构体
         MethodInvocationProceedingJoinPoint methodPoint = (MethodInvocationProceedingJoinPoint) point;
         MethodSignature signature = (MethodSignature) methodPoint.getSignature();
-        Object returnValue = null;
-        Method method = signature.getMethod();
-        Class clazz = signature.getDeclaringType();
+        Object returnValue;
+        Class<?> clazz = signature.getDeclaringType();
         Field target = null;
         if(clazz.isAnnotationPresent(DbValueConfiguration.class)){
             List<Field> allFieldsList = FieldUtils.getAllFieldsList(signature.getDeclaringType());
@@ -82,7 +81,13 @@ public class SysDbValueGetAop {
         return returnValue;
     }
 
-    private Object disposeFieldValue(Object bean, Field field, List<SysDbValue> sysDbValues) {
+    private Object disposeFieldValue(Object bean, Field field, List<SysDbValue> sysDbValues) throws Exception {
+        /// 如果某个Field字段曾被赋值过，可以无需再次赋值，每次都赋值可以获取到最新的数据
+        /*final Object fieldValue = FieldUtils.readField(field, bean, true);
+        if (fieldValue != null) {
+            return fieldValue;
+        }*/
+
         DbValue dbValue = field.getAnnotation(DbValue.class);
         String group = dbValue.group();
         String prefix = dbValue.prefix();
@@ -141,7 +146,7 @@ public class SysDbValueGetAop {
                 }
                 return fieldInstance;
             } catch (InstantiationException | IllegalAccessException e) {
-                log.error("类型 {} 赋值出现错误" , e , fieldType , fieldInstance);
+                log.error("类型 {} {} {} 赋值出现错误" , e , fieldType , fieldInstance);
             }
 
         } else {
