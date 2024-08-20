@@ -14,6 +14,9 @@ import org.apache.commons.lang3.math.NumberUtils;
  */
 public enum EnumValueType implements IEnumValueType {
 
+    /**
+     *
+     */
     INTEGER{
         @Override
         public Object convertValue(String value) {
