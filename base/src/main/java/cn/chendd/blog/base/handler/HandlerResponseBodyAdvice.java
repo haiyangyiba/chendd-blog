@@ -65,7 +65,7 @@ public class HandlerResponseBodyAdvice implements ResponseBodyAdvice {
      * @param ex 错误异常信息封装
      */
     @ExceptionHandler(Exception.class)
-//    @ResponseBody
+    //@ResponseBody
     public BaseResult handerRestApiException(Exception ex , HttpServletRequest request) throws Exception {
         //可根据request中请求判定是否为ajax类型
         //提示类的异常不需要输出错误堆栈
@@ -84,7 +84,7 @@ public class HandlerResponseBodyAdvice implements ResponseBodyAdvice {
         if(exceptionType != null){
             return new ErrorResult<>(exceptionType.getMessage());
         }
-//        getRootCauseMessage
+        //getRootCauseMessage
         String message = ExceptionUtils.getRootCauseMessage(ex);
         return new ErrorResult<>(StringUtils.substring(message , message.indexOf(": ") + 1));
     }

@@ -44,7 +44,7 @@ public class SysDbValueGetAop {
      * 2、必须是以 get开头的书属性方法
      * 3、该方法对应的有字段，并且注解有 DbValue
      */
-    @Pointcut("execution(* cn.chendd..*.get*())")
+    @Pointcut("@within(cn.chendd.toolkit.dbproperty.annotions.DbValueConfiguration) && execution(* cn.chendd..*.get*())")
     public void pointcutDeclare(){}
 
     @Around(value = "pointcutDeclare()")

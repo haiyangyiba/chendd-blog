@@ -6,6 +6,7 @@ import cn.chendd.core.result.ErrorResult;
 import cn.chendd.core.utils.Ajax;
 import cn.chendd.core.utils.Http;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -41,7 +42,7 @@ public class LoginValidatorInterceptor extends HandlerInterceptorAdapter {
             boolean isAjax = Ajax.isAJAXRequest(request);
             String basePath = Http.getBasePath(request);
             if (isAjax) {
-                Http.responseText(response , JSONObject.toJSONString(new ErrorResult<String>("用户未登录或已失效")));
+                Http.responseJson(response , JSONObject.toJSONString(new ErrorResult<String>("用户未登录或已失效") , SerializerFeature.WriteMapNullValue));
             } else {
                 //未登录页面
                 response.sendRedirect(basePath + "/blog/frame/login.html");

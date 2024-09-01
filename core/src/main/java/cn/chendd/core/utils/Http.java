@@ -76,4 +76,19 @@ public class Http {
         }
     }
 
+    /**
+     * 输出response流信息
+     * @param response response
+     * @param text 文本
+     * @throws IOException 异常
+     */
+    public static void responseJson(HttpServletResponse response , String text) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        try(PrintWriter out = response.getWriter()) {
+            out.print(text);
+            out.flush();
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import cn.chendd.core.utils.Ajax;
 import cn.chendd.core.utils.EnumUtil;
 import cn.chendd.core.utils.Http;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -119,7 +120,7 @@ public class UrlValidatorInterceptor extends HandlerInterceptorAdapter {
         boolean isAjax = Ajax.isAJAXRequest(request);
         String basePath = Http.getBasePath(request);
         if (isAjax) {
-            Http.responseText(response , JSONObject.toJSONString(new ErrorResult<String>(message)));
+            Http.responseJson(response , JSONObject.toJSONString(new ErrorResult<String>(message) , SerializerFeature.WriteMapNullValue));
         } else {
             response.sendRedirect(basePath + "/statics/frame/auth.html");
         }
