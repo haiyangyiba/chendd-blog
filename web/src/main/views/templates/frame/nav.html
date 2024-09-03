@@ -19,8 +19,15 @@
                                 </i><th:block th:text="${oneLevel.text}">text</th:block>
                                 <div th:if="${oneLevel.nodes != null}" class="arrow-down"></div>
                             </a>
+                            <a class="nav-link dropdown-toggle blink arrow-none" th:href="${oneLevel.values.url}" onclick="window.location.href = this.href;return false;"
+                               th:if="${oneLevel.values.url != 'javascript:void(0);' && oneLevel.values.icon.contains('_highlight_')}"
+                               th:id="'topnav-' + ${oneLevel.id}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i th:if="${oneLevel.values.icon != null && oneLevel.values.icon != ''}" th:class="${oneLevel.values.icon} + ' mr-1'">
+                                </i><th:block th:text="${oneLevel.text}">text</th:block>
+                                <div th:if="${oneLevel.nodes != null}" class="arrow-down"></div>
+                            </a>
                             <a class="nav-link dropdown-toggle arrow-none" th:href="${oneLevel.values.url}" onclick="window.location.href = this.href;return false;"
-                               th:if="${oneLevel.values.url != 'javascript:void(0);'}"
+                               th:if="${oneLevel.values.url != 'javascript:void(0);' && !oneLevel.values.icon.contains('_highlight_')}"
                                th:id="'topnav-' + ${oneLevel.id}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i th:if="${oneLevel.values.icon != null && oneLevel.values.icon != ''}" th:class="${oneLevel.values.icon} + ' mr-1'">
                                 </i><th:block th:text="${oneLevel.text}">text</th:block>
