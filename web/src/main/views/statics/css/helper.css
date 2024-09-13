@@ -127,6 +127,10 @@
     -o-animation: scratchy 0.253s linear forwards infinite;
 }
 
+.nav-link.blink {
+    font-weight: bold;
+}
+
 blockquote {
     background:#f9f9f9;
     border-left:4px solid #ccc;

@@ -21,6 +21,7 @@ public class RequestApiSessionFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
+        //绕过session filter如：所有以/v数字/开头的url；或者以/api/开头的URL，都绕过session filter，不去访问session
         if (uri.matches(API_PATH_MATCHER)) {
             request.setAttribute("org.springframework.session.web.http.SessionRepositoryFilter.FILTERED", Boolean.TRUE);
         }
