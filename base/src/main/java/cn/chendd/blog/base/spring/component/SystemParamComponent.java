@@ -22,4 +22,10 @@ public class SystemParamComponent {
     @DbValue(value = "blog.createSiteTime")
     private String createSiteTime;
 
+    @DbValue(value = "system.ip.black")
+    private String ipBlack;
+
+    @DbValue(value = "system.basePath.white")
+    private String basePathWhite;
+
 }

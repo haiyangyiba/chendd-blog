@@ -1,8 +1,10 @@
 package cn.chendd.core.utils;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * IP地址获取工具类
@@ -31,6 +33,18 @@ public class Ip {
             ip = request.getRemoteAddr();
         }
         return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+    }
+
+    public static List<String> getIpAddressList(HttpServletRequest request) {
+        List<String> ipList = Lists.newArrayList();
+        for (String headerName : HEADERS) {
+            String ip = request.getHeader(headerName);
+            if(StringUtils.isNotEmpty(ip) && !StringUtils.equalsIgnoreCase("unknown" , ip)) {
+                ipList.add(ip);
+            }
+        }
+        ipList.add(request.getRemoteAddr());
+        return ipList;
     }
 
 }
