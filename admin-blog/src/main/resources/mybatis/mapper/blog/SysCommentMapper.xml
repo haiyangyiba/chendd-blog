@@ -85,7 +85,7 @@
     <!--查询最新的limit条评论数据-->
     <select id="queryCommentNewestList" resultType="cn.chendd.blog.client.comment.vo.CommentNewestDto">
         select
-            usr.realName , usr.portrait , usr.userSource , main.createTime , main.editorContent content
+            usr.realName , usr.portrait , usr.userSource , main.createTime , main.editorContent content , main.targetId articleId
         from
             sys_comment main
         left join sys_user usr on main.createUserId = usr.userId

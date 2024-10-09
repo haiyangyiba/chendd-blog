@@ -34,6 +34,8 @@ public class CommentNewestDto implements Serializable {
     private String createTime;
     @ApiModelProperty("评论内容")
     private String content;
+    @ApiModelProperty("文章ID")
+    private Long articleId;
 
     /**
      * 将回复内容去除html标签，并截取文本长度

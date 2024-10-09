@@ -226,7 +226,7 @@
                                     <div class="media-body text-truncate">
                                         <span class="badge badge-soft-warning float-right">评论时间：<dd:format th:type="datetime" th:value="${commentNewest.createTime}">5个月前</dd:format></span>
                                         <h5 class="mt-0 mb-1" th:text="${commentNewest.userSource.text} + '：' + ${commentNewest.realName}">百度用户：不出色的小子</h5>
-                                        <span class="font-13" th:title="${commentNewest.content}" th:text="${commentNewest.content}"></span>
+                                        <a target="_blank" style="text-decoration: underline;" th:href="'/blog/article/' + ${commentNewest.articleId} + '.html'" href="javascript:void(0);"><span class="font-13" th:title="${commentNewest.content}" th:text="${commentNewest.content}"></span></a>
                                     </div>
                                 </div>
                             </div>
