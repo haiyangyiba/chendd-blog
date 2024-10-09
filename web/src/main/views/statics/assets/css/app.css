@@ -1050,7 +1050,7 @@ body[data-layout-mode="horizontal"] .content-page {
 
 @media (max-width: 991.98px) {
   .topnav {
-    max-height: 360px;
+    max-height: 440px;
     overflow-y: auto;
     padding: 0; }
     .topnav .navbar-nav .nav-link {
