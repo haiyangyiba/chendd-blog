@@ -1,10 +1,12 @@
 package cn.chendd.blog.web.home.controller;
 
 import cn.chendd.blog.base.controller.BaseController;
+import cn.chendd.blog.base.enums.EnumStatus;
 import cn.chendd.blog.base.enums.EnumUserSource;
 import cn.chendd.blog.base.model.ThirdUserResult;
 import cn.chendd.blog.client.user.vo.SysUserResult;
 import cn.chendd.blog.web.home.service.UserLoginService;
+import cn.chendd.core.exceptions.ValidateDataException;
 import cn.chendd.core.result.BaseResult;
 import cn.chendd.core.result.SuccessResult;
 import cn.chendd.core.spring.SpringBeanFactory;
@@ -84,6 +86,11 @@ public class WebThirdLoginController extends BaseController {
             throw e;
         }
         SysUserResult userEntity = userLoginService.thirdUserStore(thirdUserResult);
+        final SysUserResult.SysAccount account = userEntity.getAccount();
+        if (! EnumStatus.ENABLE.equals(account.getStatus())) {
+            throw new ValidateDataException("用户已被禁用！");
+        }
+
         session.setAttribute(SYSTEM_CURRENT_USER, JSONObject.toJSON(userEntity));
         session.setMaxInactiveInterval(60 * 60);
         response.sendRedirect("/");
