@@ -240,7 +240,7 @@
                                     <div class="media-body">
                                         <button th:each="friendsLinkNewes : ${friendsLinkNewestList}" type="button" style="cursor: default;"
                                                 class="btn btn-white waves-effect waves-light mb-2 mr-1" th:title="${friendsLinkNewes.remark}">
-                                            <img th:if="${friendsLinkNewes.logo != null && friendsLinkNewes.logo != ''}" th:src="${friendsLinkNewes.logo}" class="img-fluid avatar-xs rounded" />
+                                            <img th:if="${friendsLinkNewes.logo != null && friendsLinkNewes.logo != ''}" th:src="'/internet/logo?url='+${friendsLinkNewes.logo}" class="img-fluid avatar-xs rounded" />
                                             <a th:href="${friendsLinkNewes.link}" target="_blank">
                                                 <th:block th:if="${friendsLinkNewes.counts > 0}">
                                                     <th:block th:text="${friendsLinkNewes.title}"></th:block><span class="badge badge-danger ml-1" th:text="${friendsLinkNewes.counts}">0</span>

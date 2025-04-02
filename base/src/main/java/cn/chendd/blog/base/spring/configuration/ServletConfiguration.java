@@ -29,4 +29,11 @@ public class ServletConfiguration {
         return bean;
     }
 
+    @Bean
+    public ServletRegistrationBean internetLogoServletRegistrationBean(){
+        ServletRegistrationBean<InternetImageReaderServlet> bean = new ServletRegistrationBean<>(new InternetImageReaderServlet());
+        bean.addUrlMappings("/internet/logo/*");
+        return bean;
+    }
+
 }

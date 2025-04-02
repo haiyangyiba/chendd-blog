@@ -6,7 +6,7 @@
 
     <!--根据条件查询列表数据 -->
     <select id="queryUserSourcesCharts" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
-        SELECT userSource name, count(*) value FROM sys_user group by userSource
+        SELECT userSource name, count(*) value FROM sys_user where userSource != 'System' group by userSource
     </select>
     <!-- 按年份查询文章统计 -->
     <select id="queryArticleYears" resultType="cn.chendd.blog.admin.system.report.vo.NameValueResult">
