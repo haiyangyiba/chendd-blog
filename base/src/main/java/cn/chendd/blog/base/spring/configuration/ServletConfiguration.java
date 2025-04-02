@@ -2,6 +2,7 @@ package cn.chendd.blog.base.spring.configuration;
 
 import cn.chendd.blog.base.servlet.FileReaderServlet;
 import cn.chendd.blog.base.servlet.InternetImageReaderServlet;
+import cn.chendd.blog.base.servlet.InternetLogoReaderServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +32,7 @@ public class ServletConfiguration {
 
     @Bean
     public ServletRegistrationBean internetLogoServletRegistrationBean(){
-        ServletRegistrationBean<InternetImageReaderServlet> bean = new ServletRegistrationBean<>(new InternetImageReaderServlet());
+        ServletRegistrationBean<InternetLogoReaderServlet> bean = new ServletRegistrationBean<>(new InternetLogoReaderServlet());
         bean.addUrlMappings("/internet/logo/*");
         return bean;
     }
