@@ -13,7 +13,7 @@ server:
   ssl:
     enabled: true
     key-store: "classpath:config/ssl/www.chendd.cn.pfx"
-    key-store-password: 18m8ci53w605
+    key-store-password: vb6wibux
 
 logging:
   config: classpath:config/logback/logback-spring.xml

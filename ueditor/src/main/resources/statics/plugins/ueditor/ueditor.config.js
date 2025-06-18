@@ -432,6 +432,10 @@
 
     function getUEBasePath(docUrl, confUrl) {
 
+        if (true) {
+            return "/statics/plugins/ueditor/";
+        }
+
         return getBasePath(docUrl || self.document.URL || self.location.href, confUrl || getConfigFilePath());
 
     }
